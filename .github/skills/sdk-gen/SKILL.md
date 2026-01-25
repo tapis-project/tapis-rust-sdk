@@ -789,6 +789,69 @@ tapis-<service>/
     └── *.md (generated)
 ```
 
+### Git Branch Management
+
+**IMPORTANT:** SDK generation should follow the environment-to-branch mapping:
+
+| Environment | Git Branch | Usage |
+|-------------|------------|-------|
+| `prod` | `main` | Production-ready SDKs from production API specs |
+| `staging` | `staging` | Testing SDKs from staging API specs |
+| `dev` | `dev` | Development SDKs from dev API specs |
+
+**Workflow:**
+
+```bash
+# Generate SDK for production environment
+git checkout main
+./generate_rust_sdk.sh --from-json prod pods
+
+# Generate SDK for staging environment
+git checkout staging
+./generate_rust_sdk.sh --from-json staging pods
+
+# Generate SDK for development environment
+git checkout dev
+./generate_rust_sdk.sh --from-json dev pods
+```
+
+**Branch Rules:**
+- ✅ Always generate SDKs on the correct branch for the target environment
+- ✅ Use `main` branch for production-ready SDKs only
+- ✅ Test changes on `dev` or `staging` before merging to `main`
+- ❌ Never generate dev/staging SDKs on the `main` branch
+- ❌ Never mix environment specs across branches
+
+**Example Workflow:**
+```bash
+# Working on a new feature with dev environment
+git checkout dev
+git pull origin dev
+
+# Generate SDK from dev environment
+cd skills/sdk-gen/scripts
+./generate_rust_sdk.sh --from-json dev pods
+
+# Test and validate
+cd ../../../tapis-pods
+cargo build
+cargo test
+
+# Commit changes
+git add .
+git commit -m "feat: update pods SDK from dev environment"
+git push origin dev
+
+# After validation, merge through staging to main
+git checkout staging
+git merge dev
+# Test on staging...
+
+git checkout main
+git merge staging
+# Final production deployment
+```
+
 ---
 
 ## 🔧 Troubleshooting
