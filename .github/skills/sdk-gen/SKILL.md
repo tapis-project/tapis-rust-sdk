@@ -240,6 +240,145 @@ openapi-generator generate \
 
 ---
 
+## Real-World Issues & Solutions
+
+These issues were discovered during actual SDK generation for TAPIS services:
+
+### Issue: Empty Enum Causes Compilation Failure
+
+**Error:**
+```
+error: expected identifier, found `}`
+  --> src/models/delete_client_200_response.rs:65:5
+   |
+65 |     }
+   |     ^ expected identifier
+```
+
+**Root Cause:** OpenAPI generator creates an empty enum when the spec has a null/empty result type:
+```rust
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Result {
+    // Empty - causes compilation error!
+}
+
+impl Default for Result {
+    fn default() -> Result {
+        Self::  // No variant to select!
+    }
+}
+```
+
+**Solution:** Replace the empty enum with `serde_json::Value`:
+```rust
+// Before - in the struct field:
+pub result: Option<Option<Result>>,
+
+// After:
+pub result: Option<Option<serde_json::Value>>,
+
+// Then remove the empty enum entirely
+```
+
+**Prevention:** Check for empty enums after generation:
+```bash
+grep -A 2 "pub enum.*{$" src/models/*.rs | grep -A 1 "^}$"
+```
+
+### Issue: Missing tokio Dependency for Examples
+
+**Error:**
+```
+error[E0433]: failed to resolve: use of unlinked crate `tokio`
+  --> examples/example.rs:3:3
+   |
+3 | #[tokio::main]
+  |   ^^^^^ use of unlinked crate `tokio`
+```
+
+**Root Cause:** Generated SDK doesn't include `tokio` in dependencies, but examples need it for `#[tokio::main]`
+
+**Solution:** Add tokio to `dev-dependencies` in `Cargo.toml`:
+```toml
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+```
+
+**Why:** This keeps tokio out of the main library (users choose their async runtime) but makes it available for examples and tests.
+
+### Issue: Incorrect OpenAPI Spec Path in Script
+
+**Error:**
+```
+❌ Error: OpenAPI_specs.json not found at: /path/to/repo/skills/sdk-gen/references/OpenAPI_specs.json
+```
+
+**Root Cause:** Generation script looking in wrong directory (missing `.github/` prefix)
+
+**Solution:** Update the path in the generation script:
+```bash
+# Before:
+OPENAPI_SPECS_FILE="$REPO_ROOT/skills/sdk-gen/references/OpenAPI_specs.json"
+
+# After:
+OPENAPI_SPECS_FILE="$REPO_ROOT/.github/skills/sdk-gen/references/OpenAPI_specs.json"
+```
+
+---
+
+## SDK Testing & Verification Scripts
+
+### Verify Compilation
+
+```bash
+cd tapis-<service>
+cargo build --all-targets
+```
+
+**Expected:** Build succeeds (warnings are acceptable)
+
+### Check for Empty Enums (Potential Issues)
+
+```bash
+# Find empty enums that will cause compilation errors
+find src/models -name "*.rs" -exec grep -l "pub enum.*{\s*}" {} \;
+```
+
+### Verify Model Coverage
+
+```bash
+# Count generated models
+ls -1 src/models/*.rs | wc -l
+
+# List all models
+ls -1 src/models/*.rs | xargs -n1 basename | sed 's/.rs$//'
+```
+
+### Verify API Coverage
+
+```bash
+# Count API modules
+ls -1 src/apis/*_api.rs | wc -l
+
+# List all API modules
+ls -1 src/apis/*_api.rs | xargs -n1 basename | sed 's/_api.rs$//'
+
+# Count total API methods
+grep -c "^pub async fn" src/apis/*_api.rs
+```
+
+### Issue: Missing Endpoints
+
+**Problem:** Some API endpoints not generated
+
+**Solutions:**
+1. Verify OpenAPI spec includes all endpoints
+2. Check spec version compatibility
+3. Try regenerating with updated spec
+4. Manually add missing endpoints if necessary
+
+---
+
 ## Verification Checklist
 
 After generation, verify:

@@ -140,7 +140,7 @@ SERVICE="$2"
 
 # Find repository root
 REPO_ROOT=$(find_repo_root)
-OPENAPI_SPECS_FILE="$REPO_ROOT/skills/sdk-gen/references/OpenAPI_specs.json"
+OPENAPI_SPECS_FILE="$REPO_ROOT/.github/skills/sdk-gen/references/OpenAPI_specs.json"
 
 print_msg $BLUE "════════════════════════════════════════════════════════════"
 print_msg $BLUE "  Rust SDK Generator for TAPIS Services"

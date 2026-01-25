@@ -512,16 +512,85 @@ diff <(grep "^pub async fn" src/apis/*_api.rs | sort) \
 
 ---
 
+## Real-World Issues & Solutions
+
+These issues were discovered during wrapper creation for TAPIS services:
+
+### Issue: Services with Public and Authenticated Endpoints
+
+**Scenario:** Some services (like Authenticator) have both public endpoints (e.g., `/oauth2/tokens` for creating tokens) and authenticated endpoints (e.g., `/oauth2/userinfo` for user data).
+
+**Problem:** Standard wrapper requires JWT token, preventing use of public endpoints.
+
+**Solution:** Make JWT token optional in the constructor:
+
+```rust
+impl TapisAuthenticator {
+    /// Create a new client with optional authentication
+    pub fn new(
+        base_url: &str, 
+        jwt_token: Option<&str>
+    ) -> Result<Self, Box<dyn std::error::Error>> {
+        let mut headers = HeaderMap::new();
+        
+        // Only add token header if provided
+        if let Some(token) = jwt_token {
+            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);
+        }
+        
+        let client = reqwest::Client::builder()
+            .default_headers(headers)
+            .build()?;
+        
+        // ... rest of initialization
+    }
+}
+```
+
+### Issue: Missing tokio Dependency for Examples
+
+**Error:**
+```
+error[E0433]: failed to resolve: use of unlinked crate `tokio`
+#[tokio::main]
+  ^^^^^ use of unlinked crate `tokio`
+```
+
+**Solution:** Add tokio to `Cargo.toml` as a dev-dependency:
+```toml
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+```
+
+### Automated Coverage Verification
+
+Quick script to verify 100% coverage:
+
+```bash
+# Count generated API methods
+GENERATED=$(grep "^pub async fn" src/apis/*_api.rs | wc -l | tr -d ' ')
+
+# Count wrapped methods
+WRAPPED=$(grep "pub async fn" src/client.rs | wc -l | tr -d ' ')
+
+echo "Generated: $GENERATED, Wrapped: $WRAPPED"
+[ "$GENERATED" -eq "$WRAPPED" ] && echo "✓ 100%" || echo "✗ Incomplete"
+```
+
+---
+
 ## Completion Checklist
 
 Verify all items before considering wrapper complete:
 
 - [ ] `http` dependency added to `Cargo.toml`
 - [ ] `src/client.rs` created
-- [ ] Main wrapper struct named `Tapis<Component>` (e.g., `TapisPods`, `TapisFiles`, `TapisSystems`)
+- [ ] Main wrapper struct named `Tapis<Component>` (e.g., `TapisPods`, `TapisAuthenticator`)
 - [ ] All sub-client structs created (one per API module)
 - [ ] ALL methods wrapped (100% coverage verified)
 - [ ] Global authentication via `default_headers()` working
+- [ ] Optional authentication considered (if service has public endpoints)
+- [ ] `tokio` added to dev-dependencies for examples
 - [ ] Module exported in `src/lib.rs`
 - [ ] `cargo build` succeeds
 - [ ] Test example runs successfully
