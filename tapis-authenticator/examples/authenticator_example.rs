@@ -35,9 +35,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("📋 Example 0: Create JWT Token (No Auth Required)");
     println!("───────────────────────────────────────────────────");
     
+    // Get TAPIS_HOST from environment or use default
+    let tapis_host = std::env::var("TAPIS_HOST").unwrap_or_else(|_| "tacc.tapis.io".to_string());
+
+    // Note: base_url should NOT include the service path (/authenticator) or /v3
+    // because the generated API code already includes the full path (e.g., /v3/oauth2/tokens)
+    let base_url = format!("https://{}", tapis_host);
+    
+    println!("🌍 Using Tapis host: {}", tapis_host);
+    println!("📡 Base URL: {}\n", base_url);
+
     // This endpoint doesn't require authentication
     let public_client = TapisAuthenticator::new(
-        "https://tacc.tapis.io/v3/authenticator",
+        &base_url,
         None, // No JWT token needed for token creation
     )?;
     
@@ -61,12 +71,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  Status: {:?}", response.status);
                 if let Some(result) = response.result {
                     if let Some(access_token_str) = result.access_token.access_token {
-                        let display_token = if access_token_str.len() > 50 { 
-                            format!("{}...", &access_token_str[..50]) 
-                        } else { 
-                            access_token_str.clone()
-                        };
-                        println!("  Access Token: {}", display_token);
+                        println!("  Access Token: {}", access_token_str);
+                        // set TAPIS_TOKEN environment variable for subsequent examples
+                        std::env::set_var("TAPIS_TOKEN", access_token_str);
                     }
                     if let Some(expires_in) = result.access_token.expires_in {
                         println!("  Expires In: {} seconds", expires_in);
@@ -96,7 +103,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // Create the high-level client with authentication
     let client = TapisAuthenticator::new(
-        "https://tacc.tapis.io/v3/authenticator",
+        &base_url,
         Some(&jwt_token),
     )?;
 
