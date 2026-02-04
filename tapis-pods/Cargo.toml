@@ -1,6 +1,6 @@
 [package]
 name = "tapis-pods"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Rust client SDK for Tapis Pods Service - a web service providing pods-as-a-service (PaaS) for deploying Docker containers with HTTP/TCP endpoints."
 license = "BSD-3-Clause"
