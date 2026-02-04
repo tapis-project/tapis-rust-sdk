@@ -9,8 +9,8 @@ repository = "https://github.com/tapis-project/tapis-rust-sdk"
 homepage = "https://tapis-project.org"
 
 [dependencies]
-tapis-authenticator = { path = "./tapis-authenticator" }
-tapis-pods = { path = "./tapis-pods" }
+tapis-authenticator = { version = "0.1.0", path = "./tapis-authenticator" }
+tapis-pods = { version = "0.1.0", path = "./tapis-pods" }
 
 [dev-dependencies]
 
