@@ -41,6 +41,14 @@ Use this skill to:
 
 **When to use:** When SDK fails to compile or has many warnings
 
+### [sdk-parent][./sdk-parent/SKILL.md]
+**Parent project management tips**
+
+Use this skill to:
+- Modify parent project when new sub-projects are added
+- Publish project to crates.io
+- Check sdk module re-export
+
 ---
 
 ## Workflow

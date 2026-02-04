@@ -1,0 +1,19 @@
+[package]
+name = "tapis-sdk"
+version = "0.1.0"
+authors = ["cicsupport@tacc.utexas.edu"]
+description = "Comprehensive Rust SDK for Tapis services"
+license = "BSD-3-Clause"
+edition = "2021"
+repository = "https://github.com/tapis-project/tapis-rust-sdk"
+homepage = "https://tapis-project.org"
+
+[dependencies]
+tapis-authenticator = { path = "./tapis-authenticator" }
+tapis-pods = { path = "./tapis-pods" }
+
+[dev-dependencies]
+
+
+[workspace]
+members = ["tapis-authenticator", "tapis-pods"]

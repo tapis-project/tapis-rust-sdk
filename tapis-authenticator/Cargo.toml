@@ -1,10 +1,12 @@
 [package]
 name = "tapis-authenticator"
-version = "1.0.0"
+version = "0.1.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "REST API and web server providing authentication for a Tapis v3 instance."
-license = "BSD 3"
+license = "BSD-3-Clause"
 edition = "2021"
+repository = "https://github.com/tapis-project/tapis-rust-sdk"
+homepage = "https://tapis-project.org"
 
 [dependencies]
 serde = { version = "^1.0", features = ["derive"] }
