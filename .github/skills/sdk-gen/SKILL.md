@@ -44,6 +44,12 @@ Run from repository root:
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh <env> <service>
 ```
 
+For full end-to-end automation across selected services:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod
+```
+
 Arguments:
 - `<env>`: `prod`, `staging`, or `dev`
 - `<service>`: service key in `.github/skills/sdk-gen/references/OpenAPI_specs.json`
@@ -54,6 +60,20 @@ Examples:
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod pods
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod authenticator
 ```
+
+Automation examples:
+
+```bash
+# Dry-run preview (recommended first)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --dry-run
+
+# Only regenerate specific services
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --services pods,authenticator
+```
+
+Automation notes:
+- `--services` limits generation/fixes/wrappers/examples to those services only.
+- Parent workspace members and root dependency mappings are still refreshed for all known service crates, so subset runs do not drop crates from the parent SDK.
 
 ## What the Script Does
 
@@ -175,6 +195,7 @@ Expected:
 ## Related Files
 
 - Script: `scripts/generate_rust_sdk.sh`
+- Full automation script: `scripts/regenerate_all_sdks.py`
 - Spec registry: `references/OpenAPI_specs.json`
 - Script docs: `scripts/README.md`
 - Extra references:

@@ -5,6 +5,7 @@ Automation script for regenerating TAPIS Rust SDK service crates.
 ## Script
 
 - `generate_rust_sdk.sh`
+- `regenerate_all_sdks.py`
 
 ## Usage
 
@@ -55,3 +56,28 @@ cargo build --workspace --all-targets
 ```
 
 Then apply wrapper/parent fixes using `sdk-wrapper` and `sdk-parent` skills.
+
+## Full Automation
+
+For end-to-end regeneration (generation + known fixes + wrappers + examples + parent wiring + build + optional version bump), use:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod
+```
+
+Useful flags:
+
+```bash
+# Preview actions only
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --dry-run
+
+# Regenerate specific services only
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --services pods,authenticator
+
+# Skip final bump (if you want manual control)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump
+```
+
+Notes:
+- `--services` scopes generation/fix/wrapper/example work, but parent workspace/dependency wiring remains complete for all known service crates.
+- Final version bump runs last unless `--skip-bump` is set.
