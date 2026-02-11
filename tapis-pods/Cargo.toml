@@ -1,6 +1,6 @@
 [package]
 name = "tapis_pods"
-version = "0.3.0"
+version = "0.5.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = " The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html). "
 license = "BSD 3.0"
@@ -13,9 +13,7 @@ serde_json = "^1.0"
 serde_repr = "^0.1"
 url = "^2.5"
 reqwest = { version = "^0.12", default-features = false, features = ["json", "multipart", "stream"] }
-
 http = "^1.0"
-
 [features]
 default = ["native-tls"]
 native-tls = ["reqwest/native-tls"]

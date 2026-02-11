@@ -15,6 +15,12 @@ From repository root:
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh <env> <service>
 ```
 
+If your workflow should not modify branches:
+
+```bash
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh --no-branch-switch <env> <service>
+```
+
 Examples:
 
 ```bash
@@ -76,8 +82,17 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --servi
 
 # Skip final bump (if you want manual control)
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump
+
+# Let the generation script perform branch checkout (default is disabled)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --allow-branch-switch
+
+# Skip DNS precheck (only if your environment has custom DNS/network behavior)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-network-precheck
 ```
 
 Notes:
+- `regenerate_all_sdks.py` calls `generate_rust_sdk.sh --no-branch-switch` by default to avoid branch checkout failures in restricted or feature-branch workflows.
+- `regenerate_all_sdks.py` runs a DNS precheck for spec hosts before generation and fails fast when hosts are not resolvable.
 - `--services` scopes generation/fix/wrapper/example work, but parent workspace/dependency wiring remains complete for all known service crates.
+- Version bump is skipped automatically if generation fails for every requested service.
 - Final version bump runs last unless `--skip-bump` is set.

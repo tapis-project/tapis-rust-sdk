@@ -44,6 +44,12 @@ Run from repository root:
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh <env> <service>
 ```
 
+To avoid branch modifications during generation:
+
+```bash
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh --no-branch-switch <env> <service>
+```
+
 For full end-to-end automation across selected services:
 
 ```bash
@@ -69,11 +75,20 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --dry-r
 
 # Only regenerate specific services
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --services pods,authenticator
+
+# Enable branch checkout in generation script (disabled by default)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --allow-branch-switch
+
+# Skip DNS precheck for spec hosts (advanced)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-network-precheck
 ```
 
 Automation notes:
 - `--services` limits generation/fixes/wrappers/examples to those services only.
+- `regenerate_all_sdks.py` uses `--no-branch-switch` for generation by default, which avoids git checkout failures in restricted environments and on feature branches.
+- `regenerate_all_sdks.py` performs a DNS precheck for spec hosts and fails fast when host resolution is unavailable.
 - Parent workspace members and root dependency mappings are still refreshed for all known service crates, so subset runs do not drop crates from the parent SDK.
+- Version bump is skipped automatically when generation fails for all requested services.
 
 ## What the Script Does
 
@@ -165,6 +180,15 @@ Symptom:
 Fix:
 - After all generation/wrapper/debug tasks are complete, run:
   `bash .github/skills/sdk-parent/scripts/bump_minor_version.sh`
+
+### 7) Branch checkout can fail in restricted environments
+
+Symptom:
+- Generation fails while trying to `git checkout` environment branch.
+
+Fix:
+- Run generation with `--no-branch-switch`.
+- `regenerate_all_sdks.py` already does this by default; use `--allow-branch-switch` only when branch switching is explicitly desired.
 
 ## Verification Checklist
 

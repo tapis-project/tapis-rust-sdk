@@ -15,10 +15,12 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import socket
 import subprocess
 import sys
 from pathlib import Path
 from typing import Iterable, List
+from urllib.parse import urlparse
 
 
 def run(cmd: List[str], cwd: Path, dry_run: bool = False) -> None:
@@ -178,12 +180,12 @@ def fix_empty_enum_defaults(crate_dir: Path, dry_run: bool) -> None:
         for m in matches:
             enum_name = m.group("name")
             text = re.sub(
-                rf"\bOption<Option<{re.escape(enum_name)}>>\b",
+                rf"Option<Option<\s*{re.escape(enum_name)}\s*>>",
                 "Option<Option<serde_json::Value>>",
                 text,
             )
             text = re.sub(
-                rf"\bOption<{re.escape(enum_name)}>\b",
+                rf"Option<\s*{re.escape(enum_name)}\s*>",
                 "Option<serde_json::Value>",
                 text,
             )
@@ -194,6 +196,11 @@ def fix_empty_enum_defaults(crate_dir: Path, dry_run: bool) -> None:
             )
 
         text = enum_block.sub("\n", text)
+        # Recovery path for previously partially-patched files where the enum was removed
+        # but the field type still references Result.
+        if "pub enum Result" not in text:
+            text = text.replace("Option<Option<Result>>", "Option<Option<serde_json::Value>>")
+            text = text.replace("Option<Result>", "Option<serde_json::Value>")
 
         if text != original:
             print(f"patched empty enum default: {path}")
@@ -504,6 +511,16 @@ def parse_args() -> argparse.Namespace:
         help="Comma-separated services to process, or 'all' (default)",
     )
     p.add_argument("--skip-generate", action="store_true", help="Skip OpenAPI generation step")
+    p.add_argument(
+        "--skip-network-precheck",
+        action="store_true",
+        help="Skip DNS reachability checks for OpenAPI spec hosts before generation",
+    )
+    p.add_argument(
+        "--allow-branch-switch",
+        action="store_true",
+        help="Allow generation script to checkout env-mapped branch (default is no branch switch)",
+    )
     p.add_argument("--skip-build", action="store_true", help="Skip final cargo build")
     p.add_argument("--skip-bump", action="store_true", help="Skip final version bump")
     p.add_argument("--dry-run", action="store_true", help="Print actions without writing files or running commands")
@@ -531,6 +548,33 @@ def load_services(specs_json: Path, env_key: str, selected: str) -> List[str]:
     return requested
 
 
+def precheck_spec_hosts(specs_json: Path, env_key: str, services: List[str]) -> None:
+    data = json.loads(specs_json.read_text())
+    env_specs = data.get(env_key, {})
+    hosts = set()
+    for svc in services:
+        spec_url = env_specs.get(svc)
+        if not spec_url:
+            continue
+        host = urlparse(spec_url).hostname
+        if host:
+            hosts.add(host)
+
+    unresolved: List[str] = []
+    for host in sorted(hosts):
+        try:
+            socket.getaddrinfo(host, None)
+        except socket.gaierror:
+            unresolved.append(host)
+
+    if unresolved:
+        raise RuntimeError(
+            "DNS lookup failed for OpenAPI spec host(s): "
+            + ", ".join(unresolved)
+            + ". Check network access (or use --skip-generate / --skip-network-precheck)."
+        )
+
+
 def main() -> int:
     args = parse_args()
 
@@ -546,9 +590,15 @@ def main() -> int:
 
     failed_generation: List[str] = []
     if not args.skip_generate:
+        if not args.skip_network_precheck and not args.dry_run:
+            precheck_spec_hosts(specs_json, args.env, services)
         for svc in services:
+            gen_cmd = ["bash", str(generate_script)]
+            if not args.allow_branch_switch:
+                gen_cmd.append("--no-branch-switch")
+            gen_cmd.extend([args.env, svc])
             try:
-                run(["bash", str(generate_script), args.env, svc], cwd=repo_root, dry_run=args.dry_run)
+                run(gen_cmd, cwd=repo_root, dry_run=args.dry_run)
             except subprocess.CalledProcessError:
                 failed_generation.append(svc)
                 if not args.continue_on_generate_error:
@@ -558,6 +608,8 @@ def main() -> int:
         print("Generation failures:", ", ".join(failed_generation), file=sys.stderr)
 
     processed_services = [s for s in services if s not in failed_generation]
+    if failed_generation and not processed_services and not args.skip_generate:
+        raise RuntimeError("All generation steps failed. Aborting before build/version bump.")
 
     for svc in processed_services:
         crate_dir = repo_root / f"tapis-{svc}"
@@ -595,10 +647,12 @@ def main() -> int:
     if not args.skip_build:
         run(["cargo", "build", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
 
-    if not args.skip_bump:
+    if not args.skip_bump and not (failed_generation and not args.skip_generate):
         run(["bash", str(bump_script)], cwd=repo_root, dry_run=args.dry_run)
         if not args.skip_build:
             run(["cargo", "build", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
+    elif failed_generation and not args.skip_generate:
+        print("Skipping version bump due generation failures.", file=sys.stderr)
 
     print("Automation workflow completed.")
     return 0

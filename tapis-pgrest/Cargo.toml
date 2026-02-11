@@ -1,6 +1,6 @@
 [package]
 name = "tapis_pgrest"
-version = "0.3.0"
+version = "0.5.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis PgREST API provides a RESTful interface to a managed SQL-db-as-a-service."
 license = "3-Clause BSD License"
@@ -12,9 +12,7 @@ serde_json = "^1.0"
 serde_repr = "^0.1"
 url = "^2.5"
 reqwest = { version = "^0.12", default-features = false, features = ["json", "multipart", "stream"] }
-
 http = "^1.0"
-
 [features]
 default = ["native-tls"]
 native-tls = ["reqwest/native-tls"]

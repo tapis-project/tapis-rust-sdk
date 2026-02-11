@@ -98,3 +98,31 @@ Fix:
 ```bash
 bash .github/skills/sdk-parent/scripts/bump_minor_version.sh
 ```
+
+## 10) Generation fails on branch checkout
+
+Symptom:
+- `generate_rust_sdk.sh` fails while switching to env branch (e.g. cannot create `.git/index.lock`, branch policy, or restricted filesystem).
+
+Fix:
+- Use non-branch-switch mode:
+```bash
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh --no-branch-switch <env> <service>
+```
+- The full orchestrator already defaults to this safe mode:
+```bash
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod
+```
+
+## 11) Network/DNS unavailable for OpenAPI spec hosts
+
+Symptom:
+- `curl: Could not resolve host: raw.githubusercontent.com`
+
+Fix:
+- Ensure network access to spec host(s) before generation.
+- `regenerate_all_sdks.py` now prechecks host DNS and fails fast with a clear message.
+- If needed for special network environments, bypass the precheck:
+```bash
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-network-precheck
+```

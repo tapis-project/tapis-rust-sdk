@@ -1,6 +1,6 @@
 [package]
 name = "tapis-sdk"
-version = "0.3.0"
+version = "0.5.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Comprehensive Rust SDK for Tapis services"
 license = "BSD-3-Clause"
@@ -9,23 +9,22 @@ repository = "https://github.com/tapis-project/tapis-rust-sdk"
 homepage = "https://tapis-project.org"
 
 [dependencies]
-tapis-actors = { package = "tapis_actors", version = "0.3.0", path = "./tapis-actors" }
-tapis-apps = { package = "tapis_apps", version = "0.3.0", path = "./tapis-apps" }
-tapis-authenticator = { package = "tapis_authenticator", version = "0.3.0", path = "./tapis-authenticator" }
-tapis-files = { package = "tapis_files", version = "0.3.0", path = "./tapis-files" }
-tapis-globus-proxy = { package = "tapis_globus_proxy", version = "0.3.0", path = "./tapis-globus-proxy" }
-tapis-jobs = { package = "tapis_jobs", version = "0.3.0", path = "./tapis-jobs" }
-tapis-meta = { package = "tapis_meta", version = "0.3.0", path = "./tapis-meta" }
-tapis-notifications = { package = "tapis_notifications", version = "0.3.0", path = "./tapis-notifications" }
-tapis-pgrest = { package = "tapis_pgrest", version = "0.3.0", path = "./tapis-pgrest" }
-tapis-pods = { package = "tapis_pods", version = "0.3.0", path = "./tapis-pods" }
-tapis-sk = { package = "tapis_sk", version = "0.3.0", path = "./tapis-sk" }
-tapis-streams = { package = "tapis_streams", version = "0.3.0", path = "./tapis-streams" }
-tapis-systems = { package = "tapis_systems", version = "0.3.0", path = "./tapis-systems" }
-tapis-tenants = { package = "tapis_tenants", version = "0.3.0", path = "./tapis-tenants" }
-tapis-tokens = { package = "tapis_tokens", version = "0.3.0", path = "./tapis-tokens" }
-tapis-workflows = { package = "tapis_workflows", version = "0.3.0", path = "./tapis-workflows" }
-
+tapis-actors = { package = "tapis_actors", version = "0.5.0", path = "./tapis-actors" }
+tapis-apps = { package = "tapis_apps", version = "0.5.0", path = "./tapis-apps" }
+tapis-authenticator = { package = "tapis_authenticator", version = "0.5.0", path = "./tapis-authenticator" }
+tapis-files = { package = "tapis_files", version = "0.5.0", path = "./tapis-files" }
+tapis-globus-proxy = { package = "tapis_globus_proxy", version = "0.5.0", path = "./tapis-globus-proxy" }
+tapis-jobs = { package = "tapis_jobs", version = "0.5.0", path = "./tapis-jobs" }
+tapis-meta = { package = "tapis_meta", version = "0.5.0", path = "./tapis-meta" }
+tapis-notifications = { package = "tapis_notifications", version = "0.5.0", path = "./tapis-notifications" }
+tapis-pgrest = { package = "tapis_pgrest", version = "0.5.0", path = "./tapis-pgrest" }
+tapis-pods = { package = "tapis_pods", version = "0.5.0", path = "./tapis-pods" }
+tapis-sk = { package = "tapis_sk", version = "0.5.0", path = "./tapis-sk" }
+tapis-streams = { package = "tapis_streams", version = "0.5.0", path = "./tapis-streams" }
+tapis-systems = { package = "tapis_systems", version = "0.5.0", path = "./tapis-systems" }
+tapis-tenants = { package = "tapis_tenants", version = "0.5.0", path = "./tapis-tenants" }
+tapis-tokens = { package = "tapis_tokens", version = "0.5.0", path = "./tapis-tokens" }
+tapis-workflows = { package = "tapis_workflows", version = "0.5.0", path = "./tapis-workflows" }
 [dev-dependencies]
 
 
@@ -48,8 +47,6 @@ members = [
     "tapis-tokens",
     "tapis-workflows",
 ]
-
-
 [package.metadata.docs.rs]
 # Enable all features when building docs
 all-features = true

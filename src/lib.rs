@@ -50,7 +50,7 @@ pub mod pods {
     pub use tapis_pods::*;
 }
 
-/// Tapis Security Kernel service client
+/// Tapis Sk service client
 pub mod sk {
     pub use tapis_sk::*;
 }

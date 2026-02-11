@@ -1,6 +1,6 @@
 [package]
 name = "tapis_files"
-version = "0.3.0"
+version = "0.5.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Files API provides for management of file resources on Tapis systems"
 license = "3-Clause BSD License"
@@ -13,9 +13,7 @@ serde_repr = "^0.1"
 url = "^2.5"
 uuid = { version = "^1.8", features = ["serde", "v4"] }
 reqwest = { version = "^0.12", default-features = false, features = ["json", "multipart", "stream"] }
-
 http = "^1.0"
-
 [features]
 default = ["native-tls"]
 native-tls = ["reqwest/native-tls"]
