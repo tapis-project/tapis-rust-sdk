@@ -3,7 +3,27 @@ use crate::apis::{
 };
 use crate::models;
 use http::header::{HeaderMap, HeaderValue};
+use reqwest::{Client, Request, Response};
+use reqwest_middleware::{ClientBuilder, Middleware, Next, Result as MiddlewareResult};
 use std::sync::Arc;
+
+#[derive(Debug)]
+struct LoggingMiddleware;
+
+#[async_trait::async_trait]
+impl Middleware for LoggingMiddleware {
+    async fn handle(
+        &self,
+        req: Request,
+        extensions: &mut http::Extensions,
+        next: Next<'_>,
+    ) -> MiddlewareResult<Response> {
+        let method = req.method().clone();
+        let url = req.url().clone();
+        println!("Tapis SDK request: {} {}", method, url);
+        next.run(req, extensions).await
+    }
+}
 
 #[derive(Clone)]
 pub struct TapisSk {
@@ -17,13 +37,20 @@ pub struct TapisSk {
 }
 
 impl TapisSk {
-    pub fn new(base_url: &str, jwt_token: &str) -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn new(
+        base_url: &str,
+        jwt_token: Option<&str>,
+    ) -> Result<Self, Box<dyn std::error::Error>> {
         let mut headers = HeaderMap::new();
-        headers.insert("X-Tapis-Token", HeaderValue::from_str(jwt_token)?);
+        if let Some(token) = jwt_token {
+            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);
+        }
 
-        let client = reqwest::Client::builder()
-            .default_headers(headers)
-            .build()?;
+        let reqwest_client = Client::builder().default_headers(headers).build()?;
+
+        let client = ClientBuilder::new(reqwest_client)
+            .with(LoggingMiddleware)
+            .build();
 
         let mut config = configuration::Configuration::default();
         config.base_path = base_url.to_string();

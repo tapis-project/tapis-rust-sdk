@@ -147,6 +147,16 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
             ),
         )
 
+    deps_body = _section_body(text, "dependencies")
+    if deps_body is None:
+        text = replace_section(text, "dependencies", 'async-trait = "^0.1"')
+    elif not re.search(r'^async-trait\s*=\s*"\^0\.1"\s*$', deps_body, flags=re.M):
+        text = replace_section(
+            text,
+            "dependencies",
+            _append_line_to_section_body(deps_body, 'async-trait = "^0.1"'),
+        )
+
     dev_body = _section_body(text, "dev-dependencies")
     if dev_body is None:
         text = replace_section(
@@ -290,7 +300,27 @@ def generate_client(
         f"use crate::apis::{{configuration, Error, {imports}}};",
         "use crate::models;",
         "use http::header::{HeaderMap, HeaderValue};",
+        "use reqwest::{Client, Request, Response};",
+        "use reqwest_middleware::{ClientBuilder, Middleware, Next, Result as MiddlewareResult};",
         "use std::sync::Arc;",
+        "",
+        "#[derive(Debug)]",
+        "struct LoggingMiddleware;",
+        "",
+        "#[async_trait::async_trait]",
+        "impl Middleware for LoggingMiddleware {",
+        "    async fn handle(",
+        "        &self,",
+        "        req: Request,",
+        "        extensions: &mut http::Extensions,",
+        "        next: Next<'_>,",
+        "    ) -> MiddlewareResult<Response> {",
+        "        let method = req.method().clone();",
+        "        let url = req.url().clone();",
+        "        println!(\"Tapis SDK request: {} {}\", method, url);",
+        "        next.run(req, extensions).await",
+        "    }",
+        "}",
         "",
         "#[derive(Clone)]",
         f"pub struct {wrapper_name} {{",
@@ -302,26 +332,23 @@ def generate_client(
 
     out.extend(["}", "", f"impl {wrapper_name} {{"])
 
-    if service == "authenticator":
-        out.extend([
-            "    pub fn new(base_url: &str, jwt_token: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {",
-            "        let mut headers = HeaderMap::new();",
-            "        if let Some(token) = jwt_token {",
-            '            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);',
-            "        }",
-        ])
-    else:
-        out.extend([
-            "    pub fn new(base_url: &str, jwt_token: &str) -> Result<Self, Box<dyn std::error::Error>> {",
-            "        let mut headers = HeaderMap::new();",
-            '        headers.insert("X-Tapis-Token", HeaderValue::from_str(jwt_token)?);',
-        ])
+    out.extend([
+        "    pub fn new(base_url: &str, jwt_token: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {",
+        "        let mut headers = HeaderMap::new();",
+        "        if let Some(token) = jwt_token {",
+        '            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);',
+        "        }",
+    ])
 
     out.extend([
         "",
-        "        let client = reqwest::Client::builder()",
+        "        let reqwest_client = Client::builder()",
         "            .default_headers(headers)",
         "            .build()?;",
+        "",
+        "        let client = ClientBuilder::new(reqwest_client)",
+        "            .with(LoggingMiddleware)",
+        "            .build();",
         "",
         "        let mut config = configuration::Configuration::default();",
         "        config.base_path = base_url.to_string();",
@@ -348,7 +375,10 @@ def generate_client(
         "",
     ])
 
-    sig_re = re.compile(r"^pub async fn\s+([A-Za-z0-9_]+)\((.*)\)\s*->\s*(.*)\s*\{$")
+    sig_re = re.compile(
+        r"pub async fn\s+([A-Za-z0-9_]+)\s*\((.*?)\)\s*->\s*(.*?)\s*\{",
+        flags=re.S,
+    )
 
     for module in modules:
         cname = pascal_from_snake(module) + "Client"
@@ -361,16 +391,11 @@ def generate_client(
             f"impl {cname} {{",
         ])
 
-        for line in (api_dir / f"{module}_api.rs").read_text().splitlines():
-            if not line.startswith("pub async fn "):
-                continue
-            m = sig_re.match(line.strip())
-            if not m:
-                continue
-
+        api_text = (api_dir / f"{module}_api.rs").read_text()
+        for m in sig_re.finditer(api_text):
             fn_name = m.group(1)
             params = m.group(2).strip()
-            ret = m.group(3).strip()
+            ret = re.sub(r"\s+", " ", m.group(3)).strip()
             ret = re.sub(r"\bError<([A-Za-z0-9_]+)>", rf"Error<{module}_api::\1>", ret)
 
             pitems = split_top_level_params(params)
@@ -432,31 +457,15 @@ def generate_basic_example(
     target = examples_dir / f"{service}_basic_example.rs"
     examples_dir.mkdir(parents=True, exist_ok=True)
 
-    if service == "authenticator":
-        text = f"""use {crate_name}::{wrapper_name};
+    text = f"""use {crate_name}::{wrapper_name};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {{
+    let jwt_token = std::env::var("TAPIS_TOKEN").ok();
     let base_url = std::env::var("TAPIS_BASE_URL")
         .unwrap_or_else(|_| "https://dev.develop.tapis.io/v3".to_string());
 
-    let client = {wrapper_name}::new(&base_url, None)?;
-    println!("Initialized {wrapper_name} against {{}}", client.config().base_path);
-
-    Ok(())
-}}
-"""
-    else:
-        text = f"""use {crate_name}::{wrapper_name};
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {{
-    let jwt_token = std::env::var("TAPIS_TOKEN")
-        .expect("TAPIS_TOKEN environment variable must be set");
-    let base_url = std::env::var("TAPIS_BASE_URL")
-        .unwrap_or_else(|_| "https://dev.develop.tapis.io/v3".to_string());
-
-    let client = {wrapper_name}::new(&base_url, &jwt_token)?;
+    let client = {wrapper_name}::new(&base_url, jwt_token.as_deref())?;
     println!("Initialized {wrapper_name} against {{}}", client.config().base_path);
 
     Ok(())

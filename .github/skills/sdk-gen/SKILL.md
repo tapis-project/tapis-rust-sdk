@@ -104,11 +104,13 @@ Automation notes:
 1. Finds repo root.
 2. Maps environment to branch (`prod->main`, `staging->staging`, `dev->dev`).
 3. Looks up spec URL from `.github/skills/sdk-gen/references/OpenAPI_specs.json`.
-4. Downloads spec and runs `openapi-generator` into `tapis-<service>/`.
+4. Downloads spec and runs `openapi-generator` into `tapis-<service>/` with `packageVersion` set to the parent SDK version from root `Cargo.toml`.
 
 Operational notes:
 - The script requires a clean git working tree when branch switching is needed.
 - Running in `prod` while already on `main` avoids branch switching.
+- Optional version override:
+  `export TAPIS_SDK_PACKAGE_VERSION=<target_version>`
 
 ## Post-Generation Rules
 

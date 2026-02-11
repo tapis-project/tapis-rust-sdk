@@ -22,7 +22,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap_or_else(|_| "https://dev.develop.tapis.io/v3".to_string());
     let pod_image = std::env::var("TAPIS_POD_IMAGE").unwrap_or_else(|_| "ubuntu:22.04".to_string());
 
-    let client = TapisPods::new(&base_url, &jwt_token)?;
+    let client = TapisPods::new(&base_url, Some(jwt_token.as_str()))?;
 
     let suffix = unique_suffix();
     let volume_id = format!("example-volume-{suffix}");

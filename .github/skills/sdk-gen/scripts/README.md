@@ -35,7 +35,7 @@ The script:
 1. Maps env to branch (`prod->main`, `staging->staging`, `dev->dev`).
 2. Reads spec URL from `.github/skills/sdk-gen/references/OpenAPI_specs.json`.
 3. Downloads spec via `curl`.
-4. Runs openapi-generator into `tapis-<service>/`.
+4. Runs openapi-generator into `tapis-<service>/` with `packageVersion` set to the parent SDK version from root `Cargo.toml`.
 
 ## Requirements
 
@@ -109,3 +109,5 @@ Notes:
 - Final version bump runs last unless `--skip-bump` is set.
 - Publishing requires `CARGO_REGISTRY_TOKEN` to be set:
   `export CARGO_REGISTRY_TOKEN=<your_crates_io_token>`
+- Optional version override for generation:
+  `export TAPIS_SDK_PACKAGE_VERSION=<target_version>`

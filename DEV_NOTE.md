@@ -48,6 +48,11 @@ Run from repo root:
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod
 ```
 
+Version behavior:
+- Generated sub-SDK crates use the current parent SDK version from root `Cargo.toml` via `packageVersion`.
+- Optional override for generation:
+  `export TAPIS_SDK_PACKAGE_VERSION=<target_version>`
+
 Useful variants:
 
 ```bash

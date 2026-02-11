@@ -95,6 +95,33 @@ find_repo_root() {
     exit 1
 }
 
+# Parse root package version from Cargo.toml [package] section.
+get_root_package_version() {
+    local manifest="$1/Cargo.toml"
+    if [ ! -f "$manifest" ]; then
+        print_msg $RED "❌ Error: Root Cargo.toml not found at: $manifest"
+        exit 1
+    fi
+    
+    local version
+    version=$(awk '
+        $0 ~ /^\[package\]$/ { in_package=1; next }
+        in_package && $0 ~ /^\[/ { in_package=0 }
+        in_package && $1 == "version" {
+            gsub(/"/, "", $3)
+            print $3
+            exit
+        }
+    ' "$manifest")
+    
+    if [ -z "$version" ]; then
+        print_msg $RED "❌ Error: Failed to parse root package version from $manifest"
+        exit 1
+    fi
+    
+    echo "$version"
+}
+
 # Map environment to git branch
 get_branch_for_env() {
     local env=$1
@@ -150,6 +177,7 @@ SERVICE="$2"
 # Find repository root
 REPO_ROOT=$(find_repo_root)
 OPENAPI_SPECS_FILE="$REPO_ROOT/.github/skills/sdk-gen/references/OpenAPI_specs.json"
+SDK_VERSION="${TAPIS_SDK_PACKAGE_VERSION:-$(get_root_package_version "$REPO_ROOT")}"
 
 print_msg $BLUE "════════════════════════════════════════════════════════════"
 print_msg $BLUE "  Rust SDK Generator for TAPIS Services"
@@ -158,6 +186,7 @@ echo ""
 print_msg $GREEN "🌍 Environment: $ENV"
 print_msg $GREEN "📦 Service: $SERVICE"
 print_msg $GREEN "📂 Repository Root: $REPO_ROOT"
+print_msg $GREEN "🏷️  SDK Version: $SDK_VERSION"
 echo ""
 
 # Check dependencies
@@ -179,10 +208,10 @@ if [ "$NO_BRANCH_SWITCH" = "1" ]; then
     print_msg $YELLOW "⏭️  Skipping branch switch (current: $CURRENT_BRANCH, target for env: $TARGET_BRANCH)"
 else
     print_msg $YELLOW "🔀 Switching to branch: $TARGET_BRANCH"
-
+    
     if [ "$CURRENT_BRANCH" != "$TARGET_BRANCH" ]; then
         print_msg $YELLOW "   Current branch: $CURRENT_BRANCH → $TARGET_BRANCH"
-
+        
         # Check for uncommitted changes
         if ! git diff-index --quiet HEAD -- 2>/dev/null; then
             print_msg $RED "❌ Error: You have uncommitted changes. Please commit or stash them first."
@@ -190,7 +219,7 @@ else
             git status --short
             exit 1
         fi
-
+        
         # Switch branch
         if ! git checkout "$TARGET_BRANCH"; then
             print_msg $RED "❌ Error: Failed to switch to branch $TARGET_BRANCH"
@@ -198,7 +227,7 @@ else
             git branch -a
             exit 1
         fi
-
+        
         print_msg $GREEN "✓ Switched to branch: $TARGET_BRANCH"
     else
         print_msg $GREEN "✓ Already on branch: $TARGET_BRANCH"
@@ -254,9 +283,10 @@ if openapi-generator generate \
 -g rust \
 -o "$OUTPUT_DIR" \
 --package-name "$PACKAGE_NAME" \
---additional-properties=packageVersion=1.0.0 \
+--additional-properties=packageVersion="$SDK_VERSION" \
 --additional-properties=useSingleRequestParameter=false \
 --additional-properties=supportAsync=true \
+--additional-properties=supportMiddleware=true \
 --library=reqwest \
 --skip-validate-spec; then
     
