@@ -26,7 +26,13 @@ pub struct RespResourceUrl {
 }
 
 impl RespResourceUrl {
-    pub fn new(status: String, message: String, result: models::ResourceUrlResult, version: String, metadata: serde_json::Value) -> RespResourceUrl {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::ResourceUrlResult,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespResourceUrl {
         RespResourceUrl {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespResourceUrl {
         }
     }
 }
-

@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum RuntimeEnum {
     #[serde(rename = "SINGULARITY")]
@@ -20,7 +20,6 @@ pub enum RuntimeEnum {
     Docker,
     #[serde(rename = "ZIP")]
     Zip,
-
 }
 
 impl std::fmt::Display for RuntimeEnum {
@@ -38,4 +37,3 @@ impl Default for RuntimeEnum {
         Self::Singularity
     }
 }
-

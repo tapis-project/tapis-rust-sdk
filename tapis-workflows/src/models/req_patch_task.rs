@@ -60,7 +60,12 @@ pub struct ReqPatchTask {
     pub tapis_job_def: Option<serde_json::Value>,
     #[serde(rename = "tapis_actor_id", skip_serializing_if = "Option::is_none")]
     pub tapis_actor_id: Option<String>,
-    #[serde(rename = "tapis_actor_message", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_actor_message",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_actor_message: Option<Option<String>>,
     #[serde(rename = "git_repositories", skip_serializing_if = "Option::is_none")]
     pub git_repositories: Option<Vec<models::GitCloneDetails>>,
@@ -118,4 +123,3 @@ impl ReqPatchTask {
         }
     }
 }
-

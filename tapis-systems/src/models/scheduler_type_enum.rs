@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum SchedulerTypeEnum {
     #[serde(rename = "SLURM")]
@@ -26,7 +26,6 @@ pub enum SchedulerTypeEnum {
     Uge,
     #[serde(rename = "TORQUE")]
     Torque,
-
 }
 
 impl std::fmt::Display for SchedulerTypeEnum {
@@ -47,4 +46,3 @@ impl Default for SchedulerTypeEnum {
         Self::Slurm
     }
 }
-

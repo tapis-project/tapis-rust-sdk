@@ -20,11 +20,13 @@ pub struct EtlSystemsConfiguration {
 }
 
 impl EtlSystemsConfiguration {
-    pub fn new(manifests: models::EtlManifestsSystem, data: models::EtlDataSystem) -> EtlSystemsConfiguration {
+    pub fn new(
+        manifests: models::EtlManifestsSystem,
+        data: models::EtlDataSystem,
+    ) -> EtlSystemsConfiguration {
         EtlSystemsConfiguration {
             manifests: Box::new(manifests),
             data: Box::new(data),
         }
     }
 }
-

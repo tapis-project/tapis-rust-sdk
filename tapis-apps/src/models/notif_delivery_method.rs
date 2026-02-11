@@ -11,14 +11,13 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum NotifDeliveryMethod {
     #[serde(rename = "WEBHOOK")]
     Webhook,
     #[serde(rename = "EMAIL")]
     Email,
-
 }
 
 impl std::fmt::Display for NotifDeliveryMethod {
@@ -35,4 +34,3 @@ impl Default for NotifDeliveryMethod {
         Self::Webhook
     }
 }
-

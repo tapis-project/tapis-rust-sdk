@@ -13,7 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqGithubCred {
-    #[serde(rename = "personal_access_token", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "personal_access_token",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub personal_access_token: Option<String>,
     #[serde(rename = "username", skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
@@ -27,4 +30,3 @@ impl ReqGithubCred {
         }
     }
 }
-

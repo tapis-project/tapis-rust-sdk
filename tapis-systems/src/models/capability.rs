@@ -26,7 +26,11 @@ pub struct Capability {
 }
 
 impl Capability {
-    pub fn new(category: models::CategoryEnum, name: String, datatype: models::DatatypeEnum) -> Capability {
+    pub fn new(
+        category: models::CategoryEnum,
+        name: String,
+        datatype: models::DatatypeEnum,
+    ) -> Capability {
         Capability {
             category,
             name,
@@ -36,4 +40,3 @@ impl Capability {
         }
     }
 }
-

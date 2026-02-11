@@ -24,7 +24,11 @@ pub struct ReqRegistryContext {
 }
 
 impl ReqRegistryContext {
-    pub fn new(r#type: models::EnumContextType, visibility: models::EnumContextVisibility, url: String) -> ReqRegistryContext {
+    pub fn new(
+        r#type: models::EnumContextType,
+        visibility: models::EnumContextVisibility,
+        url: String,
+    ) -> ReqRegistryContext {
         ReqRegistryContext {
             r#type,
             visibility,
@@ -33,4 +37,3 @@ impl ReqRegistryContext {
         }
     }
 }
-

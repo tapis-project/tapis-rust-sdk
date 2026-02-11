@@ -85,9 +85,15 @@ pub struct TapisSystem {
     pub batch_scheduler: Option<models::SchedulerTypeEnum>,
     #[serde(rename = "batchLogicalQueues", skip_serializing_if = "Option::is_none")]
     pub batch_logical_queues: Option<Vec<models::LogicalQueue>>,
-    #[serde(rename = "batchDefaultLogicalQueue", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "batchDefaultLogicalQueue",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub batch_default_logical_queue: Option<String>,
-    #[serde(rename = "batchSchedulerProfile", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "batchSchedulerProfile",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub batch_scheduler_profile: Option<String>,
     #[serde(rename = "jobCapabilities", skip_serializing_if = "Option::is_none")]
     pub job_capabilities: Option<Vec<models::Capability>>,
@@ -107,7 +113,10 @@ pub struct TapisSystem {
     pub has_credentials: Option<bool>,
     #[serde(rename = "isPublic", skip_serializing_if = "Option::is_none")]
     pub is_public: Option<bool>,
-    #[serde(rename = "isDynamicEffectiveUser", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "isDynamicEffectiveUser",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub is_dynamic_effective_user: Option<bool>,
     #[serde(rename = "sharedWithUsers", skip_serializing_if = "Option::is_none")]
     pub shared_with_users: Option<Vec<String>>,
@@ -162,4 +171,3 @@ impl TapisSystem {
         }
     }
 }
-

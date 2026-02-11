@@ -11,14 +11,13 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumDestinationType {
     #[serde(rename = "dockerhub")]
     Dockerhub,
     #[serde(rename = "local")]
     Local,
-
 }
 
 impl std::fmt::Display for EnumDestinationType {
@@ -35,4 +34,3 @@ impl Default for EnumDestinationType {
         Self::Dockerhub
     }
 }
-

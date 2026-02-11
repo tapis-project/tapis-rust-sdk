@@ -20,9 +20,6 @@ pub struct Roles {
 
 impl Roles {
     pub fn new() -> Roles {
-        Roles {
-            role_names: None,
-        }
+        Roles { role_names: None }
     }
 }
-

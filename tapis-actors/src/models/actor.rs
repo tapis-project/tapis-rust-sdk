@@ -23,7 +23,10 @@ pub struct Actor {
     #[serde(rename = "image", skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
     /// The default environment variables and values for the actor.
-    #[serde(rename = "default_environment", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "default_environment",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub default_environment: Option<serde_json::Value>,
     /// User provided description of the actor.
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
@@ -116,4 +119,3 @@ impl Default for Type {
         Self::None
     }
 }
-

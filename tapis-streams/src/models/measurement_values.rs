@@ -22,9 +22,6 @@ pub struct MeasurementValues {
 impl MeasurementValues {
     /// Measurement objects. Example [{\"temp1\":\"75.0\",\"pc_hmd\":\"34\",\"datetime\":\"2021-05-15T15:23:00+05:00\"},{\"temp1\":\"77.0\",\"pc_hmd\":\"36\",\"datetime\":\"2021-05-15T15:54:00+05:00\"}]
     pub fn new(datetime: String) -> MeasurementValues {
-        MeasurementValues {
-            datetime,
-        }
+        MeasurementValues { datetime }
     }
 }
-

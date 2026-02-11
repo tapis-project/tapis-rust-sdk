@@ -19,9 +19,6 @@ pub struct ActorMessages {
 
 impl ActorMessages {
     pub fn new() -> ActorMessages {
-        ActorMessages {
-            messages: None,
-        }
+        ActorMessages { messages: None }
     }
 }
-

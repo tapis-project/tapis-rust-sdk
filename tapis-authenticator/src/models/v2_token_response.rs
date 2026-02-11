@@ -35,4 +35,3 @@ impl V2TokenResponse {
         }
     }
 }
-

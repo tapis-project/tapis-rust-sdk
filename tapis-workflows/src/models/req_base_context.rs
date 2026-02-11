@@ -19,9 +19,6 @@ pub struct ReqBaseContext {
 
 impl ReqBaseContext {
     pub fn new(r#type: models::EnumContextType) -> ReqBaseContext {
-        ReqBaseContext {
-            r#type,
-        }
+        ReqBaseContext { r#type }
     }
 }
-

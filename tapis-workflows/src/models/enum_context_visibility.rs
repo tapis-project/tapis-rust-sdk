@@ -11,14 +11,13 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumContextVisibility {
     #[serde(rename = "private")]
     Private,
     #[serde(rename = "public")]
     Public,
-
 }
 
 impl std::fmt::Display for EnumContextVisibility {
@@ -35,4 +34,3 @@ impl Default for EnumContextVisibility {
         Self::Private
     }
 }
-

@@ -1,7 +1,7 @@
 /*
  * Tapis Pods Service
  *
- *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html). 
+ *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html).
  *
  * The version of the OpenAPI document: 1.9.0
  * Contact: cicsupport@tacc.utexas.edu
@@ -26,10 +26,16 @@ pub struct ModelsPodsResources {
     #[serde(rename = "mem_limit", skip_serializing_if = "Option::is_none")]
     pub mem_limit: Option<i32>,
     /// Ephemeral storage pod requests at startup. In mebibytes (Mi)
-    #[serde(rename = "ephemeral_storage_request", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "ephemeral_storage_request",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub ephemeral_storage_request: Option<i32>,
     /// Ephemeral storage pod is allowed to use. In mebibytes (Mi)
-    #[serde(rename = "ephemeral_storage_limit", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "ephemeral_storage_limit",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub ephemeral_storage_limit: Option<i32>,
     /// GPU allocation pod is allowed to use. In integers of GPUs. (we only have 1 currently ;) )
     #[serde(rename = "gpus", skip_serializing_if = "Option::is_none")]
@@ -49,4 +55,3 @@ impl ModelsPodsResources {
         }
     }
 }
-

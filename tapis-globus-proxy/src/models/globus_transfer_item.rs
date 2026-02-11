@@ -23,7 +23,11 @@ pub struct GlobusTransferItem {
 }
 
 impl GlobusTransferItem {
-    pub fn new(source_path: String, destination_path: String, recursive: bool) -> GlobusTransferItem {
+    pub fn new(
+        source_path: String,
+        destination_path: String,
+        recursive: bool,
+    ) -> GlobusTransferItem {
         GlobusTransferItem {
             source_path,
             destination_path,
@@ -31,4 +35,3 @@ impl GlobusTransferItem {
         }
     }
 }
-

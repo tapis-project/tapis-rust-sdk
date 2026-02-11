@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumTaskIoType {
     #[serde(rename = "string")]
@@ -20,7 +20,6 @@ pub enum EnumTaskIoType {
     Number,
     #[serde(rename = "boolean")]
     Boolean,
-
 }
 
 impl std::fmt::Display for EnumTaskIoType {
@@ -38,4 +37,3 @@ impl Default for EnumTaskIoType {
         Self::String
     }
 }
-

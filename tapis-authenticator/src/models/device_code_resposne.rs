@@ -31,7 +31,13 @@ pub struct DeviceCodeResposne {
 }
 
 impl DeviceCodeResposne {
-    pub fn new(device_code: String, user_code: String, client_id: String, expires_in: String, verification_uri: String) -> DeviceCodeResposne {
+    pub fn new(
+        device_code: String,
+        user_code: String,
+        client_id: String,
+        expires_in: String,
+        verification_uri: String,
+    ) -> DeviceCodeResposne {
         DeviceCodeResposne {
             device_code,
             user_code,
@@ -41,4 +47,3 @@ impl DeviceCodeResposne {
         }
     }
 }
-

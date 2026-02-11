@@ -19,9 +19,6 @@ pub struct ResourceUrlResult {
 
 impl ResourceUrlResult {
     pub fn new() -> ResourceUrlResult {
-        ResourceUrlResult {
-            url: None,
-        }
+        ResourceUrlResult { url: None }
     }
 }
-

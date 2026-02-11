@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum OperationTypeEnum {
     #[serde(rename = "CREATE")]
@@ -42,7 +42,6 @@ pub enum OperationTypeEnum {
     RemoveCred,
     #[serde(rename = "GET_CRED")]
     GetCred,
-
 }
 
 impl std::fmt::Display for OperationTypeEnum {
@@ -71,4 +70,3 @@ impl Default for OperationTypeEnum {
         Self::Create
     }
 }
-

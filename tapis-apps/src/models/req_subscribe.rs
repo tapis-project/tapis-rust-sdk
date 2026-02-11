@@ -26,7 +26,10 @@ pub struct ReqSubscribe {
 }
 
 impl ReqSubscribe {
-    pub fn new(job_event_category_filter: models::JobEventCategoryFilter, delivery_targets: Vec<models::NotifDeliveryTarget>) -> ReqSubscribe {
+    pub fn new(
+        job_event_category_filter: models::JobEventCategoryFilter,
+        delivery_targets: Vec<models::NotifDeliveryTarget>,
+    ) -> ReqSubscribe {
         ReqSubscribe {
             description: None,
             enabled: None,
@@ -36,4 +39,3 @@ impl ReqSubscribe {
         }
     }
 }
-

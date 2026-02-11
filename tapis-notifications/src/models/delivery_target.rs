@@ -20,11 +20,13 @@ pub struct DeliveryTarget {
 }
 
 impl DeliveryTarget {
-    pub fn new(delivery_method: models::DeliveryMethod, delivery_address: String) -> DeliveryTarget {
+    pub fn new(
+        delivery_method: models::DeliveryMethod,
+        delivery_address: String,
+    ) -> DeliveryTarget {
         DeliveryTarget {
             delivery_method,
             delivery_address,
         }
     }
 }
-

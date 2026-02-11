@@ -26,7 +26,13 @@ pub struct RespArchiveList {
 }
 
 impl RespArchiveList {
-    pub fn new(status: String, message: String, result: Vec<models::Archive>, version: String, metadata: serde_json::Value) -> RespArchiveList {
+    pub fn new(
+        status: String,
+        message: String,
+        result: Vec<models::Archive>,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespArchiveList {
         RespArchiveList {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespArchiveList {
         }
     }
 }
-

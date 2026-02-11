@@ -19,9 +19,6 @@ pub struct ReqMatchConstraints {
 
 impl ReqMatchConstraints {
     pub fn new(r#match: Vec<String>) -> ReqMatchConstraints {
-        ReqMatchConstraints {
-            r#match,
-        }
+        ReqMatchConstraints { r#match }
     }
 }
-

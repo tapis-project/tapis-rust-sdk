@@ -19,9 +19,6 @@ pub struct ResultCancelTask {
 
 impl ResultCancelTask {
     pub fn new() -> ResultCancelTask {
-        ResultCancelTask {
-            code: None,
-        }
+        ResultCancelTask { code: None }
     }
 }
-

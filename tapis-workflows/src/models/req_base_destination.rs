@@ -19,9 +19,6 @@ pub struct ReqBaseDestination {
 
 impl ReqBaseDestination {
     pub fn new(r#type: models::EnumDestinationType) -> ReqBaseDestination {
-        ReqBaseDestination {
-            r#type,
-        }
+        ReqBaseDestination { r#type }
     }
 }
-

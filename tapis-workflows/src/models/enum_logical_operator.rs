@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumLogicalOperator {
     #[serde(rename = "and")]
@@ -26,7 +26,6 @@ pub enum EnumLogicalOperator {
     Nor,
     #[serde(rename = "xnor")]
     Xnor,
-
 }
 
 impl std::fmt::Display for EnumLogicalOperator {
@@ -47,4 +46,3 @@ impl Default for EnumLogicalOperator {
         Self::And
     }
 }
-

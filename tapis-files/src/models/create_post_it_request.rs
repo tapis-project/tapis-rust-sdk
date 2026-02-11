@@ -13,10 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreatePostItRequest {
-    /// Number of times that the new PostIt can be redeemed. The default is one use.  Setting the value to -1 (negative one) will allow the PostIt to be redeemed an unlimited number of times. 
+    /// Number of times that the new PostIt can be redeemed. The default is one use.  Setting the value to -1 (negative one) will allow the PostIt to be redeemed an unlimited number of times.
     #[serde(rename = "allowedUses", skip_serializing_if = "Option::is_none")]
     pub allowed_uses: Option<i32>,
-    /// Number of seconds until the PostIt expires.   Default is 30 days. 
+    /// Number of seconds until the PostIt expires.   Default is 30 days.
     #[serde(rename = "validSeconds", skip_serializing_if = "Option::is_none")]
     pub valid_seconds: Option<i32>,
 }
@@ -29,4 +29,3 @@ impl CreatePostItRequest {
         }
     }
 }
-

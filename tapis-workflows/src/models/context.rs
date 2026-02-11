@@ -15,7 +15,12 @@ use serde::{Deserialize, Serialize};
 pub struct Context {
     #[serde(rename = "branch", skip_serializing_if = "Option::is_none")]
     pub branch: Option<String>,
-    #[serde(rename = "credentials", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "credentials",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub credentials: Option<Option<serde_json::Value>>,
     #[serde(rename = "build_file_path", skip_serializing_if = "Option::is_none")]
     pub build_file_path: Option<String>,
@@ -42,4 +47,3 @@ impl Context {
         }
     }
 }
-

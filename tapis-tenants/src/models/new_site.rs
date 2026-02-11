@@ -26,7 +26,10 @@ pub struct NewSite {
     #[serde(rename = "services")]
     pub services: Vec<String>,
     /// For primary site only; The template string represening the base URL for a tenant.
-    #[serde(rename = "tenant_base_url_template", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tenant_base_url_template",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tenant_base_url_template: Option<String>,
     /// Tenant ID of this site's tenant.
     #[serde(rename = "site_admin_tenant_id")]
@@ -34,7 +37,13 @@ pub struct NewSite {
 }
 
 impl NewSite {
-    pub fn new(site_id: String, base_url: String, primary: bool, services: Vec<String>, site_admin_tenant_id: String) -> NewSite {
+    pub fn new(
+        site_id: String,
+        base_url: String,
+        primary: bool,
+        services: Vec<String>,
+        site_admin_tenant_id: String,
+    ) -> NewSite {
         NewSite {
             site_id,
             base_url,
@@ -45,4 +54,3 @@ impl NewSite {
         }
     }
 }
-

@@ -1,6 +1,6 @@
 [package]
 name = "tapis_sk"
-version = "0.6.0"
+version = "1.0.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources. "
 license = "3-Clause BSD License"

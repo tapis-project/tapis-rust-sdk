@@ -36,7 +36,14 @@ pub struct NewSite {
 }
 
 impl NewSite {
-    pub fn new(site_name: String, site_id: String, description: String, latitude: f64, longitude: f64, elevation: f64) -> NewSite {
+    pub fn new(
+        site_name: String,
+        site_id: String,
+        description: String,
+        latitude: f64,
+        longitude: f64,
+        elevation: f64,
+    ) -> NewSite {
         NewSite {
             site_name,
             site_id,
@@ -48,4 +55,3 @@ impl NewSite {
         }
     }
 }
-

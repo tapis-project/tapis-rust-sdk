@@ -40,7 +40,16 @@ pub struct NewLdap {
 }
 
 impl NewLdap {
-    pub fn new(ldap_id: String, url: String, port: i32, use_ssl: bool, user_dn: String, bind_dn: String, bind_credential: String, account_type: AccountType) -> NewLdap {
+    pub fn new(
+        ldap_id: String,
+        url: String,
+        port: i32,
+        use_ssl: bool,
+        user_dn: String,
+        bind_dn: String,
+        bind_credential: String,
+        account_type: AccountType,
+    ) -> NewLdap {
         NewLdap {
             ldap_id,
             url,
@@ -67,4 +76,3 @@ impl Default for AccountType {
         Self::Service
     }
 }
-

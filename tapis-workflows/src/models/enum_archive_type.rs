@@ -11,14 +11,13 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumArchiveType {
     #[serde(rename = "system")]
     System,
     #[serde(rename = "s3")]
     S3,
-
 }
 
 impl std::fmt::Display for EnumArchiveType {
@@ -35,4 +34,3 @@ impl Default for EnumArchiveType {
         Self::System
     }
 }
-

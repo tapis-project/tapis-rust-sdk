@@ -19,9 +19,6 @@ pub struct ValueFromTaskOutput {
 
 impl ValueFromTaskOutput {
     pub fn new() -> ValueFromTaskOutput {
-        ValueFromTaskOutput {
-            task_output: None,
-        }
+        ValueFromTaskOutput { task_output: None }
     }
 }
-

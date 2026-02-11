@@ -19,9 +19,6 @@ pub struct MkdirRequest {
 
 impl MkdirRequest {
     pub fn new(path: String) -> MkdirRequest {
-        MkdirRequest {
-            path,
-        }
+        MkdirRequest { path }
     }
 }
-

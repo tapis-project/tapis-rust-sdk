@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum GlobusTaskStatusEnum {
     #[serde(rename = "ACTIVE")]
@@ -24,7 +24,6 @@ pub enum GlobusTaskStatusEnum {
     Failed,
     #[serde(rename = "UNKNOWN")]
     Unknown,
-
 }
 
 impl std::fmt::Display for GlobusTaskStatusEnum {
@@ -44,4 +43,3 @@ impl Default for GlobusTaskStatusEnum {
         Self::Active
     }
 }
-

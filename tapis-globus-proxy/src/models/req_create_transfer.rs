@@ -22,7 +22,11 @@ pub struct ReqCreateTransfer {
 }
 
 impl ReqCreateTransfer {
-    pub fn new(source_endpoint: String, destination_endpoint: String, transfer_items: Vec<models::GlobusTransferItem>) -> ReqCreateTransfer {
+    pub fn new(
+        source_endpoint: String,
+        destination_endpoint: String,
+        transfer_items: Vec<models::GlobusTransferItem>,
+    ) -> ReqCreateTransfer {
         ReqCreateTransfer {
             source_endpoint,
             destination_endpoint,
@@ -30,4 +34,3 @@ impl ReqCreateTransfer {
         }
     }
 }
-

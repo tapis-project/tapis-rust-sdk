@@ -19,9 +19,6 @@ pub struct TapisEtlExtendedTapisJobDef {
 
 impl TapisEtlExtendedTapisJobDef {
     pub fn new() -> TapisEtlExtendedTapisJobDef {
-        TapisEtlExtendedTapisJobDef {
-            extensions: None,
-        }
+        TapisEtlExtendedTapisJobDef { extensions: None }
     }
 }
-

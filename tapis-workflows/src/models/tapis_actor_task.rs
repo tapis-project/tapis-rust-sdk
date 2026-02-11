@@ -33,7 +33,12 @@ pub struct TapisActorTask {
     pub poll: Option<bool>,
     #[serde(rename = "tapis_actor_id", skip_serializing_if = "Option::is_none")]
     pub tapis_actor_id: Option<String>,
-    #[serde(rename = "tapis_actor_message", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_actor_message",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_actor_message: Option<Option<String>>,
 }
 
@@ -54,4 +59,3 @@ impl TapisActorTask {
         }
     }
 }
-

@@ -21,7 +21,10 @@ pub struct PipelineExecutionProfile {
     pub max_exec_time: Option<i32>,
     #[serde(rename = "retry_policy", skip_serializing_if = "Option::is_none")]
     pub retry_policy: Option<models::EnumRetryPolicy>,
-    #[serde(rename = "duplicate_submission_policy", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "duplicate_submission_policy",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub duplicate_submission_policy: Option<models::EnumDuplicateSubmissionPolicy>,
 }
 
@@ -36,4 +39,3 @@ impl PipelineExecutionProfile {
         }
     }
 }
-

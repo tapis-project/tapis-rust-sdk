@@ -20,9 +20,6 @@ pub struct NewTableRow {
 
 impl NewTableRow {
     pub fn new() -> NewTableRow {
-        NewTableRow {
-            data: None,
-        }
+        NewTableRow { data: None }
     }
 }
-

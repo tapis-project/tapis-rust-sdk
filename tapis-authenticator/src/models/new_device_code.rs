@@ -20,9 +20,6 @@ pub struct NewDeviceCode {
 
 impl NewDeviceCode {
     pub fn new(client_id: String) -> NewDeviceCode {
-        NewDeviceCode {
-            client_id,
-        }
+        NewDeviceCode { client_id }
     }
 }
-

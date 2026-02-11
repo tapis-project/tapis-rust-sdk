@@ -20,9 +20,6 @@ pub struct ActorExecutionLogs {
 
 impl ActorExecutionLogs {
     pub fn new() -> ActorExecutionLogs {
-        ActorExecutionLogs {
-            logs: None,
-        }
+        ActorExecutionLogs { logs: None }
     }
 }
-

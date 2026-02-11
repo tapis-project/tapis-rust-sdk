@@ -28,7 +28,11 @@ pub struct ReqDockerhubContext {
 }
 
 impl ReqDockerhubContext {
-    pub fn new(r#type: models::EnumContextType, visibility: models::EnumContextVisibility, url: String) -> ReqDockerhubContext {
+    pub fn new(
+        r#type: models::EnumContextType,
+        visibility: models::EnumContextVisibility,
+        url: String,
+    ) -> ReqDockerhubContext {
         ReqDockerhubContext {
             r#type,
             visibility,
@@ -39,4 +43,3 @@ impl ReqDockerhubContext {
         }
     }
 }
-

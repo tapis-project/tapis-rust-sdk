@@ -19,9 +19,6 @@ pub struct ReqSearchSystems {
 
 impl ReqSearchSystems {
     pub fn new(search: Vec<String>) -> ReqSearchSystems {
-        ReqSearchSystems {
-            search,
-        }
+        ReqSearchSystems { search }
     }
 }
-

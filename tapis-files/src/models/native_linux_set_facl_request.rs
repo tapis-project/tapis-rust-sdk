@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 pub struct NativeLinuxSetFaclRequest {
     #[serde(rename = "operation")]
     pub operation: Operation,
-    /// Recursion may be set to physical (don't follow symlinks) or logical (follow symlinks), or none (don't recurse). 
+    /// Recursion may be set to physical (don't follow symlinks) or logical (follow symlinks), or none (don't recurse).
     #[serde(rename = "recursionMethod", skip_serializing_if = "Option::is_none")]
     pub recursion_method: Option<RecursionMethod>,
     /// specifies the actual acl string to set.  Multiple acls may be separated by  commas. Examples - user:myuser:rwx,group             group:mygroup:rw             user:myuser:rwx,group,group:mygroup:rw  
@@ -32,7 +32,7 @@ impl NativeLinuxSetFaclRequest {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Operation {
     #[serde(rename = "ADD")]
@@ -50,7 +50,7 @@ impl Default for Operation {
         Self::Add
     }
 }
-/// Recursion may be set to physical (don't follow symlinks) or logical (follow symlinks), or none (don't recurse). 
+/// Recursion may be set to physical (don't follow symlinks) or logical (follow symlinks), or none (don't recurse).
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum RecursionMethod {
     #[serde(rename = "NONE")]
@@ -66,4 +66,3 @@ impl Default for RecursionMethod {
         Self::None
     }
 }
-

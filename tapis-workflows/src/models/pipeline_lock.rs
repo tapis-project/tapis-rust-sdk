@@ -39,4 +39,3 @@ impl PipelineLock {
         }
     }
 }
-

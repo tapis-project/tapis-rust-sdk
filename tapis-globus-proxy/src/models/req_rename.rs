@@ -19,9 +19,6 @@ pub struct ReqRename {
 
 impl ReqRename {
     pub fn new(destination: String) -> ReqRename {
-        ReqRename {
-            destination,
-        }
+        ReqRename { destination }
     }
 }
-

@@ -1,7 +1,7 @@
 /*
  * Tapis Pods Service
  *
- *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html). 
+ *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html).
  *
  * The version of the OpenAPI document: 1.9.0
  * Contact: cicsupport@tacc.utexas.edu
@@ -13,18 +13,46 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TemplateTagPodDefinition {
-    #[serde(rename = "image", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "image",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub image: Option<Option<String>>,
-    #[serde(rename = "template", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "template",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub template: Option<Option<String>>,
-    #[serde(rename = "description", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "description",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub description: Option<Option<String>>,
-    #[serde(rename = "command", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "command",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub command: Option<Option<Vec<String>>>,
-    #[serde(rename = "arguments", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "arguments",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub arguments: Option<Option<Vec<String>>>,
     /// Environment variables to inject into pod. Use `${pods:secrets:KEY}` to reference secret_map entries.
-    #[serde(rename = "environment_variables", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "environment_variables",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub environment_variables: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// Map of keys to secret references or placeholders. Use ${secret:name} for user secrets, ${pods:default:val:?desc} for placeholders with defaults, ${:?desc} for required placeholders. Secrets resolved at pod start.
     #[serde(rename = "secret_map", skip_serializing_if = "Option::is_none")]
@@ -32,13 +60,24 @@ pub struct TemplateTagPodDefinition {
     /// Volume mounts keyed by mount_path. For templates, tapisvolume/tapissnapshot MUST use placeholder source_id (e.g., \"${:?Description}\"). Ex: {\"/data\": {\"type\": \"tapisvolume\", \"source_id\": \"${:?User data volume}\"}, \"/etc/config.ini\": {\"type\": \"ephemeral\", \"config_content\": \"key=value\"}}
     #[serde(rename = "volume_mounts", skip_serializing_if = "Option::is_none")]
     pub volume_mounts: Option<std::collections::HashMap<String, models::VolumeMountsValue>>,
-    #[serde(rename = "time_to_stop_default", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "time_to_stop_default",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub time_to_stop_default: Option<Option<i32>>,
-    #[serde(rename = "time_to_stop_instance", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "time_to_stop_instance",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub time_to_stop_instance: Option<Option<i32>>,
     /// Networking information. `{\"url_suffix\": {\"protocol\": \"http\"  \"tcp\", \"port\": int}}`
     #[serde(rename = "networking", skip_serializing_if = "Option::is_none")]
-    pub networking: Option<std::collections::HashMap<String, models::ModelsTemplatesTagsNetworking>>,
+    pub networking:
+        Option<std::collections::HashMap<String, models::ModelsTemplatesTagsNetworking>>,
     /// Pod resource management `{\"cpu_limit\": 3000, \"mem_limit\": 3000, \"cpu_request\": 500, \"mem_limit\": 500, \"gpus\": 0}`
     #[serde(rename = "resources", skip_serializing_if = "Option::is_none")]
     pub resources: Option<Box<models::ModelsTemplatesTagsResources>>,
@@ -66,4 +105,3 @@ impl TemplateTagPodDefinition {
         }
     }
 }
-

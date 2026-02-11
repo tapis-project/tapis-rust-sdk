@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum CategoryEnum {
     #[serde(rename = "SCHEDULER")]
@@ -30,7 +30,6 @@ pub enum CategoryEnum {
     Misc,
     #[serde(rename = "CUSTOM")]
     Custom,
-
 }
 
 impl std::fmt::Display for CategoryEnum {
@@ -53,4 +52,3 @@ impl Default for CategoryEnum {
         Self::Scheduler
     }
 }
-

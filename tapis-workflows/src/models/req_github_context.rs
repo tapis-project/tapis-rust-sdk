@@ -32,7 +32,13 @@ pub struct ReqGithubContext {
 }
 
 impl ReqGithubContext {
-    pub fn new(r#type: models::EnumContextType, visibility: models::EnumContextVisibility, url: String, branch: String, build_file_path: String) -> ReqGithubContext {
+    pub fn new(
+        r#type: models::EnumContextType,
+        visibility: models::EnumContextVisibility,
+        url: String,
+        branch: String,
+        build_file_path: String,
+    ) -> ReqGithubContext {
         ReqGithubContext {
             r#type,
             visibility,
@@ -45,4 +51,3 @@ impl ReqGithubContext {
         }
     }
 }
-

@@ -36,7 +36,11 @@ pub struct ReqTapisJobTask {
 }
 
 impl ReqTapisJobTask {
-    pub fn new(id: String, r#type: models::EnumTaskType, tapis_job_def: serde_json::Value) -> ReqTapisJobTask {
+    pub fn new(
+        id: String,
+        r#type: models::EnumTaskType,
+        tapis_job_def: serde_json::Value,
+    ) -> ReqTapisJobTask {
         ReqTapisJobTask {
             id,
             r#type,
@@ -51,4 +55,3 @@ impl ReqTapisJobTask {
         }
     }
 }
-

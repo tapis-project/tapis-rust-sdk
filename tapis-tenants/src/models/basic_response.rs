@@ -47,4 +47,3 @@ impl Default for Status {
         Self::Success
     }
 }
-

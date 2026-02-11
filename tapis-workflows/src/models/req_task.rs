@@ -16,19 +16,19 @@ use serde_with::serde_as;
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum ReqTask {
-    #[serde(rename="image_build")]
+    #[serde(rename = "image_build")]
     ImageBuild(Box<models::ReqImageBuildTask>),
-    #[serde(rename="request")]
+    #[serde(rename = "request")]
     Request(Box<models::ReqRequestTask>),
-    #[serde(rename="application")]
+    #[serde(rename = "application")]
     Application(Box<models::ReqApplicationTask>),
-    #[serde(rename="tapis_job")]
+    #[serde(rename = "tapis_job")]
     TapisJob(Box<models::ReqTapisJobTask>),
-    #[serde(rename="tapis_actor")]
+    #[serde(rename = "tapis_actor")]
     TapisActor(Box<models::ReqTapisActorTask>),
-    #[serde(rename="function")]
+    #[serde(rename = "function")]
     Function(Box<models::ReqFunctionTask>),
-    #[serde(rename="template")]
+    #[serde(rename = "template")]
     Template(Box<models::ReqTemplateTask>),
 }
 
@@ -37,5 +37,3 @@ impl Default for ReqTask {
         Self::ImageBuild(Default::default())
     }
 }
-
-

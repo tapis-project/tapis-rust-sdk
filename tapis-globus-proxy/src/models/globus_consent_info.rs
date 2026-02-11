@@ -19,9 +19,6 @@ pub struct GlobusConsentInfo {
 
 impl GlobusConsentInfo {
     pub fn new() -> GlobusConsentInfo {
-        GlobusConsentInfo {
-            scopes: None,
-        }
+        GlobusConsentInfo { scopes: None }
     }
 }
-

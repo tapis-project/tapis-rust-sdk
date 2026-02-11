@@ -19,9 +19,6 @@ pub struct ResultChangeCount {
 
 impl ResultChangeCount {
     pub fn new() -> ResultChangeCount {
-        ResultChangeCount {
-            changes: None,
-        }
+        ResultChangeCount { changes: None }
     }
 }
-

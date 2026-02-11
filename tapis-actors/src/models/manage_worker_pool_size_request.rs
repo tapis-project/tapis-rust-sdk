@@ -20,9 +20,6 @@ pub struct ManageWorkerPoolSizeRequest {
 
 impl ManageWorkerPoolSizeRequest {
     pub fn new() -> ManageWorkerPoolSizeRequest {
-        ManageWorkerPoolSizeRequest {
-            num: None,
-        }
+        ManageWorkerPoolSizeRequest { num: None }
     }
 }
-

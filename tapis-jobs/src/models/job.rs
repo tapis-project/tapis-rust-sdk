@@ -53,9 +53,15 @@ pub struct Job {
     pub exec_system_exec_dir: Option<String>,
     #[serde(rename = "execSystemInputDir", skip_serializing_if = "Option::is_none")]
     pub exec_system_input_dir: Option<String>,
-    #[serde(rename = "execSystemOutputDir", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemOutputDir",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_output_dir: Option<String>,
-    #[serde(rename = "execSystemLogicalQueue", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemLogicalQueue",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_logical_queue: Option<String>,
     #[serde(rename = "archiveSystemId", skip_serializing_if = "Option::is_none")]
     pub archive_system_id: Option<String>,
@@ -79,7 +85,10 @@ pub struct Job {
     pub file_inputs: Option<String>,
     #[serde(rename = "parameterSet", skip_serializing_if = "Option::is_none")]
     pub parameter_set: Option<String>,
-    #[serde(rename = "execSystemConstraints", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemConstraints",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_constraints: Option<String>,
     #[serde(rename = "subscriptions", skip_serializing_if = "Option::is_none")]
     pub subscriptions: Option<String>,
@@ -101,33 +110,66 @@ pub struct Job {
     pub remote_started: Option<String>,
     #[serde(rename = "remoteEnded", skip_serializing_if = "Option::is_none")]
     pub remote_ended: Option<String>,
-    #[serde(rename = "remoteSubmitRetries", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "remoteSubmitRetries",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub remote_submit_retries: Option<i32>,
-    #[serde(rename = "remoteChecksSuccess", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "remoteChecksSuccess",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub remote_checks_success: Option<i32>,
     #[serde(rename = "remoteChecksFailed", skip_serializing_if = "Option::is_none")]
     pub remote_checks_failed: Option<i32>,
-    #[serde(rename = "remoteLastStatusCheck", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "remoteLastStatusCheck",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub remote_last_status_check: Option<String>,
     #[serde(rename = "inputTransactionId", skip_serializing_if = "Option::is_none")]
     pub input_transaction_id: Option<String>,
     #[serde(rename = "inputCorrelationId", skip_serializing_if = "Option::is_none")]
     pub input_correlation_id: Option<String>,
-    #[serde(rename = "archiveTransactionId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "archiveTransactionId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub archive_transaction_id: Option<String>,
-    #[serde(rename = "archiveCorrelationId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "archiveCorrelationId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub archive_correlation_id: Option<String>,
-    #[serde(rename = "stageAppTransactionId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "stageAppTransactionId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub stage_app_transaction_id: Option<String>,
-    #[serde(rename = "stageAppCorrelationId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "stageAppCorrelationId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub stage_app_correlation_id: Option<String>,
-    #[serde(rename = "dtnInputTransactionId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dtnInputTransactionId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub dtn_input_transaction_id: Option<String>,
-    #[serde(rename = "dtnInputCorrelationId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dtnInputCorrelationId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub dtn_input_correlation_id: Option<String>,
-    #[serde(rename = "dtnOutputTransactionId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dtnOutputTransactionId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub dtn_output_transaction_id: Option<String>,
-    #[serde(rename = "dtnOutputCorrelationId", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "dtnOutputCorrelationId",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub dtn_output_correlation_id: Option<String>,
     #[serde(rename = "tapisQueue", skip_serializing_if = "Option::is_none")]
     pub tapis_queue: Option<String>,
@@ -147,7 +189,10 @@ pub struct Job {
     pub cmd_prefix: Option<String>,
     #[serde(rename = "sharedAppCtx", skip_serializing_if = "Option::is_none")]
     pub shared_app_ctx: Option<String>,
-    #[serde(rename = "sharedAppCtxAttribs", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "sharedAppCtxAttribs",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub shared_app_ctx_attribs: Option<Vec<SharedAppCtxAttribs>>,
     #[serde(rename = "trackingId", skip_serializing_if = "Option::is_none")]
     pub tracking_id: Option<String>,
@@ -234,7 +279,7 @@ impl Job {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "PENDING")]
@@ -270,7 +315,7 @@ impl Default for Status {
         Self::Pending
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Condition {
     #[serde(rename = "CANCELLED_BY_USER")]
@@ -332,7 +377,7 @@ impl Default for Condition {
         Self::CancelledByUser
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum RemoteOutcome {
     #[serde(rename = "FINISHED")]
@@ -348,7 +393,7 @@ impl Default for RemoteOutcome {
         Self::Finished
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum JobType {
     #[serde(rename = "FORK")]
@@ -362,7 +407,7 @@ impl Default for JobType {
         Self::Fork
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum SharedAppCtxAttribs {
     #[serde(rename = "SAC_EXEC_SYSTEM_ID")]
@@ -390,4 +435,3 @@ impl Default for SharedAppCtxAttribs {
         Self::SacExecSystemId
     }
 }
-

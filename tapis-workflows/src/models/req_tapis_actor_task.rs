@@ -33,12 +33,21 @@ pub struct ReqTapisActorTask {
     pub poll: Option<bool>,
     #[serde(rename = "tapis_actor_id")]
     pub tapis_actor_id: String,
-    #[serde(rename = "tapis_actor_message", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_actor_message",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_actor_message: Option<Option<String>>,
 }
 
 impl ReqTapisActorTask {
-    pub fn new(id: String, r#type: models::EnumTaskType, tapis_actor_id: String) -> ReqTapisActorTask {
+    pub fn new(
+        id: String,
+        r#type: models::EnumTaskType,
+        tapis_actor_id: String,
+    ) -> ReqTapisActorTask {
         ReqTapisActorTask {
             id,
             r#type,
@@ -54,4 +63,3 @@ impl ReqTapisActorTask {
         }
     }
 }
-

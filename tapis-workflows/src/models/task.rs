@@ -16,19 +16,19 @@ use serde_with::serde_as;
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum Task {
-    #[serde(rename="image_build")]
+    #[serde(rename = "image_build")]
     ImageBuild(Box<models::ImageBuildTask>),
-    #[serde(rename="request")]
+    #[serde(rename = "request")]
     Request(Box<models::RequestTask>),
-    #[serde(rename="application")]
+    #[serde(rename = "application")]
     Application(Box<models::ApplicationTask>),
-    #[serde(rename="tapis_job")]
+    #[serde(rename = "tapis_job")]
     TapisJob(Box<models::TapisJobTask>),
-    #[serde(rename="tapis_actor")]
+    #[serde(rename = "tapis_actor")]
     TapisActor(Box<models::TapisActorTask>),
-    #[serde(rename="function")]
+    #[serde(rename = "function")]
     Function(Box<models::FunctionTask>),
-    #[serde(rename="template")]
+    #[serde(rename = "template")]
     Template(Box<models::TemplateTask>),
 }
 
@@ -37,5 +37,3 @@ impl Default for Task {
         Self::ImageBuild(Default::default())
     }
 }
-
-

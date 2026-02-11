@@ -20,11 +20,13 @@ pub struct NotifDeliveryTarget {
 }
 
 impl NotifDeliveryTarget {
-    pub fn new(delivery_method: models::NotifDeliveryMethod, delivery_address: String) -> NotifDeliveryTarget {
+    pub fn new(
+        delivery_method: models::NotifDeliveryMethod,
+        delivery_address: String,
+    ) -> NotifDeliveryTarget {
         NotifDeliveryTarget {
             delivery_method,
             delivery_address,
         }
     }
 }
-

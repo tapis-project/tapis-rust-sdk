@@ -40,7 +40,13 @@ pub struct ReqImageBuildTask {
 }
 
 impl ReqImageBuildTask {
-    pub fn new(id: String, r#type: models::EnumTaskType, builder: models::EnumBuilder, context: models::ReqContext, destination: models::ReqDestination) -> ReqImageBuildTask {
+    pub fn new(
+        id: String,
+        r#type: models::EnumTaskType,
+        builder: models::EnumBuilder,
+        context: models::ReqContext,
+        destination: models::ReqDestination,
+    ) -> ReqImageBuildTask {
         ReqImageBuildTask {
             id,
             r#type,
@@ -57,4 +63,3 @@ impl ReqImageBuildTask {
         }
     }
 }
-

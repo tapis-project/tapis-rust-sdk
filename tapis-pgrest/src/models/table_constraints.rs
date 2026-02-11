@@ -22,9 +22,6 @@ pub struct TableConstraints {
 impl TableConstraints {
     /// A description of the table constraints. Unique constraint is the only current constraint.
     pub fn new() -> TableConstraints {
-        TableConstraints {
-            unique: None,
-        }
+        TableConstraints { unique: None }
     }
 }
-

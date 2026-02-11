@@ -23,10 +23,7 @@ pub struct ManageRole {
 
 impl ManageRole {
     pub fn new(username: String, method: Method) -> ManageRole {
-        ManageRole {
-            username,
-            method,
-        }
+        ManageRole { username, method }
     }
 }
 /// Whether to revoke or grant role
@@ -43,4 +40,3 @@ impl Default for Method {
         Self::Grant
     }
 }
-

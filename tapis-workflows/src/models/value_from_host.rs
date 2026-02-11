@@ -19,9 +19,6 @@ pub struct ValueFromHost {
 
 impl ValueFromHost {
     pub fn new() -> ValueFromHost {
-        ValueFromHost {
-            host: None,
-        }
+        ValueFromHost { host: None }
     }
 }
-

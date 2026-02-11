@@ -26,7 +26,13 @@ pub struct RespIdentity {
 }
 
 impl RespIdentity {
-    pub fn new(status: String, message: String, result: models::Identity, version: String, metadata: serde_json::Value) -> RespIdentity {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::Identity,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespIdentity {
         RespIdentity {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespIdentity {
         }
     }
 }
-

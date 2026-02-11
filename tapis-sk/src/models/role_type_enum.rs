@@ -1,7 +1,7 @@
 /*
  * Tapis Security API
  *
- * The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources. 
+ * The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources.
  *
  * The version of the OpenAPI document: 1.8.2
  * Contact: cicsupport@tacc.utexas.edu
@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum RoleTypeEnum {
     #[serde(rename = "USER")]
@@ -24,7 +24,6 @@ pub enum RoleTypeEnum {
     TenantAdmin,
     #[serde(rename = "SITE_ADMIN")]
     SiteAdmin,
-
 }
 
 impl std::fmt::Display for RoleTypeEnum {
@@ -44,4 +43,3 @@ impl Default for RoleTypeEnum {
         Self::User
     }
 }
-

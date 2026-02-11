@@ -26,7 +26,13 @@ pub struct RespTask {
 }
 
 impl RespTask {
-    pub fn new(status: String, message: String, result: models::Task, version: String, metadata: serde_json::Value) -> RespTask {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::Task,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespTask {
         RespTask {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespTask {
         }
     }
 }
-

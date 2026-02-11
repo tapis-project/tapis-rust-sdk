@@ -14,9 +14,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum ReqDestination {
-    #[serde(rename="dockerhub")]
+    #[serde(rename = "dockerhub")]
     Dockerhub(Box<models::ReqDockerhubDestination>),
-    #[serde(rename="local")]
+    #[serde(rename = "local")]
     Local(Box<models::ReqLocalDestination>),
 }
 
@@ -25,5 +25,3 @@ impl Default for ReqDestination {
         Self::Dockerhub(Default::default())
     }
 }
-
-

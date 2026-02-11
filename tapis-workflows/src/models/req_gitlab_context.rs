@@ -32,7 +32,13 @@ pub struct ReqGitlabContext {
 }
 
 impl ReqGitlabContext {
-    pub fn new(r#type: models::EnumContextType, visibility: models::EnumContextVisibility, url: String, branch: String, build_file_path: String) -> ReqGitlabContext {
+    pub fn new(
+        r#type: models::EnumContextType,
+        visibility: models::EnumContextVisibility,
+        url: String,
+        branch: String,
+        build_file_path: String,
+    ) -> ReqGitlabContext {
         ReqGitlabContext {
             r#type,
             visibility,
@@ -45,4 +51,3 @@ impl ReqGitlabContext {
         }
     }
 }
-

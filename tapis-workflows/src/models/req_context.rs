@@ -14,13 +14,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum ReqContext {
-    #[serde(rename="github")]
+    #[serde(rename = "github")]
     Github(Box<models::ReqGithubContext>),
-    #[serde(rename="gitlab")]
+    #[serde(rename = "gitlab")]
     Gitlab(Box<models::ReqGitlabContext>),
-    #[serde(rename="dockerhub")]
+    #[serde(rename = "dockerhub")]
     Dockerhub(Box<models::ReqDockerhubContext>),
-    #[serde(rename="local")]
+    #[serde(rename = "local")]
     Local(Box<models::ReqLocalContext>),
 }
 
@@ -29,5 +29,3 @@ impl Default for ReqContext {
         Self::Github(Default::default())
     }
 }
-
-

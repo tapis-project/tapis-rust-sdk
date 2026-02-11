@@ -19,9 +19,6 @@ pub struct ReqPipelineLock {
 
 impl ReqPipelineLock {
     pub fn new() -> ReqPipelineLock {
-        ReqPipelineLock {
-            expires_in: None,
-        }
+        ReqPipelineLock { expires_in: None }
     }
 }
-

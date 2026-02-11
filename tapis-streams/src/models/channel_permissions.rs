@@ -19,9 +19,6 @@ pub struct ChannelPermissions {
 
 impl ChannelPermissions {
     pub fn new() -> ChannelPermissions {
-        ChannelPermissions {
-            users: None,
-        }
+        ChannelPermissions { users: None }
     }
 }
-

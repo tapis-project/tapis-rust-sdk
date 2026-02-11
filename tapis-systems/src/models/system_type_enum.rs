@@ -23,7 +23,6 @@ pub enum SystemTypeEnum {
     Irods,
     #[serde(rename = "GLOBUS")]
     Globus,
-
 }
 
 impl std::fmt::Display for SystemTypeEnum {
@@ -42,4 +41,3 @@ impl Default for SystemTypeEnum {
         Self::Linux
     }
 }
-

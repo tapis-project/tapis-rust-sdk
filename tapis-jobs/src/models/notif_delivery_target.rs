@@ -27,7 +27,7 @@ impl NotifDeliveryTarget {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum DeliveryMethod {
     #[serde(rename = "WEBHOOK")]
@@ -41,4 +41,3 @@ impl Default for DeliveryMethod {
         Self::Webhook
     }
 }
-

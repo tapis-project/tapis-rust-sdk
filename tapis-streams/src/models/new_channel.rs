@@ -25,7 +25,10 @@ pub struct NewChannel {
     /// Type of Checks (threshold or deadman)
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub r#type: Option<Type>,
-    #[serde(rename = "triggers_with_actions", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "triggers_with_actions",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub triggers_with_actions: Option<Vec<models::NewChannelTriggersWithActionsInner>>,
 }
 
@@ -54,4 +57,3 @@ impl Default for Type {
         Self::Threshold
     }
 }
-

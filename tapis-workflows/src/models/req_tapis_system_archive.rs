@@ -24,7 +24,11 @@ pub struct ReqTapisSystemArchive {
 }
 
 impl ReqTapisSystemArchive {
-    pub fn new(id: String, r#type: models::EnumArchiveType, system_id: String) -> ReqTapisSystemArchive {
+    pub fn new(
+        id: String,
+        r#type: models::EnumArchiveType,
+        system_id: String,
+    ) -> ReqTapisSystemArchive {
         ReqTapisSystemArchive {
             id,
             r#type,
@@ -33,4 +37,3 @@ impl ReqTapisSystemArchive {
         }
     }
 }
-

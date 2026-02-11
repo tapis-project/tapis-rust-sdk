@@ -20,9 +20,7 @@ pub struct UpdateTemplate {
 
 impl UpdateTemplate {
     pub fn new() -> UpdateTemplate {
-        UpdateTemplate {
-            status: None,
-        }
+        UpdateTemplate { status: None }
     }
 }
 /// Whether the request was a success or failure.
@@ -39,4 +37,3 @@ impl Default for Status {
         Self::Inactive
     }
 }
-

@@ -82,9 +82,15 @@ pub struct ReqPostSystem {
     pub batch_scheduler: Option<models::SchedulerTypeEnum>,
     #[serde(rename = "batchLogicalQueues", skip_serializing_if = "Option::is_none")]
     pub batch_logical_queues: Option<Vec<models::LogicalQueue>>,
-    #[serde(rename = "batchDefaultLogicalQueue", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "batchDefaultLogicalQueue",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub batch_default_logical_queue: Option<String>,
-    #[serde(rename = "batchSchedulerProfile", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "batchSchedulerProfile",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub batch_scheduler_profile: Option<String>,
     #[serde(rename = "jobCapabilities", skip_serializing_if = "Option::is_none")]
     pub job_capabilities: Option<Vec<models::Capability>>,
@@ -97,7 +103,13 @@ pub struct ReqPostSystem {
 }
 
 impl ReqPostSystem {
-    pub fn new(id: String, system_type: models::SystemTypeEnum, host: String, default_authn_method: models::AuthnEnum, can_exec: bool) -> ReqPostSystem {
+    pub fn new(
+        id: String,
+        system_type: models::SystemTypeEnum,
+        host: String,
+        default_authn_method: models::AuthnEnum,
+        can_exec: bool,
+    ) -> ReqPostSystem {
         ReqPostSystem {
             id,
             description: None,
@@ -135,4 +147,3 @@ impl ReqPostSystem {
         }
     }
 }
-

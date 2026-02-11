@@ -31,7 +31,10 @@ pub struct Channel {
     /// task id from Kapacitor
     #[serde(rename = "task_id", skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
-    #[serde(rename = "triggers_with_actions", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "triggers_with_actions",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub triggers_with_actions: Option<Vec<models::ChannelTriggersWithActionsInner>>,
     /// Template id
     #[serde(rename = "template_id", skip_serializing_if = "Option::is_none")]
@@ -69,4 +72,3 @@ impl Default for Status {
         Self::Inactive
     }
 }
-

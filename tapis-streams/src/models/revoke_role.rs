@@ -69,4 +69,3 @@ impl Default for RoleName {
         Self::Admin
     }
 }
-

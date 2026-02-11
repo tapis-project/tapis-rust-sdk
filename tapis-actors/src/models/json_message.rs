@@ -20,9 +20,6 @@ pub struct JsonMessage {
 
 impl JsonMessage {
     pub fn new() -> JsonMessage {
-        JsonMessage {
-            message: None,
-        }
+        JsonMessage { message: None }
     }
 }
-

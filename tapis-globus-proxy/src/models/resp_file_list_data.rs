@@ -19,9 +19,6 @@ pub struct RespFileListData {
 
 impl RespFileListData {
     pub fn new() -> RespFileListData {
-        RespFileListData {
-            data: None,
-        }
+        RespFileListData { data: None }
     }
 }
-

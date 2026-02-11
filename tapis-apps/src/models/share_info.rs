@@ -21,10 +21,6 @@ pub struct ShareInfo {
 
 impl ShareInfo {
     pub fn new(public: bool, user_list: Vec<String>) -> ShareInfo {
-        ShareInfo {
-            public,
-            user_list,
-        }
+        ShareInfo { public, user_list }
     }
 }
-

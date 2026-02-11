@@ -21,10 +21,6 @@ pub struct NewMeasurement {
 
 impl NewMeasurement {
     pub fn new(inst_id: String, vars: Vec<models::MeasurementValues>) -> NewMeasurement {
-        NewMeasurement {
-            inst_id,
-            vars,
-        }
+        NewMeasurement { inst_id, vars }
     }
 }
-

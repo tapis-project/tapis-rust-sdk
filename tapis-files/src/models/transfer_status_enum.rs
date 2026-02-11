@@ -31,7 +31,6 @@ pub enum TransferStatusEnum {
     FailedOpt,
     #[serde(rename = "PAUSED")]
     Paused,
-
 }
 
 impl std::fmt::Display for TransferStatusEnum {
@@ -54,4 +53,3 @@ impl Default for TransferStatusEnum {
         Self::Accepted
     }
 }
-

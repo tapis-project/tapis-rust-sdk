@@ -19,9 +19,6 @@ pub struct ValueFromArgs {
 
 impl ValueFromArgs {
     pub fn new() -> ValueFromArgs {
-        ValueFromArgs {
-            args: None,
-        }
+        ValueFromArgs { args: None }
     }
 }
-

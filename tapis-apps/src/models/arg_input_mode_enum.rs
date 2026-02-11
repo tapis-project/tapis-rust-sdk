@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum ArgInputModeEnum {
     #[serde(rename = "REQUIRED")]
@@ -22,7 +22,6 @@ pub enum ArgInputModeEnum {
     IncludeOnDemand,
     #[serde(rename = "INCLUDE_BY_DEFAULT")]
     IncludeByDefault,
-
 }
 
 impl std::fmt::Display for ArgInputModeEnum {
@@ -41,4 +40,3 @@ impl Default for ArgInputModeEnum {
         Self::Required
     }
 }
-

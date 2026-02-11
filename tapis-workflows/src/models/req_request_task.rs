@@ -44,7 +44,12 @@ pub struct ReqRequestTask {
 }
 
 impl ReqRequestTask {
-    pub fn new(id: String, r#type: models::EnumTaskType, http_method: models::EnumHttpMethod, url: String) -> ReqRequestTask {
+    pub fn new(
+        id: String,
+        r#type: models::EnumTaskType,
+        http_method: models::EnumHttpMethod,
+        url: String,
+    ) -> ReqRequestTask {
         ReqRequestTask {
             id,
             r#type,
@@ -63,4 +68,3 @@ impl ReqRequestTask {
         }
     }
 }
-

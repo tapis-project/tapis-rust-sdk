@@ -20,9 +20,6 @@ pub struct ReqMakeDir {
 
 impl ReqMakeDir {
     pub fn new() -> ReqMakeDir {
-        ReqMakeDir {
-            not_used: None,
-        }
+        ReqMakeDir { not_used: None }
     }
 }
-

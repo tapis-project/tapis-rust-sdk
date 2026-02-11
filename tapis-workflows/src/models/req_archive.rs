@@ -14,9 +14,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum ReqArchive {
-    #[serde(rename="system")]
+    #[serde(rename = "system")]
     System(Box<models::ReqTapisSystemArchive>),
-    #[serde(rename="s3")]
+    #[serde(rename = "s3")]
     S3(Box<models::ReqS3Archive>),
 }
 
@@ -25,5 +25,3 @@ impl Default for ReqArchive {
         Self::System(Default::default())
     }
 }
-
-

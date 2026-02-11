@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum AuthnEnum {
     #[serde(rename = "PASSWORD")]
@@ -26,7 +26,6 @@ pub enum AuthnEnum {
     TmsKeys,
     #[serde(rename = "CERT")]
     Cert,
-
 }
 
 impl std::fmt::Display for AuthnEnum {
@@ -47,4 +46,3 @@ impl Default for AuthnEnum {
         Self::Password
     }
 }
-

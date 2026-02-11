@@ -20,9 +20,6 @@ pub struct NewSigningKeysRequest {
 
 impl NewSigningKeysRequest {
     pub fn new() -> NewSigningKeysRequest {
-        NewSigningKeysRequest {
-            tenant_id: None,
-        }
+        NewSigningKeysRequest { tenant_id: None }
     }
 }
-

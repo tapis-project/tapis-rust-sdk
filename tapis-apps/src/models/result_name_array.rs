@@ -19,9 +19,6 @@ pub struct ResultNameArray {
 
 impl ResultNameArray {
     pub fn new() -> ResultNameArray {
-        ResultNameArray {
-            names: None,
-        }
+        ResultNameArray { names: None }
     }
 }
-

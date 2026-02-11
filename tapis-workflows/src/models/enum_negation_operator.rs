@@ -11,12 +11,11 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumNegationOperator {
     #[serde(rename = "not")]
     Not,
-
 }
 
 impl std::fmt::Display for EnumNegationOperator {
@@ -32,4 +31,3 @@ impl Default for EnumNegationOperator {
         Self::Not
     }
 }
-

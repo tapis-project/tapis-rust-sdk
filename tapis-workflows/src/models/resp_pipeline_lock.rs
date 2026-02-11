@@ -26,7 +26,13 @@ pub struct RespPipelineLock {
 }
 
 impl RespPipelineLock {
-    pub fn new(status: String, message: String, result: models::PipelineLock, version: String, metadata: serde_json::Value) -> RespPipelineLock {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::PipelineLock,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespPipelineLock {
         RespPipelineLock {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespPipelineLock {
         }
     }
 }
-

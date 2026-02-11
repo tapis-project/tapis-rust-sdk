@@ -26,7 +26,13 @@ pub struct RespString {
 }
 
 impl RespString {
-    pub fn new(status: String, message: String, result: String, version: String, metadata: serde_json::Value) -> RespString {
+    pub fn new(
+        status: String,
+        message: String,
+        result: String,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespString {
         RespString {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespString {
         }
     }
 }
-

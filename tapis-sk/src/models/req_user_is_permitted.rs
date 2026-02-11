@@ -1,7 +1,7 @@
 /*
  * Tapis Security API
  *
- * The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources. 
+ * The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources.
  *
  * The version of the OpenAPI document: 1.8.2
  * Contact: cicsupport@tacc.utexas.edu
@@ -33,4 +33,3 @@ impl ReqUserIsPermitted {
         }
     }
 }
-

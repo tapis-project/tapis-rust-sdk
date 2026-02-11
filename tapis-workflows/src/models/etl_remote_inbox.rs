@@ -20,11 +20,13 @@ pub struct EtlRemoteInbox {
 }
 
 impl EtlRemoteInbox {
-    pub fn new(manifests: models::EtlManifestsSystem, data: models::EtlDataSystem) -> EtlRemoteInbox {
+    pub fn new(
+        manifests: models::EtlManifestsSystem,
+        data: models::EtlDataSystem,
+    ) -> EtlRemoteInbox {
         EtlRemoteInbox {
             manifests: Box::new(manifests),
             data: Box::new(data),
         }
     }
 }
-

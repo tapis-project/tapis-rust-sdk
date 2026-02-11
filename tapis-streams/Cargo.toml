@@ -1,6 +1,6 @@
 [package]
 name = "tapis_streams"
-version = "0.6.0"
+version = "1.0.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Manage Tapis Streams API."
 license = "BSD 3"

@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum OperationTypeEnum {
     #[serde(rename = "CREATE")]
@@ -44,7 +44,6 @@ pub enum OperationTypeEnum {
     GrantPerms,
     #[serde(rename = "REVOKE_PERMS")]
     RevokePerms,
-
 }
 
 impl std::fmt::Display for OperationTypeEnum {
@@ -74,4 +73,3 @@ impl Default for OperationTypeEnum {
         Self::Create
     }
 }
-

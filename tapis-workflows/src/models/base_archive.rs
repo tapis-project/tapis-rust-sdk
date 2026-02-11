@@ -30,7 +30,14 @@ pub struct BaseArchive {
 }
 
 impl BaseArchive {
-    pub fn new(id: String, r#type: models::EnumArchiveType, group: uuid::Uuid, tenant_id: String, owner: String, archive_dir: String) -> BaseArchive {
+    pub fn new(
+        id: String,
+        r#type: models::EnumArchiveType,
+        group: uuid::Uuid,
+        tenant_id: String,
+        owner: String,
+        archive_dir: String,
+    ) -> BaseArchive {
         BaseArchive {
             id,
             r#type,
@@ -42,4 +49,3 @@ impl BaseArchive {
         }
     }
 }
-

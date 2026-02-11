@@ -32,7 +32,11 @@ pub struct ReqPostSubscription {
 }
 
 impl ReqPostSubscription {
-    pub fn new(type_filter: String, subject_filter: String, delivery_targets: Vec<models::DeliveryTarget>) -> ReqPostSubscription {
+    pub fn new(
+        type_filter: String,
+        subject_filter: String,
+        delivery_targets: Vec<models::DeliveryTarget>,
+    ) -> ReqPostSubscription {
         ReqPostSubscription {
             name: None,
             description: None,
@@ -45,4 +49,3 @@ impl ReqPostSubscription {
         }
     }
 }
-

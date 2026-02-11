@@ -18,7 +18,10 @@ pub struct Measurements {
     #[serde(rename = "site", skip_serializing_if = "Option::is_none")]
     pub site: Option<models::Site>,
     /// The count of measurements records.
-    #[serde(rename = "measurements_in_file", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "measurements_in_file",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub measurements_in_file: Option<i32>,
 }
 
@@ -31,4 +34,3 @@ impl Measurements {
         }
     }
 }
-

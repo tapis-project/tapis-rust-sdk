@@ -20,9 +20,6 @@ pub struct BinaryMessage {
 
 impl BinaryMessage {
     pub fn new() -> BinaryMessage {
-        BinaryMessage {
-            message: None,
-        }
+        BinaryMessage { message: None }
     }
 }
-

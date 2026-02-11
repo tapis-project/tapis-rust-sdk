@@ -19,9 +19,6 @@ pub struct ReqShareUpdate {
 
 impl ReqShareUpdate {
     pub fn new(users: Vec<String>) -> ReqShareUpdate {
-        ReqShareUpdate {
-            users,
-        }
+        ReqShareUpdate { users }
     }
 }
-

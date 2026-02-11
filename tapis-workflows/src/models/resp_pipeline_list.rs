@@ -26,7 +26,13 @@ pub struct RespPipelineList {
 }
 
 impl RespPipelineList {
-    pub fn new(status: String, message: String, result: Vec<models::Pipeline>, version: String, metadata: serde_json::Value) -> RespPipelineList {
+    pub fn new(
+        status: String,
+        message: String,
+        result: Vec<models::Pipeline>,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespPipelineList {
         RespPipelineList {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespPipelineList {
         }
     }
 }
-

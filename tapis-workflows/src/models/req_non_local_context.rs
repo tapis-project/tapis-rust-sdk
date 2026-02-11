@@ -22,7 +22,11 @@ pub struct ReqNonLocalContext {
 }
 
 impl ReqNonLocalContext {
-    pub fn new(r#type: models::EnumContextType, visibility: models::EnumContextVisibility, url: String) -> ReqNonLocalContext {
+    pub fn new(
+        r#type: models::EnumContextType,
+        visibility: models::EnumContextVisibility,
+        url: String,
+    ) -> ReqNonLocalContext {
         ReqNonLocalContext {
             r#type,
             visibility,
@@ -30,4 +34,3 @@ impl ReqNonLocalContext {
         }
     }
 }
-

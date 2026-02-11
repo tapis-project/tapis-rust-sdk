@@ -14,7 +14,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TenantConfig {
     /// JSON-serializable list of allowable grant types
-    #[serde(rename = "allowable_grant_types", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "allowable_grant_types",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub allowable_grant_types: Option<Vec<String>>,
     /// whether to use the LDAP configured in the Tenants API for this tenant.
     #[serde(rename = "use_ldap", skip_serializing_if = "Option::is_none")]
@@ -26,34 +29,61 @@ pub struct TenantConfig {
     #[serde(rename = "mfa_config", skip_serializing_if = "Option::is_none")]
     pub mfa_config: Option<serde_json::Value>,
     /// The access token TTL, in seconds, for standard grant types, such as authorization code.
-    #[serde(rename = "default_access_token_ttl", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "default_access_token_ttl",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub default_access_token_ttl: Option<i32>,
     /// The refresh token TTL, in seconds, for standard grant types, such as authorization code.
-    #[serde(rename = "default_refresh_token_ttl", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "default_refresh_token_ttl",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub default_refresh_token_ttl: Option<i32>,
     /// The maxiumum access token TTL, in seconds, for grant types that allow the caller to specify the TTL.
-    #[serde(rename = "max_access_token_ttl", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "max_access_token_ttl",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub max_access_token_ttl: Option<i32>,
     /// The maxiumum refresh token TTL, in seconds, for grant types that allow the caller to specify the TTL.
-    #[serde(rename = "max_refresh_token_ttl", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "max_refresh_token_ttl",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub max_refresh_token_ttl: Option<i32>,
     /// JSON-serializable object which includes various configuration details for tenants using an IdP that is not LDAP/AD.
-    #[serde(rename = "custom_idp_configuration", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "custom_idp_configuration",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub custom_idp_configuration: Option<serde_json::Value>,
     /// Token URL endpoint for generating v2 token
     #[serde(rename = "token_url", skip_serializing_if = "Option::is_none")]
     pub token_url: Option<String>,
     /// Client ID for impersonation
-    #[serde(rename = "impers_oauth_client_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "impers_oauth_client_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub impers_oauth_client_id: Option<String>,
     /// Client secret for impersonation
-    #[serde(rename = "impers_oauth_client_secret", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "impers_oauth_client_secret",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub impers_oauth_client_secret: Option<String>,
     /// Impersonation username for impersonation
-    #[serde(rename = "impersadmin_username", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "impersadmin_username",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub impersadmin_username: Option<String>,
     /// Impersonation password for impersonation
-    #[serde(rename = "impersadmin_password", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "impersadmin_password",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub impersadmin_password: Option<String>,
 }
 
@@ -77,4 +107,3 @@ impl TenantConfig {
         }
     }
 }
-

@@ -21,10 +21,6 @@ pub struct ReqLocalContext {
 
 impl ReqLocalContext {
     pub fn new(r#type: models::EnumContextType, filename: String) -> ReqLocalContext {
-        ReqLocalContext {
-            r#type,
-            filename,
-        }
+        ReqLocalContext { r#type, filename }
     }
 }
-

@@ -19,17 +19,29 @@ pub struct GlobusTransferTask {
     pub completion_time: Option<String>,
     #[serde(rename = "deadline", skip_serializing_if = "Option::is_none")]
     pub deadline: Option<String>,
-    #[serde(rename = "destination_endpoint_display_name", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "destination_endpoint_display_name",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub destination_endpoint_display_name: Option<String>,
-    #[serde(rename = "destination_endpoint_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "destination_endpoint_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub destination_endpoint_id: Option<String>,
     #[serde(rename = "directories", skip_serializing_if = "Option::is_none")]
     pub directories: Option<i32>,
-    #[serde(rename = "effective_bytes_per_second", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "effective_bytes_per_second",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub effective_bytes_per_second: Option<i32>,
     #[serde(rename = "encrypt_data", skip_serializing_if = "Option::is_none")]
     pub encrypt_data: Option<bool>,
-    #[serde(rename = "fail_on_quota_errors", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "fail_on_quota_errors",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub fail_on_quota_errors: Option<bool>,
     #[serde(rename = "fatal_error", skip_serializing_if = "Option::is_none")]
     pub fatal_error: Option<Box<models::GlobusTransferTaskFatalError>>,
@@ -55,7 +67,10 @@ pub struct GlobusTransferTask {
     pub request_time: Option<String>,
     #[serde(rename = "skip_source_errors", skip_serializing_if = "Option::is_none")]
     pub skip_source_errors: Option<bool>,
-    #[serde(rename = "source_endpoint_display_name", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "source_endpoint_display_name",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub source_endpoint_display_name: Option<String>,
     #[serde(rename = "source_endpoint_id", skip_serializing_if = "Option::is_none")]
     pub source_endpoint_id: Option<String>,
@@ -108,4 +123,3 @@ impl GlobusTransferTask {
         }
     }
 }
-

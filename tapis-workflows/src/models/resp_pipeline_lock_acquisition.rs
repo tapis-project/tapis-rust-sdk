@@ -26,7 +26,13 @@ pub struct RespPipelineLockAcquisition {
 }
 
 impl RespPipelineLockAcquisition {
-    pub fn new(status: String, message: String, result: models::RespPipelineLockAcquisitionAllOfResult, version: String, metadata: serde_json::Value) -> RespPipelineLockAcquisition {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::RespPipelineLockAcquisitionAllOfResult,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespPipelineLockAcquisition {
         RespPipelineLockAcquisition {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespPipelineLockAcquisition {
         }
     }
 }
-

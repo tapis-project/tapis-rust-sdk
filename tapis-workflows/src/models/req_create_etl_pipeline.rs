@@ -50,7 +50,15 @@ pub struct ReqCreateEtlPipeline {
 }
 
 impl ReqCreateEtlPipeline {
-    pub fn new(id: String, r#type: models::EnumPipelineType, remote_outbox: models::EtlRemoteOutbox, local_inbox: models::EtlLocalInbox, jobs: Vec<models::TapisEtlExtendedTapisJobDef>, local_outbox: models::EtlLocalOutbox, remote_inbox: models::EtlRemoteInbox) -> ReqCreateEtlPipeline {
+    pub fn new(
+        id: String,
+        r#type: models::EnumPipelineType,
+        remote_outbox: models::EtlRemoteOutbox,
+        local_inbox: models::EtlLocalInbox,
+        jobs: Vec<models::TapisEtlExtendedTapisJobDef>,
+        local_outbox: models::EtlLocalOutbox,
+        remote_inbox: models::EtlRemoteInbox,
+    ) -> ReqCreateEtlPipeline {
         ReqCreateEtlPipeline {
             id,
             uses: None,
@@ -72,4 +80,3 @@ impl ReqCreateEtlPipeline {
         }
     }
 }
-

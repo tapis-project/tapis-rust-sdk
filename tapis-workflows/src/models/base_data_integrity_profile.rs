@@ -19,9 +19,6 @@ pub struct BaseDataIntegrityProfile {
 
 impl BaseDataIntegrityProfile {
     pub fn new(r#type: models::EtlEnumDataIntegrityType) -> BaseDataIntegrityProfile {
-        BaseDataIntegrityProfile {
-            r#type,
-        }
+        BaseDataIntegrityProfile { r#type }
     }
 }
-

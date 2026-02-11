@@ -19,9 +19,6 @@ pub struct GetActor200Response {
 
 impl GetActor200Response {
     pub fn new() -> GetActor200Response {
-        GetActor200Response {
-            result: None,
-        }
+        GetActor200Response { result: None }
     }
 }
-

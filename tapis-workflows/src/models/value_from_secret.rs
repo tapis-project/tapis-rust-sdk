@@ -19,9 +19,6 @@ pub struct ValueFromSecret {
 
 impl ValueFromSecret {
     pub fn new() -> ValueFromSecret {
-        ValueFromSecret {
-            secret: None,
-        }
+        ValueFromSecret { secret: None }
     }
 }
-

@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumTaskType {
     #[serde(rename = "image_build")]
@@ -28,7 +28,6 @@ pub enum EnumTaskType {
     Function,
     #[serde(rename = "template")]
     Template,
-
 }
 
 impl std::fmt::Display for EnumTaskType {
@@ -50,4 +49,3 @@ impl Default for EnumTaskType {
         Self::ImageBuild
     }
 }
-

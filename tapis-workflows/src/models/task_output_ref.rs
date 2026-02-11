@@ -21,10 +21,6 @@ pub struct TaskOutputRef {
 
 impl TaskOutputRef {
     pub fn new(task_id: String, output_id: String) -> TaskOutputRef {
-        TaskOutputRef {
-            task_id,
-            output_id,
-        }
+        TaskOutputRef { task_id, output_id }
     }
 }
-

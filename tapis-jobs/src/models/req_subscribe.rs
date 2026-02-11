@@ -17,7 +17,10 @@ pub struct ReqSubscribe {
     pub description: Option<String>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[serde(rename = "eventCategoryFilter", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "eventCategoryFilter",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub event_category_filter: Option<EventCategoryFilter>,
     #[serde(rename = "deliveryTargets", skip_serializing_if = "Option::is_none")]
     pub delivery_targets: Option<Vec<models::NotifDeliveryTarget>>,
@@ -36,7 +39,7 @@ impl ReqSubscribe {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EventCategoryFilter {
     #[serde(rename = "JOB_NEW_STATUS")]
@@ -62,4 +65,3 @@ impl Default for EventCategoryFilter {
         Self::JobNewStatus
     }
 }
-

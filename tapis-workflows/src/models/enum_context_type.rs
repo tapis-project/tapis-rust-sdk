@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumContextType {
     #[serde(rename = "github")]
@@ -22,7 +22,6 @@ pub enum EnumContextType {
     Dockerhub,
     #[serde(rename = "local")]
     Local,
-
 }
 
 impl std::fmt::Display for EnumContextType {
@@ -41,4 +40,3 @@ impl Default for EnumContextType {
         Self::Github
     }
 }
-

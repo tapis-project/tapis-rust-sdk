@@ -23,11 +23,6 @@ pub struct Threshold {
 
 impl Threshold {
     pub fn new(key: String, operator: String, val: f64) -> Threshold {
-        Threshold {
-            key,
-            operator,
-            val,
-        }
+        Threshold { key, operator, val }
     }
 }
-

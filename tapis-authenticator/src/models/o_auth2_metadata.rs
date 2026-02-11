@@ -17,7 +17,10 @@ pub struct OAuth2Metadata {
     #[serde(rename = "issuer", skip_serializing_if = "Option::is_none")]
     pub issuer: Option<String>,
     /// URL of the authorization server's authorization endpoint.
-    #[serde(rename = "authorization_endpoint", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "authorization_endpoint",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub authorization_endpoint: Option<String>,
     /// URL of the authorization server's token endpoint.
     #[serde(rename = "token_endpoint", skip_serializing_if = "Option::is_none")]
@@ -26,10 +29,16 @@ pub struct OAuth2Metadata {
     #[serde(rename = "jwks_uri", skip_serializing_if = "Option::is_none")]
     pub jwks_uri: Option<String>,
     /// URL of the authorization server's OAuth 2.0 Dynamic Client Registration endpoint
-    #[serde(rename = "registration_endpoint", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "registration_endpoint",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub registration_endpoint: Option<String>,
     /// JSON-serializable list of grant types supported by this server.
-    #[serde(rename = "grant_types_supported", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "grant_types_supported",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub grant_types_supported: Option<Vec<String>>,
 }
 
@@ -45,4 +54,3 @@ impl OAuth2Metadata {
         }
     }
 }
-

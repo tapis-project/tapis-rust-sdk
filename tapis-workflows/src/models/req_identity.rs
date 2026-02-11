@@ -14,9 +14,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum ReqIdentity {
-    #[serde(rename="dockerhub")]
+    #[serde(rename = "dockerhub")]
     Dockerhub(Box<models::ReqDockerhubIdentity>),
-    #[serde(rename="github")]
+    #[serde(rename = "github")]
     Github(Box<models::ReqGithubIdentity>),
 }
 
@@ -25,5 +25,3 @@ impl Default for ReqIdentity {
         Self::Dockerhub(Default::default())
     }
 }
-
-

@@ -19,9 +19,6 @@ pub struct JobUnShareDisplay {
 
 impl JobUnShareDisplay {
     pub fn new() -> JobUnShareDisplay {
-        JobUnShareDisplay {
-            message: None,
-        }
+        JobUnShareDisplay { message: None }
     }
 }
-

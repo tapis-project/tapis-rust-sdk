@@ -26,7 +26,13 @@ pub struct RespArchive {
 }
 
 impl RespArchive {
-    pub fn new(status: String, message: String, result: models::Archive, version: String, metadata: serde_json::Value) -> RespArchive {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::Archive,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespArchive {
         RespArchive {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespArchive {
         }
     }
 }
-

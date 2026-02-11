@@ -19,9 +19,6 @@ pub struct JobHideDisplay {
 
 impl JobHideDisplay {
     pub fn new() -> JobHideDisplay {
-        JobHideDisplay {
-            message: None,
-        }
+        JobHideDisplay { message: None }
     }
 }
-

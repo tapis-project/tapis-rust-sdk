@@ -19,9 +19,6 @@ pub struct OutputValue {
 
 impl OutputValue {
     pub fn new() -> OutputValue {
-        OutputValue {
-            r#type: None,
-        }
+        OutputValue { r#type: None }
     }
 }
-

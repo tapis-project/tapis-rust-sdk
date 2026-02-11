@@ -26,7 +26,13 @@ pub struct RespGroupUser {
 }
 
 impl RespGroupUser {
-    pub fn new(status: String, message: String, result: models::GroupUser, version: String, metadata: serde_json::Value) -> RespGroupUser {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::GroupUser,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespGroupUser {
         RespGroupUser {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespGroupUser {
         }
     }
 }
-

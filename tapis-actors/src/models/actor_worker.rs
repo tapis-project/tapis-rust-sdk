@@ -29,10 +29,16 @@ pub struct ActorWorker {
     #[serde(rename = "image", skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
     /// The last ime (UTC) the worker started an execution.
-    #[serde(rename = "last_execution_time", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "last_execution_time",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub last_execution_time: Option<String>,
     /// The last ime (UTC) the worker responded to a health check.
-    #[serde(rename = "last_health_check_time", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "last_health_check_time",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub last_health_check_time: Option<String>,
     /// The location of the docker daemon used by this worker.
     #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
@@ -87,4 +93,3 @@ impl Default for Status {
         Self::Requested
     }
 }
-

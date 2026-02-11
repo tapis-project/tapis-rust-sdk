@@ -28,7 +28,7 @@ impl MoveCopyRequest {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Operation {
     #[serde(rename = "MOVE")]
@@ -42,4 +42,3 @@ impl Default for Operation {
         Self::Move
     }
 }
-

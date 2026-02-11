@@ -20,9 +20,6 @@ pub struct RevokeTokenRequest {
 
 impl RevokeTokenRequest {
     pub fn new() -> RevokeTokenRequest {
-        RevokeTokenRequest {
-            token: None,
-        }
+        RevokeTokenRequest { token: None }
     }
 }
-

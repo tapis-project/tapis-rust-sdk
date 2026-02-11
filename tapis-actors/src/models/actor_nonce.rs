@@ -73,4 +73,3 @@ impl Default for Level {
         Self::Read
     }
 }
-

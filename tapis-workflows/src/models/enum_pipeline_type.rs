@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumPipelineType {
     #[serde(rename = "workflow")]
@@ -20,7 +20,6 @@ pub enum EnumPipelineType {
     Ci,
     #[serde(rename = "etl")]
     Etl,
-
 }
 
 impl std::fmt::Display for EnumPipelineType {
@@ -38,4 +37,3 @@ impl Default for EnumPipelineType {
         Self::Workflow
     }
 }
-

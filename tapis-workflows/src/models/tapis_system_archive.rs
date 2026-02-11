@@ -32,7 +32,15 @@ pub struct TapisSystemArchive {
 }
 
 impl TapisSystemArchive {
-    pub fn new(id: String, r#type: models::EnumArchiveType, group: uuid::Uuid, tenant_id: String, owner: String, archive_dir: String, system_id: String) -> TapisSystemArchive {
+    pub fn new(
+        id: String,
+        r#type: models::EnumArchiveType,
+        group: uuid::Uuid,
+        tenant_id: String,
+        owner: String,
+        archive_dir: String,
+        system_id: String,
+    ) -> TapisSystemArchive {
         TapisSystemArchive {
             id,
             r#type,
@@ -45,4 +53,3 @@ impl TapisSystemArchive {
         }
     }
 }
-

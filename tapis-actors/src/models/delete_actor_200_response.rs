@@ -22,7 +22,12 @@ pub struct DeleteActor200Response {
     /// Whether the request was a success or failure.
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
-    #[serde(rename = "result", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "result",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub result: Option<Option<serde_json::Value>>,
 }
 
@@ -50,4 +55,3 @@ impl Default for Status {
         Self::Success
     }
 }
-

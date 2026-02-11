@@ -41,10 +41,16 @@ pub struct NewTenant {
     #[serde(rename = "token_gen_services")]
     pub token_gen_services: Vec<String>,
     /// The unique identifier for the LDAP object for service accounts in the tenant.
-    #[serde(rename = "service_ldap_connection_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "service_ldap_connection_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub service_ldap_connection_id: Option<String>,
     /// The unique identifier for the LDAP object for user accounts in the tenant.
-    #[serde(rename = "user_ldap_connection_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "user_ldap_connection_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub user_ldap_connection_id: Option<String>,
     /// The status of the tenant; Tenants can be created in \"draft\" status without a public key; Tenants in both \"inactive\" and \"draft\" status are by default not returned in the tenants listing.
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
@@ -58,7 +64,17 @@ pub struct NewTenant {
 }
 
 impl NewTenant {
-    pub fn new(tenant_id: String, base_url: String, site_id: String, token_service: String, security_kernel: String, authenticator: String, owner: String, admin_user: String, token_gen_services: Vec<String>) -> NewTenant {
+    pub fn new(
+        tenant_id: String,
+        base_url: String,
+        site_id: String,
+        token_service: String,
+        security_kernel: String,
+        authenticator: String,
+        owner: String,
+        admin_user: String,
+        token_gen_services: Vec<String>,
+    ) -> NewTenant {
         NewTenant {
             tenant_id,
             base_url,
@@ -93,4 +109,3 @@ impl Default for Status {
         Self::Draft
     }
 }
-

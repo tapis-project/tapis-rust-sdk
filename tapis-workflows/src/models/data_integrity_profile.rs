@@ -14,11 +14,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum DataIntegrityProfile {
-    #[serde(rename="checksum")]
+    #[serde(rename = "checksum")]
     Checksum(Box<models::ChecksumDataIntegrityProfile>),
-    #[serde(rename="done_file")]
+    #[serde(rename = "done_file")]
     DoneFile(Box<models::DoneFileDataIntegrityProfile>),
-    #[serde(rename="byte_check")]
+    #[serde(rename = "byte_check")]
     ByteCheck(Box<models::ByteCheckDataIntegrityProfile>),
 }
 
@@ -27,5 +27,3 @@ impl Default for DataIntegrityProfile {
         Self::Checksum(Default::default())
     }
 }
-
-

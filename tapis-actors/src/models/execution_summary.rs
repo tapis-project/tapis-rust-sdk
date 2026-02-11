@@ -26,7 +26,10 @@ pub struct ExecutionSummary {
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
     /// the time the message was originally received by Abaco.
-    #[serde(rename = "message_received_time", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "message_received_time",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub message_received_time: Option<String>,
 }
 
@@ -57,4 +60,3 @@ impl Default for Status {
         Self::Submitted
     }
 }
-

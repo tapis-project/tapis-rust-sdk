@@ -63,7 +63,7 @@ impl JobListDto {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "PENDING")]
@@ -99,7 +99,7 @@ impl Default for Status {
         Self::Pending
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Condition {
     #[serde(rename = "CANCELLED_BY_USER")]
@@ -161,4 +161,3 @@ impl Default for Condition {
         Self::CancelledByUser
     }
 }
-

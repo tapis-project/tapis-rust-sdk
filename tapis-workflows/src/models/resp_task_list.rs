@@ -26,7 +26,13 @@ pub struct RespTaskList {
 }
 
 impl RespTaskList {
-    pub fn new(status: String, message: String, result: Vec<models::Task>, version: String, metadata: serde_json::Value) -> RespTaskList {
+    pub fn new(
+        status: String,
+        message: String,
+        result: Vec<models::Task>,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespTaskList {
         RespTaskList {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespTaskList {
         }
     }
 }
-

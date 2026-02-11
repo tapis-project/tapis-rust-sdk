@@ -20,9 +20,6 @@ pub struct ResultMetadata {
 
 impl ResultMetadata {
     pub fn new() -> ResultMetadata {
-        ResultMetadata {
-            total_count: None,
-        }
+        ResultMetadata { total_count: None }
     }
 }
-

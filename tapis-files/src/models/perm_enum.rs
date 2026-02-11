@@ -11,14 +11,13 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum PermEnum {
     #[serde(rename = "READ")]
     Read,
     #[serde(rename = "MODIFY")]
     Modify,
-
 }
 
 impl std::fmt::Display for PermEnum {
@@ -35,4 +34,3 @@ impl Default for PermEnum {
         Self::Read
     }
 }
-

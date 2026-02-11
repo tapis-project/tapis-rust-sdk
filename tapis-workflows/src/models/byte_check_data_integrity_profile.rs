@@ -19,9 +19,6 @@ pub struct ByteCheckDataIntegrityProfile {
 
 impl ByteCheckDataIntegrityProfile {
     pub fn new(r#type: String) -> ByteCheckDataIntegrityProfile {
-        ByteCheckDataIntegrityProfile {
-            r#type,
-        }
+        ByteCheckDataIntegrityProfile { r#type }
     }
 }
-

@@ -19,9 +19,6 @@ pub struct ResultBoolean {
 
 impl ResultBoolean {
     pub fn new() -> ResultBoolean {
-        ResultBoolean {
-            a_bool: None,
-        }
+        ResultBoolean { a_bool: None }
     }
 }
-

@@ -20,9 +20,6 @@ pub struct V2Token {
 
 impl V2Token {
     pub fn new(access_token: String) -> V2Token {
-        V2Token {
-            access_token,
-        }
+        V2Token { access_token }
     }
 }
-

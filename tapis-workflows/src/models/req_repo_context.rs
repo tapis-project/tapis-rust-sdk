@@ -28,7 +28,13 @@ pub struct ReqRepoContext {
 }
 
 impl ReqRepoContext {
-    pub fn new(r#type: models::EnumContextType, visibility: models::EnumContextVisibility, url: String, branch: String, build_file_path: String) -> ReqRepoContext {
+    pub fn new(
+        r#type: models::EnumContextType,
+        visibility: models::EnumContextVisibility,
+        url: String,
+        branch: String,
+        build_file_path: String,
+    ) -> ReqRepoContext {
         ReqRepoContext {
             r#type,
             visibility,
@@ -39,4 +45,3 @@ impl ReqRepoContext {
         }
     }
 }
-

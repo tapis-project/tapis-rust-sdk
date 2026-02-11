@@ -39,9 +39,15 @@ pub struct ReqSubmitJob {
     pub exec_system_exec_dir: Option<String>,
     #[serde(rename = "execSystemInputDir", skip_serializing_if = "Option::is_none")]
     pub exec_system_input_dir: Option<String>,
-    #[serde(rename = "execSystemOutputDir", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemOutputDir",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_output_dir: Option<String>,
-    #[serde(rename = "execSystemLogicalQueue", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemLogicalQueue",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_logical_queue: Option<String>,
     #[serde(rename = "archiveSystemId", skip_serializing_if = "Option::is_none")]
     pub archive_system_id: Option<String>,
@@ -65,7 +71,10 @@ pub struct ReqSubmitJob {
     pub file_input_arrays: Option<Vec<models::JobFileInputArray>>,
     #[serde(rename = "parameterSet", skip_serializing_if = "Option::is_none")]
     pub parameter_set: Option<Box<models::JobParameterSet>>,
-    #[serde(rename = "execSystemConstraints", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemConstraints",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_constraints: Option<Vec<String>>,
     #[serde(rename = "tags", skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<String>>,
@@ -120,4 +129,3 @@ impl ReqSubmitJob {
         }
     }
 }
-

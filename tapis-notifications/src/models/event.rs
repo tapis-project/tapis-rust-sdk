@@ -27,7 +27,10 @@ pub struct Event {
     pub end_series: Option<bool>,
     #[serde(rename = "timestamp")]
     pub timestamp: String,
-    #[serde(rename = "deleteSubscriptionsMatchingSubject", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "deleteSubscriptionsMatchingSubject",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub delete_subscriptions_matching_subject: Option<bool>,
     #[serde(rename = "tenant", skip_serializing_if = "Option::is_none")]
     pub tenant: Option<String>,
@@ -60,4 +63,3 @@ impl Event {
         }
     }
 }
-

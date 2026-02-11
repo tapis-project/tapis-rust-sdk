@@ -19,9 +19,6 @@ pub struct ChecksumDataIntegrityProfile {
 
 impl ChecksumDataIntegrityProfile {
     pub fn new(r#type: String) -> ChecksumDataIntegrityProfile {
-        ChecksumDataIntegrityProfile {
-            r#type,
-        }
+        ChecksumDataIntegrityProfile { r#type }
     }
 }
-

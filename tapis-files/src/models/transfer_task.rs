@@ -25,9 +25,15 @@ pub struct TransferTask {
     pub status: Option<models::TransferStatusEnum>,
     #[serde(rename = "parentTasks", skip_serializing_if = "Option::is_none")]
     pub parent_tasks: Option<Vec<models::TransferTaskParent>>,
-    #[serde(rename = "estimatedTotalBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "estimatedTotalBytes",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub estimated_total_bytes: Option<i64>,
-    #[serde(rename = "totalBytesTransferred", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "totalBytesTransferred",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub total_bytes_transferred: Option<i64>,
     #[serde(rename = "totalTransfers", skip_serializing_if = "Option::is_none")]
     pub total_transfers: Option<i32>,
@@ -63,4 +69,3 @@ impl TransferTask {
         }
     }
 }
-

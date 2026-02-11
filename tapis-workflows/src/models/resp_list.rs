@@ -26,7 +26,13 @@ pub struct RespList {
 }
 
 impl RespList {
-    pub fn new(status: String, message: String, result: Vec<serde_json::Value>, version: String, metadata: serde_json::Value) -> RespList {
+    pub fn new(
+        status: String,
+        message: String,
+        result: Vec<serde_json::Value>,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespList {
         RespList {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespList {
         }
     }
 }
-

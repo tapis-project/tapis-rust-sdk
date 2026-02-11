@@ -113,4 +113,3 @@ impl Default for EventAction {
         Self::Cascade
     }
 }
-

@@ -30,7 +30,12 @@ pub struct ReqCiPipeline {
 }
 
 impl ReqCiPipeline {
-    pub fn new(id: String, r#type: models::EnumPipelineType, context: models::ReqContext, destination: models::ReqDestination) -> ReqCiPipeline {
+    pub fn new(
+        id: String,
+        r#type: models::EnumPipelineType,
+        context: models::ReqContext,
+        destination: models::ReqDestination,
+    ) -> ReqCiPipeline {
         ReqCiPipeline {
             id,
             description: None,
@@ -42,4 +47,3 @@ impl ReqCiPipeline {
         }
     }
 }
-

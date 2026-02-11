@@ -28,7 +28,7 @@ impl NativeLinuxOpRequest {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Operation {
     #[serde(rename = "CHMOD")]
@@ -44,4 +44,3 @@ impl Default for Operation {
         Self::Chmod
     }
 }
-

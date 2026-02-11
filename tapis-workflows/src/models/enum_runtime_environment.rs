@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumRuntimeEnvironment {
     #[serde(rename = "tapis/workflows-python-singularity:0.1.0")]
@@ -60,13 +60,14 @@ pub enum EnumRuntimeEnvironment {
     HuggingfaceSlashTransformersPytorchGpuColon4292,
     #[serde(rename = "ghcr.io/tobiashi26/pygeoflood-container:main")]
     GhcrIoSlashTobiashi26SlashPygeofloodContainerColonMain,
-
 }
 
 impl std::fmt::Display for EnumRuntimeEnvironment {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Self::TapisSlashWorkflowsPythonSingularityColon010 => write!(f, "tapis/workflows-python-singularity:0.1.0"),
+            Self::TapisSlashWorkflowsPythonSingularityColon010 => {
+                write!(f, "tapis/workflows-python-singularity:0.1.0")
+            }
             Self::PythonColonLatest => write!(f, "python:latest"),
             Self::PythonColonSlim => write!(f, "python:slim"),
             Self::PythonColon312 => write!(f, "python:3.12"),
@@ -82,13 +83,23 @@ impl std::fmt::Display for EnumRuntimeEnvironment {
             Self::PythonColon2718 => write!(f, "python:2.7.18"),
             Self::PythonColon2718Slim => write!(f, "python:2.7.18-slim"),
             Self::TensorflowSlashTensorflowColonLatest => write!(f, "tensorflow/tensorflow:latest"),
-            Self::TensorflowSlashTensorflowColonLatestGpu => write!(f, "tensorflow/tensorflow:latest-gpu"),
+            Self::TensorflowSlashTensorflowColonLatestGpu => {
+                write!(f, "tensorflow/tensorflow:latest-gpu")
+            }
             Self::TensorflowSlashTensorflowColon2120 => write!(f, "tensorflow/tensorflow:2.12.0"),
-            Self::TensorflowSlashTensorflowColon2120Gpu => write!(f, "tensorflow/tensorflow:2.12.0-gpu"),
+            Self::TensorflowSlashTensorflowColon2120Gpu => {
+                write!(f, "tensorflow/tensorflow:2.12.0-gpu")
+            }
             Self::PytorchSlashPytorchColonLatest => write!(f, "pytorch/pytorch:latest"),
-            Self::HuggingfaceSlashTransformersPytorchGpuColonLatest => write!(f, "huggingface/transformers-pytorch-gpu:latest"),
-            Self::HuggingfaceSlashTransformersPytorchGpuColon4292 => write!(f, "huggingface/transformers-pytorch-gpu:4.29.2"),
-            Self::GhcrIoSlashTobiashi26SlashPygeofloodContainerColonMain => write!(f, "ghcr.io/tobiashi26/pygeoflood-container:main"),
+            Self::HuggingfaceSlashTransformersPytorchGpuColonLatest => {
+                write!(f, "huggingface/transformers-pytorch-gpu:latest")
+            }
+            Self::HuggingfaceSlashTransformersPytorchGpuColon4292 => {
+                write!(f, "huggingface/transformers-pytorch-gpu:4.29.2")
+            }
+            Self::GhcrIoSlashTobiashi26SlashPygeofloodContainerColonMain => {
+                write!(f, "ghcr.io/tobiashi26/pygeoflood-container:main")
+            }
         }
     }
 }
@@ -98,4 +109,3 @@ impl Default for EnumRuntimeEnvironment {
         Self::TapisSlashWorkflowsPythonSingularityColon010
     }
 }
-

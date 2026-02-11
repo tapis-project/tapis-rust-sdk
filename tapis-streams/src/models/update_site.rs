@@ -33,7 +33,13 @@ pub struct UpdateSite {
 }
 
 impl UpdateSite {
-    pub fn new(site_name: String, description: String, latitude: f64, longitude: f64, elevation: f64) -> UpdateSite {
+    pub fn new(
+        site_name: String,
+        description: String,
+        latitude: f64,
+        longitude: f64,
+        elevation: f64,
+    ) -> UpdateSite {
         UpdateSite {
             site_name,
             description,
@@ -44,4 +50,3 @@ impl UpdateSite {
         }
     }
 }
-

@@ -1,4 +1,4 @@
-use crate::apis::{configuration, Error, health_check_api, keys_api, tokens_api};
+use crate::apis::{configuration, health_check_api, keys_api, tokens_api, Error};
 use crate::models;
 use http::header::{HeaderMap, HeaderValue};
 use std::sync::Arc;
@@ -28,9 +28,15 @@ impl TapisTokens {
 
         Ok(Self {
             config: config.clone(),
-            health_check: HealthCheckClient { config: config.clone() },
-            keys: KeysClient { config: config.clone() },
-            tokens: TokensClient { config: config.clone() },
+            health_check: HealthCheckClient {
+                config: config.clone(),
+            },
+            keys: KeysClient {
+                config: config.clone(),
+            },
+            tokens: TokensClient {
+                config: config.clone(),
+            },
         })
     }
 
@@ -45,14 +51,17 @@ pub struct HealthCheckClient {
 }
 
 impl HealthCheckClient {
-    pub async fn hello(&self) -> Result<models::BasicResponse, Error<health_check_api::HelloError>> {
+    pub async fn hello(
+        &self,
+    ) -> Result<models::BasicResponse, Error<health_check_api::HelloError>> {
         health_check_api::hello(&self.config).await
     }
 
-    pub async fn ready(&self) -> Result<models::BasicResponse, Error<health_check_api::ReadyError>> {
+    pub async fn ready(
+        &self,
+    ) -> Result<models::BasicResponse, Error<health_check_api::ReadyError>> {
         health_check_api::ready(&self.config).await
     }
-
 }
 
 #[derive(Clone)]
@@ -61,10 +70,12 @@ pub struct KeysClient {
 }
 
 impl KeysClient {
-    pub async fn update_keys(&self, new_signing_keys_request: models::NewSigningKeysRequest) -> Result<models::UpdateKeys201Response, Error<keys_api::UpdateKeysError>> {
+    pub async fn update_keys(
+        &self,
+        new_signing_keys_request: models::NewSigningKeysRequest,
+    ) -> Result<models::UpdateKeys201Response, Error<keys_api::UpdateKeysError>> {
         keys_api::update_keys(&self.config, new_signing_keys_request).await
     }
-
 }
 
 #[derive(Clone)]
@@ -73,21 +84,31 @@ pub struct TokensClient {
 }
 
 impl TokensClient {
-    pub async fn create_token(&self, new_token_request: models::NewTokenRequest) -> Result<models::RefreshToken201Response, Error<tokens_api::CreateTokenError>> {
+    pub async fn create_token(
+        &self,
+        new_token_request: models::NewTokenRequest,
+    ) -> Result<models::RefreshToken201Response, Error<tokens_api::CreateTokenError>> {
         tokens_api::create_token(&self.config, new_token_request).await
     }
 
-    pub async fn refresh_token(&self, refresh_token_request: models::RefreshTokenRequest) -> Result<models::RefreshToken201Response, Error<tokens_api::RefreshTokenError>> {
+    pub async fn refresh_token(
+        &self,
+        refresh_token_request: models::RefreshTokenRequest,
+    ) -> Result<models::RefreshToken201Response, Error<tokens_api::RefreshTokenError>> {
         tokens_api::refresh_token(&self.config, refresh_token_request).await
     }
 
-    pub async fn revoke_token(&self, revoke_token_request: models::RevokeTokenRequest) -> Result<models::BasicResponse, Error<tokens_api::RevokeTokenError>> {
+    pub async fn revoke_token(
+        &self,
+        revoke_token_request: models::RevokeTokenRequest,
+    ) -> Result<models::BasicResponse, Error<tokens_api::RevokeTokenError>> {
         tokens_api::revoke_token(&self.config, revoke_token_request).await
     }
 
-    pub async fn update_keys(&self, new_signing_keys_request: models::NewSigningKeysRequest) -> Result<models::UpdateKeys201Response, Error<tokens_api::UpdateKeysError>> {
+    pub async fn update_keys(
+        &self,
+        new_signing_keys_request: models::NewSigningKeysRequest,
+    ) -> Result<models::UpdateKeys201Response, Error<tokens_api::UpdateKeysError>> {
         tokens_api::update_keys(&self.config, new_signing_keys_request).await
     }
-
 }
-

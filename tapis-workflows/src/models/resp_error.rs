@@ -26,7 +26,13 @@ pub struct RespError {
 }
 
 impl RespError {
-    pub fn new(status: String, message: String, result: serde_json::Value, version: String, metadata: serde_json::Value) -> RespError {
+    pub fn new(
+        status: String,
+        message: String,
+        result: serde_json::Value,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespError {
         RespError {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespError {
         }
     }
 }
-

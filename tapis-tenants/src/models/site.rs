@@ -26,7 +26,10 @@ pub struct Site {
     #[serde(rename = "services")]
     pub services: Vec<String>,
     /// The tenant base url template.
-    #[serde(rename = "tenant_base_url_template", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tenant_base_url_template",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tenant_base_url_template: Option<String>,
     /// Tenant ID of this site's tenant.
     #[serde(rename = "site_admin_tenant_id")]
@@ -45,4 +48,3 @@ impl Site {
         }
     }
 }
-

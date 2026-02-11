@@ -19,9 +19,6 @@ pub struct ExtendedTapisJob {
 
 impl ExtendedTapisJob {
     pub fn new() -> ExtendedTapisJob {
-        ExtendedTapisJob {
-            extensions: None,
-        }
+        ExtendedTapisJob { extensions: None }
     }
 }
-

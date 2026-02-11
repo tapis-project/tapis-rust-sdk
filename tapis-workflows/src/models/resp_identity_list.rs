@@ -26,7 +26,13 @@ pub struct RespIdentityList {
 }
 
 impl RespIdentityList {
-    pub fn new(status: String, message: String, result: Vec<models::Identity>, version: String, metadata: serde_json::Value) -> RespIdentityList {
+    pub fn new(
+        status: String,
+        message: String,
+        result: Vec<models::Identity>,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespIdentityList {
         RespIdentityList {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespIdentityList {
         }
     }
 }
-

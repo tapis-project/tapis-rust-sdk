@@ -1,7 +1,7 @@
 /*
  * Tapis Security API
  *
- * The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources. 
+ * The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources.
  *
  * The version of the OpenAPI document: 1.8.2
  * Contact: cicsupport@tacc.utexas.edu
@@ -22,7 +22,11 @@ pub struct ReqRolePermits {
 }
 
 impl ReqRolePermits {
-    pub fn new(role_tenant: String, role_type: models::RoleTypeEnum, perm_spec: String) -> ReqRolePermits {
+    pub fn new(
+        role_tenant: String,
+        role_type: models::RoleTypeEnum,
+        perm_spec: String,
+    ) -> ReqRolePermits {
         ReqRolePermits {
             role_tenant,
             role_type,
@@ -30,4 +34,3 @@ impl ReqRolePermits {
         }
     }
 }
-

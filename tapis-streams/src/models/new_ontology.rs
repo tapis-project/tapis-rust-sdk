@@ -22,7 +22,10 @@ pub struct NewOntology {
     /// URL for the Ontology
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-    #[serde(rename = "additionalProperties", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "additionalProperties",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub additional_properties: Option<String>,
 }
 
@@ -36,4 +39,3 @@ impl NewOntology {
         }
     }
 }
-

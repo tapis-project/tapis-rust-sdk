@@ -22,7 +22,6 @@
 /// ```bash
 /// cargo run --example authenticator_example
 /// ```
-
 use tapis_authenticator::client::TapisAuthenticator;
 use tapis_authenticator::models::NewToken;
 
@@ -34,37 +33,36 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Example 0: Create JWT Token (Unauthenticated)
     println!("📋 Example 0: Create JWT Token (No Auth Required)");
     println!("───────────────────────────────────────────────────");
-    
+
     // Get TAPIS_HOST from environment or use default
     let tapis_host = std::env::var("TAPIS_HOST").unwrap_or_else(|_| "tacc.tapis.io".to_string());
 
     // Note: base_url should NOT include the service path (/authenticator) or /v3
     // because the generated API code already includes the full path (e.g., /v3/oauth2/tokens)
     let base_url = format!("https://{}", tapis_host);
-    
+
     println!("🌍 Using Tapis host: {}", tapis_host);
     println!("📡 Base URL: {}\n", base_url);
 
     // This endpoint doesn't require authentication
     let public_client = TapisAuthenticator::new(
-        &base_url,
-        None, // No JWT token needed for token creation
+        &base_url, None, // No JWT token needed for token creation
     )?;
-    
+
     // Try to get username/password from environment
     if let (Ok(username), Ok(password)) = (
         std::env::var("TAPIS_USERNAME"),
         std::env::var("TAPIS_PASSWORD"),
     ) {
         println!("✓ Creating JWT token for user: {}", username);
-        
+
         let new_token = NewToken {
             username: Some(username),
             password: Some(password),
             grant_type: Some("password".to_string()),
             ..Default::default()
         };
-        
+
         match public_client.tokens.create_token(new_token).await {
             Ok(response) => {
                 println!("✓ JWT token created successfully!");
@@ -100,12 +98,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     println!("🔧 Creating authenticated TapisAuthenticator client...");
-    
+
     // Create the high-level client with authentication
-    let client = TapisAuthenticator::new(
-        &base_url,
-        Some(&jwt_token),
-    )?;
+    let client = TapisAuthenticator::new(&base_url, Some(&jwt_token))?;
 
     println!("✅ Client created successfully!\n");
 

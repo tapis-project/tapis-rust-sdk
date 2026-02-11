@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum JobEventCategoryFilter {
     #[serde(rename = "ALL")]
@@ -26,7 +26,6 @@ pub enum JobEventCategoryFilter {
     JobErrorMessage,
     #[serde(rename = "JOB_SUBSCRIPTION")]
     JobSubscription,
-
 }
 
 impl std::fmt::Display for JobEventCategoryFilter {
@@ -47,4 +46,3 @@ impl Default for JobEventCategoryFilter {
         Self::All
     }
 }
-

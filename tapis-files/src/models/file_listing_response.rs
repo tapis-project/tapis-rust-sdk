@@ -42,4 +42,3 @@ impl FileListingResponse {
         }
     }
 }
-

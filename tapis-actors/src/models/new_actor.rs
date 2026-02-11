@@ -20,7 +20,10 @@ pub struct NewActor {
     #[serde(rename = "token", skip_serializing_if = "Option::is_none")]
     pub token: Option<bool>,
     /// The default environment variables and values for the actor.
-    #[serde(rename = "default_environment", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "default_environment",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub default_environment: Option<serde_json::Value>,
     /// User provided description of the actor.
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
@@ -29,13 +32,23 @@ pub struct NewActor {
     #[serde(rename = "privileged", skip_serializing_if = "Option::is_none")]
     pub privileged: Option<bool>,
     /// The command channel that this actor uses.
-    #[serde(rename = "queue", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "queue",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub queue: Option<Option<String>>,
     /// Whether the actor stores private state between executions.
     #[serde(rename = "stateless", skip_serializing_if = "Option::is_none")]
     pub stateless: Option<bool>,
     /// Actor identifier of actor to link this actor's events too. May be an actor id or an alias. Cycles not permitted.
-    #[serde(rename = "link", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "link",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub link: Option<Option<String>>,
     /// String of 'yyyy-mm-dd hh + <number> <unit of time>' format. Turns on cron feature for actor so that at the specified times the actor with execute with a generic static message.
     #[serde(rename = "cron_schedule", skip_serializing_if = "Option::is_none")]
@@ -61,4 +74,3 @@ impl NewActor {
         }
     }
 }
-

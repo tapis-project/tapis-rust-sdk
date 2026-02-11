@@ -50,7 +50,12 @@ pub struct ReqFunctionTask {
 }
 
 impl ReqFunctionTask {
-    pub fn new(id: String, r#type: models::EnumTaskType, runtime: models::EnumRuntimeEnvironment, installer: models::EnumInstaller) -> ReqFunctionTask {
+    pub fn new(
+        id: String,
+        r#type: models::EnumTaskType,
+        runtime: models::EnumRuntimeEnvironment,
+        installer: models::EnumInstaller,
+    ) -> ReqFunctionTask {
         ReqFunctionTask {
             id,
             r#type,
@@ -70,4 +75,3 @@ impl ReqFunctionTask {
         }
     }
 }
-

@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EtlEnumManifestGenerationPolicy {
     #[serde(rename = "manual")]
@@ -20,7 +20,6 @@ pub enum EtlEnumManifestGenerationPolicy {
     AutoOnePerFile,
     #[serde(rename = "auto_one_for_all")]
     AutoOneForAll,
-
 }
 
 impl std::fmt::Display for EtlEnumManifestGenerationPolicy {
@@ -38,4 +37,3 @@ impl Default for EtlEnumManifestGenerationPolicy {
         Self::Manual
     }
 }
-

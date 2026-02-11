@@ -32,7 +32,13 @@ pub struct ReqS3Archive {
 }
 
 impl ReqS3Archive {
-    pub fn new(id: String, r#type: models::EnumArchiveType, endpoint: String, bucket: String, region: String) -> ReqS3Archive {
+    pub fn new(
+        id: String,
+        r#type: models::EnumArchiveType,
+        endpoint: String,
+        bucket: String,
+        region: String,
+    ) -> ReqS3Archive {
         ReqS3Archive {
             id,
             r#type,
@@ -45,4 +51,3 @@ impl ReqS3Archive {
         }
     }
 }
-

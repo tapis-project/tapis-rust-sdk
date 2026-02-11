@@ -19,9 +19,6 @@ pub struct ReqUpdateGroupUser {
 
 impl ReqUpdateGroupUser {
     pub fn new(is_admin: bool) -> ReqUpdateGroupUser {
-        ReqUpdateGroupUser {
-            is_admin,
-        }
+        ReqUpdateGroupUser { is_admin }
     }
 }
-

@@ -20,7 +20,10 @@ pub struct UpdateVariable {
     #[serde(rename = "units", skip_serializing_if = "Option::is_none")]
     pub units: Option<String>,
     /// Id of the Property measured by the variable type
-    #[serde(rename = "measured_property_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "measured_property_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub measured_property_id: Option<f64>,
     /// User entered metadata for the variable
     #[serde(rename = "metadata", skip_serializing_if = "Option::is_none")]
@@ -41,4 +44,3 @@ impl UpdateVariable {
         }
     }
 }
-

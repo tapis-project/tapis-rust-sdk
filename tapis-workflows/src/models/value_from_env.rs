@@ -19,9 +19,6 @@ pub struct ValueFromEnv {
 
 impl ValueFromEnv {
     pub fn new() -> ValueFromEnv {
-        ValueFromEnv {
-            env: None,
-        }
+        ValueFromEnv { env: None }
     }
 }
-

@@ -26,7 +26,13 @@ pub struct RespBase {
 }
 
 impl RespBase {
-    pub fn new(status: String, message: String, result: serde_json::Value, version: String, metadata: serde_json::Value) -> RespBase {
+    pub fn new(
+        status: String,
+        message: String,
+        result: serde_json::Value,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespBase {
         RespBase {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespBase {
         }
     }
 }
-

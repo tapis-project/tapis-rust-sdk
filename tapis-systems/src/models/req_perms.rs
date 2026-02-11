@@ -19,9 +19,6 @@ pub struct ReqPerms {
 
 impl ReqPerms {
     pub fn new(permissions: Vec<String>) -> ReqPerms {
-        ReqPerms {
-            permissions,
-        }
+        ReqPerms { permissions }
     }
 }
-

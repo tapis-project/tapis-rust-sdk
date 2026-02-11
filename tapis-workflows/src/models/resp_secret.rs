@@ -26,7 +26,13 @@ pub struct RespSecret {
 }
 
 impl RespSecret {
-    pub fn new(status: String, message: String, result: models::Secret, version: String, metadata: serde_json::Value) -> RespSecret {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::Secret,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespSecret {
         RespSecret {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespSecret {
         }
     }
 }
-

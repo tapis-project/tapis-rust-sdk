@@ -19,9 +19,6 @@ pub struct ReqPatchPipelineRun {
 
 impl ReqPatchPipelineRun {
     pub fn new() -> ReqPatchPipelineRun {
-        ReqPatchPipelineRun {
-            logs: None,
-        }
+        ReqPatchPipelineRun { logs: None }
     }
 }
-

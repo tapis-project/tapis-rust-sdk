@@ -30,7 +30,7 @@ impl ReqShareJob {
         }
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum JobResource {
     #[serde(rename = "JOB_HISTORY")]
@@ -48,7 +48,7 @@ impl Default for JobResource {
         Self::JobHistory
     }
 }
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum JobPermission {
     #[serde(rename = "READ")]
@@ -60,4 +60,3 @@ impl Default for JobPermission {
         Self::Read
     }
 }
-

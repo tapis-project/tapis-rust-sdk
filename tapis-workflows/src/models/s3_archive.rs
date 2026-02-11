@@ -36,7 +36,17 @@ pub struct S3Archive {
 }
 
 impl S3Archive {
-    pub fn new(id: String, r#type: models::EnumArchiveType, group: uuid::Uuid, tenant_id: String, owner: String, archive_dir: String, endpoint: String, bucket: String, region: String) -> S3Archive {
+    pub fn new(
+        id: String,
+        r#type: models::EnumArchiveType,
+        group: uuid::Uuid,
+        tenant_id: String,
+        owner: String,
+        archive_dir: String,
+        endpoint: String,
+        bucket: String,
+        region: String,
+    ) -> S3Archive {
         S3Archive {
             id,
             r#type,
@@ -51,4 +61,3 @@ impl S3Archive {
         }
     }
 }
-

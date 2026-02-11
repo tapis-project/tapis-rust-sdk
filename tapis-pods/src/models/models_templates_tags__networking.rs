@@ -1,7 +1,7 @@
 /*
  * Tapis Pods Service
  *
- *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html). 
+ *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html).
  *
  * The version of the OpenAPI document: 1.9.0
  * Contact: cicsupport@tacc.utexas.edu
@@ -29,13 +29,22 @@ pub struct ModelsTemplatesTagsNetworking {
     #[serde(rename = "tapis_auth", skip_serializing_if = "Option::is_none")]
     pub tapis_auth: Option<bool>,
     /// Specification of headers to forward to the pod when using Tapis auth.
-    #[serde(rename = "tapis_auth_response_headers", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_auth_response_headers",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_auth_response_headers: Option<std::collections::HashMap<String, String>>,
     /// List of users allowed to access the pod when using Tapis auth.
-    #[serde(rename = "tapis_auth_allowed_users", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_auth_allowed_users",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_auth_allowed_users: Option<Vec<String>>,
     /// Path to redirect to when accessing the pod via Tapis auth.
-    #[serde(rename = "tapis_auth_return_path", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_auth_return_path",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_auth_return_path: Option<String>,
     /// List of CORS allowed origins. ex. ['https://tacc.develop.tapis.io', 'https://tacc.tapis.io']
     #[serde(rename = "cors_allow_origins", skip_serializing_if = "Option::is_none")]
@@ -47,7 +56,10 @@ pub struct ModelsTemplatesTagsNetworking {
     #[serde(rename = "cors_allow_headers", skip_serializing_if = "Option::is_none")]
     pub cors_allow_headers: Option<Vec<String>>,
     /// Boolean to allow credentials to be sent with CORS requests.
-    #[serde(rename = "cors_allow_credentials", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "cors_allow_credentials",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub cors_allow_credentials: Option<bool>,
     /// Max age of CORS preflight requests in seconds.
     #[serde(rename = "cors_max_age", skip_serializing_if = "Option::is_none")]
@@ -56,10 +68,16 @@ pub struct ModelsTemplatesTagsNetworking {
     #[serde(rename = "tapis_ui_uri", skip_serializing_if = "Option::is_none")]
     pub tapis_ui_uri: Option<String>,
     /// If true, will redirect to the tapis_ui_uri when accessing the pod via Tapis UI. Otherwise, just read-only uri.
-    #[serde(rename = "tapis_ui_uri_redirect", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_ui_uri_redirect",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_ui_uri_redirect: Option<bool>,
     /// Describing where the tapis_ui_uri will redirect to.
-    #[serde(rename = "tapis_ui_uri_description", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "tapis_ui_uri_description",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub tapis_ui_uri_description: Option<String>,
 }
 
@@ -85,4 +103,3 @@ impl ModelsTemplatesTagsNetworking {
         }
     }
 }
-

@@ -1,7 +1,7 @@
 /*
  * Tapis Pods Service
  *
- *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html). 
+ *  The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html).
  *
  * The version of the OpenAPI document: 1.9.0
  * Contact: cicsupport@tacc.utexas.edu
@@ -17,21 +17,46 @@ pub struct VolumeMount {
     /// Type of mount: 'tapisvolume', 'tapissnapshot', 'ephemeral', or 'pvc'.
     #[serde(rename = "type")]
     pub r#type: Type,
-    #[serde(rename = "source_id", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "source_id",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub source_id: Option<Option<String>>,
-    #[serde(rename = "mounted_by", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "mounted_by",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub mounted_by: Option<Option<String>>,
     /// Sub-path within the source volume/snapshot to mount. Not used for ephemeral.
     #[serde(rename = "sub_path", skip_serializing_if = "Option::is_none")]
     pub sub_path: Option<String>,
-    #[serde(rename = "read_only", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "read_only",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub read_only: Option<Option<bool>>,
-    #[serde(rename = "config_content", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "config_content",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub config_content: Option<Option<String>>,
     /// Unix file permissions for config file (e.g., '0644', '0600').
     #[serde(rename = "config_permissions", skip_serializing_if = "Option::is_none")]
     pub config_permissions: Option<String>,
-    #[serde(rename = "config_filename", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "config_filename",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub config_filename: Option<Option<String>>,
     /// Config update behavior: 'always' recreates config on each pod start, 'once' only creates if file/ConfigMap doesn't exist.
     #[serde(rename = "config_update_mode", skip_serializing_if = "Option::is_none")]
@@ -72,4 +97,3 @@ impl Default for Type {
         Self::Tapisvolume
     }
 }
-

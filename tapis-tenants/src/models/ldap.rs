@@ -75,4 +75,3 @@ impl Default for AccountType {
         Self::Service
     }
 }
-

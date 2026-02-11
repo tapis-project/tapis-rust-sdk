@@ -3,13 +3,13 @@
 #![allow(deprecated)]
 #![allow(non_snake_case)]
 
-extern crate serde_repr;
+extern crate reqwest;
 extern crate serde;
 extern crate serde_json;
+extern crate serde_repr;
 extern crate url;
-extern crate reqwest;
 
 pub mod apis;
-pub mod models;
 pub mod client;
+pub mod models;
 pub use client::TapisSystems;

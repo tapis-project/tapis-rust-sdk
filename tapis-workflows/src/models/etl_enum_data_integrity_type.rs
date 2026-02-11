@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EtlEnumDataIntegrityType {
     #[serde(rename = "checksum")]
@@ -20,7 +20,6 @@ pub enum EtlEnumDataIntegrityType {
     ByteCheck,
     #[serde(rename = "done_file")]
     DoneFile,
-
 }
 
 impl std::fmt::Display for EtlEnumDataIntegrityType {
@@ -38,4 +37,3 @@ impl Default for EtlEnumDataIntegrityType {
         Self::Checksum
     }
 }
-

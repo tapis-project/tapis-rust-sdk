@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumHttpMethod {
     #[serde(rename = "get")]
@@ -24,7 +24,6 @@ pub enum EnumHttpMethod {
     Patch,
     #[serde(rename = "delete")]
     Delete,
-
 }
 
 impl std::fmt::Display for EnumHttpMethod {
@@ -44,4 +43,3 @@ impl Default for EnumHttpMethod {
         Self::Get
     }
 }
-

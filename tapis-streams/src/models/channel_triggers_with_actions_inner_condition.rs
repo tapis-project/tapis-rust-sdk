@@ -23,4 +23,3 @@ impl Default for ChannelTriggersWithActionsInnerCondition {
         Self::Threshold(Default::default())
     }
 }
-

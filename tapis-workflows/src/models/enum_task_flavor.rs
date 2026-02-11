@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumTaskFlavor {
     #[serde(rename = "c1tiny")]
@@ -32,7 +32,6 @@ pub enum EnumTaskFlavor {
     G1nvdmed,
     #[serde(rename = "g1nvdlrg")]
     G1nvdlrg,
-
 }
 
 impl std::fmt::Display for EnumTaskFlavor {
@@ -56,4 +55,3 @@ impl Default for EnumTaskFlavor {
         Self::C1tiny
     }
 }
-

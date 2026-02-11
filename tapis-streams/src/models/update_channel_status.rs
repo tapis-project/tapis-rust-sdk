@@ -20,9 +20,7 @@ pub struct UpdateChannelStatus {
 
 impl UpdateChannelStatus {
     pub fn new() -> UpdateChannelStatus {
-        UpdateChannelStatus {
-            status: None,
-        }
+        UpdateChannelStatus { status: None }
     }
 }
 /// Whether the request was a success or failure.
@@ -39,4 +37,3 @@ impl Default for Status {
         Self::Inactive
     }
 }
-

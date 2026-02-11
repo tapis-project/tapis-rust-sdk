@@ -32,10 +32,16 @@ pub struct UpdateTenant {
     #[serde(rename = "token_gen_services", skip_serializing_if = "Option::is_none")]
     pub token_gen_services: Option<Vec<String>>,
     /// The unique identifier for the LDAP object for service accounts in the tenant.
-    #[serde(rename = "service_ldap_connection_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "service_ldap_connection_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub service_ldap_connection_id: Option<String>,
     /// The unique identifier for the LDAP object for user accounts in the tenant.
-    #[serde(rename = "user_ldap_connection_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "user_ldap_connection_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub user_ldap_connection_id: Option<String>,
     /// The public key that should be used to validate the signatures of JWTs associated with the tenant.
     #[serde(rename = "public_key", skip_serializing_if = "Option::is_none")]
@@ -81,4 +87,3 @@ impl Default for Status {
         Self::Draft
     }
 }
-

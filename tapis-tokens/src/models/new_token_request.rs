@@ -29,16 +29,25 @@ pub struct NewTokenRequest {
     #[serde(rename = "delegation_token", skip_serializing_if = "Option::is_none")]
     pub delegation_token: Option<bool>,
     /// The tenant_id associated with the subject who used a delegation authority in creating the delegation token.
-    #[serde(rename = "delegation_sub_tenant_id", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "delegation_sub_tenant_id",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub delegation_sub_tenant_id: Option<String>,
     /// The username associated with the subject who used a delegation authority in creating the delegation token.
-    #[serde(rename = "delegation_sub_username", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "delegation_sub_username",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub delegation_sub_username: Option<String>,
     /// The TTL, in seconds, for the generated token.
     #[serde(rename = "access_token_ttl", skip_serializing_if = "Option::is_none")]
     pub access_token_ttl: Option<i32>,
     /// Whether to also generate a refresh token.
-    #[serde(rename = "generate_refresh_token", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "generate_refresh_token",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub generate_refresh_token: Option<bool>,
     /// The TTL, in seconds, for the refresh token (if generated).
     #[serde(rename = "refresh_token_ttl", skip_serializing_if = "Option::is_none")]
@@ -49,7 +58,11 @@ pub struct NewTokenRequest {
 }
 
 impl NewTokenRequest {
-    pub fn new(account_type: AccountType, token_tenant_id: String, token_username: String) -> NewTokenRequest {
+    pub fn new(
+        account_type: AccountType,
+        token_tenant_id: String,
+        token_username: String,
+    ) -> NewTokenRequest {
         NewTokenRequest {
             account_type,
             token_tenant_id,
@@ -79,4 +92,3 @@ impl Default for AccountType {
         Self::User
     }
 }
-

@@ -17,7 +17,10 @@ pub struct JobAttributes {
     pub description: Option<String>,
     #[serde(rename = "dynamicExecSystem", skip_serializing_if = "Option::is_none")]
     pub dynamic_exec_system: Option<bool>,
-    #[serde(rename = "execSystemConstraints", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemConstraints",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_constraints: Option<Vec<String>>,
     #[serde(rename = "execSystemId", skip_serializing_if = "Option::is_none")]
     pub exec_system_id: Option<String>,
@@ -25,13 +28,19 @@ pub struct JobAttributes {
     pub exec_system_exec_dir: Option<String>,
     #[serde(rename = "execSystemInputDir", skip_serializing_if = "Option::is_none")]
     pub exec_system_input_dir: Option<String>,
-    #[serde(rename = "execSystemOutputDir", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemOutputDir",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_output_dir: Option<String>,
     #[serde(rename = "dtnSystemInputDir", skip_serializing_if = "Option::is_none")]
     pub dtn_system_input_dir: Option<String>,
     #[serde(rename = "dtnSystemOutputDir", skip_serializing_if = "Option::is_none")]
     pub dtn_system_output_dir: Option<String>,
-    #[serde(rename = "execSystemLogicalQueue", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "execSystemLogicalQueue",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub exec_system_logical_queue: Option<String>,
     #[serde(rename = "archiveSystemId", skip_serializing_if = "Option::is_none")]
     pub archive_system_id: Option<String>,
@@ -99,4 +108,3 @@ impl JobAttributes {
         }
     }
 }
-

@@ -21,9 +21,6 @@ pub struct UpdateMultipleTableRowsWhere {
 impl UpdateMultipleTableRowsWhere {
     /// A JSON object describing a where clause of records to update; each record on the table matching the where clause will be updates.
     pub fn new() -> UpdateMultipleTableRowsWhere {
-        UpdateMultipleTableRowsWhere {
-            sub_value: None,
-        }
+        UpdateMultipleTableRowsWhere { sub_value: None }
     }
 }
-

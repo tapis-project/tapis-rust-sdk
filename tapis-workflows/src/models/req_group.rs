@@ -21,10 +21,6 @@ pub struct ReqGroup {
 
 impl ReqGroup {
     pub fn new(id: String) -> ReqGroup {
-        ReqGroup {
-            id,
-            users: None,
-        }
+        ReqGroup { id, users: None }
     }
 }
-

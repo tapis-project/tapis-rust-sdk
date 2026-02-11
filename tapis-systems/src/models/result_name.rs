@@ -19,9 +19,6 @@ pub struct ResultName {
 
 impl ResultName {
     pub fn new() -> ResultName {
-        ResultName {
-            name: None,
-        }
+        ResultName { name: None }
     }
 }
-

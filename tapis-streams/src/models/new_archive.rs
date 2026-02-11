@@ -46,4 +46,3 @@ impl Default for ArchiveType {
         Self::System
     }
 }
-

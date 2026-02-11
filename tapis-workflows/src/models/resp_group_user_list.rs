@@ -26,7 +26,13 @@ pub struct RespGroupUserList {
 }
 
 impl RespGroupUserList {
-    pub fn new(status: String, message: String, result: Vec<models::GroupUser>, version: String, metadata: serde_json::Value) -> RespGroupUserList {
+    pub fn new(
+        status: String,
+        message: String,
+        result: Vec<models::GroupUser>,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespGroupUserList {
         RespGroupUserList {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespGroupUserList {
         }
     }
 }
-

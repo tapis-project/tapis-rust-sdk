@@ -20,9 +20,6 @@ pub struct NewSigningKeysResponse {
 
 impl NewSigningKeysResponse {
     pub fn new() -> NewSigningKeysResponse {
-        NewSigningKeysResponse {
-            public_key: None,
-        }
+        NewSigningKeysResponse { public_key: None }
     }
 }
-

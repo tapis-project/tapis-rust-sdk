@@ -32,7 +32,10 @@ pub struct NewView {
     #[serde(rename = "raw_sql", skip_serializing_if = "Option::is_none")]
     pub raw_sql: Option<String>,
     /// Admin only. Full support of SQL when creating complex materialized views.
-    #[serde(rename = "materialized_view_raw_sql", skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "materialized_view_raw_sql",
+        skip_serializing_if = "Option::is_none"
+    )]
     pub materialized_view_raw_sql: Option<String>,
 }
 
@@ -49,4 +52,3 @@ impl NewView {
         }
     }
 }
-

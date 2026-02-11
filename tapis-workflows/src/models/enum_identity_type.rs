@@ -11,14 +11,13 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumIdentityType {
     #[serde(rename = "github")]
     Github,
     #[serde(rename = "dockerhub")]
     Dockerhub,
-
 }
 
 impl std::fmt::Display for EnumIdentityType {
@@ -35,4 +34,3 @@ impl Default for EnumIdentityType {
         Self::Github
     }
 }
-

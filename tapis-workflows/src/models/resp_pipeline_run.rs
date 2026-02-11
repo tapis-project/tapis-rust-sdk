@@ -26,7 +26,13 @@ pub struct RespPipelineRun {
 }
 
 impl RespPipelineRun {
-    pub fn new(status: String, message: String, result: models::PipelineRun, version: String, metadata: serde_json::Value) -> RespPipelineRun {
+    pub fn new(
+        status: String,
+        message: String,
+        result: models::PipelineRun,
+        version: String,
+        metadata: serde_json::Value,
+    ) -> RespPipelineRun {
         RespPipelineRun {
             status,
             message,
@@ -36,4 +42,3 @@ impl RespPipelineRun {
         }
     }
 }
-

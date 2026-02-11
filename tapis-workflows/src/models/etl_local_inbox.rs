@@ -22,7 +22,10 @@ pub struct EtlLocalInbox {
 }
 
 impl EtlLocalInbox {
-    pub fn new(manifests: models::EtlManifestsSystem, data: models::EtlDataSystem) -> EtlLocalInbox {
+    pub fn new(
+        manifests: models::EtlManifestsSystem,
+        data: models::EtlDataSystem,
+    ) -> EtlLocalInbox {
         EtlLocalInbox {
             manifests: Box::new(manifests),
             data: Box::new(data),
@@ -30,4 +33,3 @@ impl EtlLocalInbox {
         }
     }
 }
-

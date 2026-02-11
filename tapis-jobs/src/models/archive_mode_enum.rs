@@ -11,7 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// 
+///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum ArchiveModeEnum {
     #[serde(rename = "ALWAYS")]
@@ -20,7 +20,6 @@ pub enum ArchiveModeEnum {
     SkipOnFail,
     #[serde(rename = "NEVER")]
     Never,
-
 }
 
 impl std::fmt::Display for ArchiveModeEnum {
@@ -38,4 +37,3 @@ impl Default for ArchiveModeEnum {
         Self::Always
     }
 }
-

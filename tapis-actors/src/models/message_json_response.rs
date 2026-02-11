@@ -20,9 +20,6 @@ pub struct MessageJsonResponse {
 
 impl MessageJsonResponse {
     pub fn new() -> MessageJsonResponse {
-        MessageJsonResponse {
-            execution_id: None,
-        }
+        MessageJsonResponse { execution_id: None }
     }
 }
-
