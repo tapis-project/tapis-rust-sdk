@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_snapshot**](SnapshotsApi.md#create_snapshot) | **POST** /pods/snapshots | create_snapshot
 [**delete_snapshot**](SnapshotsApi.md#delete_snapshot) | **DELETE** /pods/snapshots/{snapshot_id} | delete_snapshot
+[**download_snapshot_file**](SnapshotsApi.md#download_snapshot_file) | **GET** /pods/snapshots/{snapshot_id}/download/{path} | download_snapshot_file
 [**get_snapshot**](SnapshotsApi.md#get_snapshot) | **GET** /pods/snapshots/{snapshot_id} | get_snapshot
 [**get_snapshot_contents**](SnapshotsApi.md#get_snapshot_contents) | **GET** /pods/snapshots/{snapshot_id}/contents/{path} | get_snapshot_contents
 [**list_snapshot_files**](SnapshotsApi.md#list_snapshot_files) | **GET** /pods/snapshots/{snapshot_id}/list | list_snapshot_files
@@ -70,6 +71,37 @@ No authorization required
 
 - **Content-Type**: Not defined
 - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## download_snapshot_file
+
+> serde_json::Value download_snapshot_file(snapshot_id, path)
+download_snapshot_file
+
+Download a specific file from a Tapis Snapshot.  Efficiently handles large files (100MB - 10GB) from NFS-backed storage by streaming in chunks.  Note: - This endpoint is for downloading individual files - For directories, use get_snapshot_contents with zip=true - Path cannot be empty or / to prevent downloading entire snapshot
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**snapshot_id** | **String** | Unique identifier for the snapshot. | [required] |
+**path** | **String** | Path to the file relative to the snapshot's root directory. Cannot be empty or /. | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/octet-stream
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

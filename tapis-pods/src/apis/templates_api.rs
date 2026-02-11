@@ -39,6 +39,14 @@ pub enum DeleteTemplateError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`delete_template_tag`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum DeleteTemplateTagError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`get_template`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -67,6 +75,7 @@ pub enum ListTemplateTagsError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListTemplatesError {
+    Status422(models::HttpValidationError),
     UnknownValue(serde_json::Value),
 }
 
@@ -97,7 +106,8 @@ pub async fn add_template(configuration: &configuration::Configuration, new_temp
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    req_builder = req_builder.json(&p_body_new_template);
+    }
+    req_builder = req_builder.json(&p_body_new_template);
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
@@ -124,6 +134,7 @@ pub async fn add_template(configuration: &configuration::Configuration, new_temp
     }
 }
 
+/// Add a new tag to a template.  Template tags can include a ``pod_definition`` with ``secret_map`` to define placeholders  that users must or can optionally override when creating pods from this template.  Secret Placeholders (25Q4 Feature): - ``${pods:default:value:?description}`` - Placeholder with a default value - ``${:?description}`` - Required placeholder (pod creation fails if not overridden) - ``${secret:name}`` - Direct secret reference (for templates with pre-configured secrets)  When users create pods from this template, they can override placeholders with actual secret references in their pod's ``secret_map``.  Returns new template tag object.
 pub async fn add_template_tag(configuration: &configuration::Configuration, template_id: &str, new_template_tag: models::NewTemplateTag) -> Result<models::TemplateTagResponse, Error<AddTemplateTagError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_template_id = template_id;
@@ -134,7 +145,8 @@ pub async fn add_template_tag(configuration: &configuration::Configuration, temp
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    req_builder = req_builder.json(&p_body_new_template_tag);
+    }
+    req_builder = req_builder.json(&p_body_new_template_tag);
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
@@ -171,7 +183,9 @@ pub async fn delete_template(configuration: &configuration::Configuration, templ
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -196,17 +210,65 @@ pub async fn delete_template(configuration: &configuration::Configuration, templ
     }
 }
 
-/// Get a templates.  Returns retrieved templates object.
-pub async fn get_template(configuration: &configuration::Configuration, template_id: &str) -> Result<models::TemplateResponse, Error<GetTemplateError>> {
+/// Delete a specific template tag. (Admin only)  If the tag has dependent pods or other template tags that inherit from it, deletion will fail unless the `force=true` query parameter is provided.  Returns the deleted tag information.
+pub async fn delete_template_tag(configuration: &configuration::Configuration, template_id: &str, tag_id: &str, force: Option<bool>) -> Result<models::TemplateTagResponse, Error<DeleteTemplateTagError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_template_id = template_id;
+    let p_path_tag_id = tag_id;
+    let p_query_force = force;
 
-    let uri_str = format!("{}/pods/templates/{template_id}", configuration.base_path, template_id=p_path_template_id.to_string());
-    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+    let uri_str = format!("{}/pods/templates/{template_id}/tags/{tag_id}", configuration.base_path, template_id=crate::apis::urlencode(p_path_template_id), tag_id=crate::apis::urlencode(p_path_tag_id));
+    let mut req_builder = configuration.client.request(reqwest::Method::DELETE, &uri_str);
 
+    if let Some(ref param_value) = p_query_force {
+        req_builder = req_builder.query(&[("force", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TemplateTagResponse`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::TemplateTagResponse`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<DeleteTemplateTagError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
+/// Get a template.  Returns retrieved templates object.
+pub async fn get_template(configuration: &configuration::Configuration, template_id: &str, include_dependencies: Option<bool>) -> Result<models::TemplateResponse, Error<GetTemplateError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_template_id = template_id;
+    let p_query_include_dependencies = include_dependencies;
+
+    let uri_str = format!("{}/pods/templates/{template_id}", configuration.base_path, template_id=crate::apis::urlencode(p_path_template_id));
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref param_value) = p_query_include_dependencies {
+        req_builder = req_builder.query(&[("include_dependencies", &param_value.to_string())]);
+    }
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -232,17 +294,27 @@ pub async fn get_template(configuration: &configuration::Configuration, template
 }
 
 /// Get a specific tag entry the template has  Returns the tag entry
-pub async fn get_template_tag(configuration: &configuration::Configuration, template_id: &str, tag_id: &str) -> Result<models::TemplateTagsResponse, Error<GetTemplateTagError>> {
+pub async fn get_template_tag(configuration: &configuration::Configuration, template_id: &str, tag_id: &str, include_configs: Option<bool>, include_dependencies: Option<bool>) -> Result<models::TemplateTagsResponse, Error<GetTemplateTagError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_template_id = template_id;
     let p_path_tag_id = tag_id;
+    let p_query_include_configs = include_configs;
+    let p_query_include_dependencies = include_dependencies;
 
     let uri_str = format!("{}/pods/templates/{template_id}/tags/{tag_id}", configuration.base_path, template_id=crate::apis::urlencode(p_path_template_id), tag_id=crate::apis::urlencode(p_path_tag_id));
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
+    if let Some(ref param_value) = p_query_include_configs {
+        req_builder = req_builder.query(&[("include_configs", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_include_dependencies {
+        req_builder = req_builder.query(&[("include_dependencies", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -268,10 +340,12 @@ pub async fn get_template_tag(configuration: &configuration::Configuration, temp
 }
 
 /// List tag entries the template has  Returns the ledger of template tags
-pub async fn list_template_tags(configuration: &configuration::Configuration, template_id: &str, full: Option<bool>) -> Result<models::TemplateTagsResponse, Error<ListTemplateTagsError>> {
+pub async fn list_template_tags(configuration: &configuration::Configuration, template_id: &str, full: Option<bool>, include_configs: Option<bool>, include_dependencies: Option<bool>) -> Result<models::TemplateTagsResponse, Error<ListTemplateTagsError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_template_id = template_id;
     let p_query_full = full;
+    let p_query_include_configs = include_configs;
+    let p_query_include_dependencies = include_dependencies;
 
     let uri_str = format!("{}/pods/templates/{template_id}/tags", configuration.base_path, template_id=crate::apis::urlencode(p_path_template_id));
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
@@ -279,9 +353,17 @@ pub async fn list_template_tags(configuration: &configuration::Configuration, te
     if let Some(ref param_value) = p_query_full {
         req_builder = req_builder.query(&[("full", &param_value.to_string())]);
     }
+    if let Some(ref param_value) = p_query_include_configs {
+        req_builder = req_builder.query(&[("include_configs", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = p_query_include_dependencies {
+        req_builder = req_builder.query(&[("include_dependencies", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -307,14 +389,21 @@ pub async fn list_template_tags(configuration: &configuration::Configuration, te
 }
 
 /// Get all templates allowed globally + in respective tenant + for specific user. Returns a list of templates.
-pub async fn list_templates(configuration: &configuration::Configuration, ) -> Result<models::TemplatesResponse, Error<ListTemplatesError>> {
+pub async fn list_templates(configuration: &configuration::Configuration, include_dependencies: Option<bool>) -> Result<models::TemplatesResponse, Error<ListTemplatesError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_query_include_dependencies = include_dependencies;
 
     let uri_str = format!("{}/pods/templates", configuration.base_path);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
+    if let Some(ref param_value) = p_query_include_dependencies {
+        req_builder = req_builder.query(&[("include_dependencies", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -340,9 +429,10 @@ pub async fn list_templates(configuration: &configuration::Configuration, ) -> R
 }
 
 /// Get all templates and their tags for the user. Returns a dictionary with templates and their tags.
-pub async fn list_templates_and_tags(configuration: &configuration::Configuration, full: Option<bool>) -> Result<serde_json::Value, Error<ListTemplatesAndTagsError>> {
+pub async fn list_templates_and_tags(configuration: &configuration::Configuration, full: Option<bool>, include_dependencies: Option<bool>) -> Result<std::collections::HashMap<String, serde_json::Value>, Error<ListTemplatesAndTagsError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_query_full = full;
+    let p_query_include_dependencies = include_dependencies;
 
     let uri_str = format!("{}/pods/templates/tags", configuration.base_path);
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
@@ -350,9 +440,14 @@ pub async fn list_templates_and_tags(configuration: &configuration::Configuratio
     if let Some(ref param_value) = p_query_full {
         req_builder = req_builder.query(&[("full", &param_value.to_string())]);
     }
+    if let Some(ref param_value) = p_query_include_dependencies {
+        req_builder = req_builder.query(&[("include_dependencies", &param_value.to_string())]);
+    }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -367,8 +462,8 @@ pub async fn list_templates_and_tags(configuration: &configuration::Configuratio
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `std::collections::HashMap&lt;String, serde_json::Value&gt;`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `std::collections::HashMap&lt;String, serde_json::Value&gt;`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -388,7 +483,8 @@ pub async fn update_template(configuration: &configuration::Configuration, templ
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    req_builder = req_builder.json(&p_body_update_template);
+    }
+    req_builder = req_builder.json(&p_body_update_template);
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;

@@ -16,7 +16,7 @@ pub struct DeleteVolumeResponse {
     #[serde(rename = "message")]
     pub message: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "result")]
     pub result: String,
     #[serde(rename = "status")]
@@ -26,7 +26,7 @@ pub struct DeleteVolumeResponse {
 }
 
 impl DeleteVolumeResponse {
-    pub fn new(message: String, metadata: serde_json::Value, result: String, status: String, version: String) -> DeleteVolumeResponse {
+    pub fn new(message: String, metadata: std::collections::HashMap<String, serde_json::Value>, result: String, status: String, version: String) -> DeleteVolumeResponse {
         DeleteVolumeResponse {
             message,
             metadata,

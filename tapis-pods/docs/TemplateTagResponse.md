@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **String** |  | 
-**metadata** | [**serde_json::Value**](.md) |  | 
+**metadata** | [**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md) |  | 
 **result** | [**models::TemplateTag**](TemplateTag.md) |  | 
 **status** | **String** |  | 
 **version** | **String** |  | 

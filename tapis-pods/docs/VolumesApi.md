@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_volume**](VolumesApi.md#create_volume) | **POST** /pods/volumes | create_volume
 [**delete_volume**](VolumesApi.md#delete_volume) | **DELETE** /pods/volumes/{volume_id} | delete_volume
+[**download_volume_file**](VolumesApi.md#download_volume_file) | **GET** /pods/volumes/{volume_id}/download/{path} | download_volume_file
 [**get_volume**](VolumesApi.md#get_volume) | **GET** /pods/volumes/{volume_id} | get_volume
 [**get_volume_contents**](VolumesApi.md#get_volume_contents) | **GET** /pods/volumes/{volume_id}/contents/{path} | get_volume_contents
 [**list_volume_files**](VolumesApi.md#list_volume_files) | **GET** /pods/volumes/{volume_id}/list | list_volume_files
@@ -71,6 +72,37 @@ No authorization required
 
 - **Content-Type**: Not defined
 - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## download_volume_file
+
+> serde_json::Value download_volume_file(volume_id, path)
+download_volume_file
+
+Download a specific file from a Tapis Volume.  Efficiently handles large files (100MB - 10GB) from NFS-backed storage by streaming in chunks.  Note: - This endpoint is for downloading individual files - For directories, use get_volume_contents with zip=true - Path cannot be empty or / to prevent downloading entire volume
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**volume_id** | **String** | Unique identifier for the volume. | [required] |
+**path** | **String** | Path to the file relative to the volume's root directory. Cannot be empty or /. | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/octet-stream
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

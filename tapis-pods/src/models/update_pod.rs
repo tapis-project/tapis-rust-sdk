@@ -14,41 +14,46 @@ use serde::{Deserialize, Serialize};
 /// UpdatePod : Object with fields that users are allowed to specify for the Pod class.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdatePod {
-    /// Description of this pod.
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// Command to run in pod. ex. [\"sleep\", \"5000\"] or [\"/bin/bash\", \"-c\", \"(exec myscript.sh)\"]
-    #[serde(rename = "command", skip_serializing_if = "Option::is_none")]
-    pub command: Option<Vec<String>>,
-    /// Environment variables to inject into k8 pod; Only for custom pods.
-    #[serde(rename = "environment_variables", skip_serializing_if = "Option::is_none")]
-    pub environment_variables: Option<serde_json::Value>,
-    /// Status requested by user, `ON`, `OFF`, or `RESTART`.
-    #[serde(rename = "status_requested", skip_serializing_if = "Option::is_none")]
-    pub status_requested: Option<String>,
-    /// Key: Volume name. Value: List of strs specifying volume folders/files to mount in pod
-    #[serde(rename = "volume_mounts", skip_serializing_if = "Option::is_none")]
-    pub volume_mounts: Option<std::collections::HashMap<String, models::ModelsPodsVolumeMount>>,
-    /// Default time (sec) for pod to run from instance start. -1 for unlimited. 12 hour default.
-    #[serde(rename = "time_to_stop_default", skip_serializing_if = "Option::is_none")]
-    pub time_to_stop_default: Option<i32>,
-    /// Time (sec) for pod to run from instance start. Reset each time instance is started. -1 for unlimited. None uses default.
-    #[serde(rename = "time_to_stop_instance", skip_serializing_if = "Option::is_none")]
-    pub time_to_stop_instance: Option<i32>,
-    /// Networking information. {\"url_suffix\": {\"protocol\": \"http\"  \"tcp\", \"port\": int}}
-    #[serde(rename = "networking", skip_serializing_if = "Option::is_none")]
-    pub networking: Option<std::collections::HashMap<String, models::ModelsPodsNetworking>>,
-    /// Pod resource management {\"cpu_limit\": 3000, \"mem_limit\": 3000, \"cpu_request\": 500, \"mem_limit\": 500, \"gpu\": 0}
-    #[serde(rename = "resources", skip_serializing_if = "Option::is_none")]
-    pub resources: Option<Box<models::ModelsPodsResources>>,
+    /// Which docker image to use, must be on allowlist, check /pods/images for list.
+    #[serde(rename = "image", skip_serializing_if = "Option::is_none")]
+    pub image: Option<String>,
+    /// Which pod template to use as base of pod fields. User set attributes will overwrite template fields.
+    #[serde(rename = "template", skip_serializing_if = "Option::is_none")]
+    pub template: Option<String>,
+    #[serde(rename = "description", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub description: Option<Option<String>>,
+    #[serde(rename = "command", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub command: Option<Option<Vec<String>>>,
+    #[serde(rename = "arguments", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub arguments: Option<Option<Vec<String>>>,
+    #[serde(rename = "environment_variables", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub environment_variables: Option<Option<std::collections::HashMap<String, serde_json::Value>>>,
+    #[serde(rename = "status_requested", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub status_requested: Option<Option<String>>,
+    #[serde(rename = "volume_mounts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub volume_mounts: Option<Option<std::collections::HashMap<String, models::VolumeMountsValue>>>,
+    #[serde(rename = "time_to_stop_default", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub time_to_stop_default: Option<Option<i32>>,
+    #[serde(rename = "time_to_stop_instance", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub time_to_stop_instance: Option<Option<i32>>,
+    #[serde(rename = "networking", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub networking: Option<Option<std::collections::HashMap<String, models::ModelsPodsNetworking>>>,
+    #[serde(rename = "resources", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub resources: Option<Option<Box<models::ModelsPodsResources>>>,
+    /// Queue to run pod in. `default` is the default queue.
+    #[serde(rename = "compute_queue", skip_serializing_if = "Option::is_none")]
+    pub compute_queue: Option<String>,
 }
 
 impl UpdatePod {
     /// Object with fields that users are allowed to specify for the Pod class.
     pub fn new() -> UpdatePod {
         UpdatePod {
+            image: None,
+            template: None,
             description: None,
             command: None,
+            arguments: None,
             environment_variables: None,
             status_requested: None,
             volume_mounts: None,
@@ -56,6 +61,7 @@ impl UpdatePod {
             time_to_stop_instance: None,
             networking: None,
             resources: None,
+            compute_queue: None,
         }
     }
 }

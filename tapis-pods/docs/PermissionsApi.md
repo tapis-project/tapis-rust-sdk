@@ -330,7 +330,7 @@ No authorization required
 > models::TemplatePermissionsResponse set_template_permission(template_id, set_permission)
 set_template_permission
 
-Set a permission for a template.  Returns updated template permissions.
+Set a permission for a template.  Permission formats: - username:LEVEL - Standard user permission (e.g., 'jsmith:READ') - **:READ - Site-wide public access (all users across all tenants can READ) [ADMIN ONLY] - tenant.<tenant_id>:READ - Tenant-wide public access (all users in specified tenant can READ) [ADMIN ONLY]  Notes: - Both '**' and 'tenant.*' only allow READ level for security - '**' and 'tenant.*' permissions require admin privileges - There are 3 levels of permissions, READ, USER, and ADMIN. - Permissions are granted to an individual usernames and are active across tenants.  Returns updated template permissions.
 
 ### Parameters
 

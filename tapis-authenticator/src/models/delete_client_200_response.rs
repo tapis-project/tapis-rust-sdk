@@ -25,12 +25,7 @@ pub struct DeleteClient200Response {
     /// Metadata about the result object, including pagination information
     #[serde(rename = "metadata", skip_serializing_if = "Option::is_none")]
     pub metadata: Option<serde_json::Value>,
-    #[serde(
-        rename = "result",
-        default,
-        with = "::serde_with::rust::double_option",
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "result", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
     pub result: Option<Option<serde_json::Value>>,
 }
 

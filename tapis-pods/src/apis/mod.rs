@@ -116,6 +116,7 @@ pub mod jupyter_api;
 pub mod misc_api;
 pub mod permissions_api;
 pub mod pods_api;
+pub mod secrets_api;
 pub mod snapshots_api;
 pub mod templates_api;
 pub mod volumes_api;

@@ -14,12 +14,10 @@ use serde::{Deserialize, Serialize};
 /// UpdateVolume : Object with fields that users are allowed to specify when updating the Volume class.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateVolume {
-    /// Description of this volume.
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// Size in MB to limit volume to. We'll start warning if you've gone past the limit.
-    #[serde(rename = "size_limit", skip_serializing_if = "Option::is_none")]
-    pub size_limit: Option<i32>,
+    #[serde(rename = "description", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub description: Option<Option<String>>,
+    #[serde(rename = "size_limit", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub size_limit: Option<Option<i32>>,
 }
 
 impl UpdateVolume {

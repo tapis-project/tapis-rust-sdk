@@ -21,7 +21,7 @@
 /// ```
 use crate::apis::{
     configuration, images_api, jupyter_api, misc_api, permissions_api, pods_api, snapshots_api,
-    templates_api, volumes_api,
+    secrets_api, templates_api, volumes_api,
 };
 use http::header::{HeaderMap, HeaderValue};
 use std::sync::Arc;
@@ -36,6 +36,7 @@ pub struct TapisPods {
     pub snapshots: SnapshotsClient,
     pub images: ImagesClient,
     pub permissions: PermissionsClient,
+    pub secrets: SecretsClient,
     pub jupyter: JupyterClient,
     pub misc: MiscClient,
 }
@@ -100,6 +101,9 @@ impl TapisPods {
             permissions: PermissionsClient {
                 config: config.clone(),
             },
+            secrets: SecretsClient {
+                config: config.clone(),
+            },
             jupyter: JupyterClient {
                 config: config.clone(),
             },
@@ -138,8 +142,10 @@ impl PodsClient {
     pub async fn get_pod(
         &self,
         pod_id: &str,
+        include_configs: Option<bool>,
+        check_unresolved: Option<bool>,
     ) -> Result<crate::models::PodResponse, crate::apis::Error<pods_api::GetPodError>> {
-        pods_api::get_pod(&self.config, pod_id).await
+        pods_api::get_pod(&self.config, pod_id, include_configs, check_unresolved).await
     }
 
     pub async fn delete_pod(
@@ -208,8 +214,10 @@ impl PodsClient {
     pub async fn get_derived_pod(
         &self,
         pod_id: &str,
+        include_configs: Option<bool>,
+        resolve_secrets: Option<bool>,
     ) -> Result<crate::models::PodResponse, crate::apis::Error<pods_api::GetDerivedPodError>> {
-        pods_api::get_derived_pod(&self.config, pod_id).await
+        pods_api::get_derived_pod(&self.config, pod_id, include_configs, resolve_secrets).await
     }
 
     pub async fn pod_auth(
@@ -247,6 +255,24 @@ impl PodsClient {
     ) -> Result<serde_json::Value, crate::apis::Error<pods_api::UploadToPodError>> {
         pods_api::upload_to_pod(&self.config, pod_id, file, dest_path).await
     }
+
+    pub async fn download_from_pod(
+        &self,
+        pod_id: &str,
+        url_path: &str,
+        path: Option<&str>,
+    ) -> Result<serde_json::Value, crate::apis::Error<pods_api::DownloadFromPodError>> {
+        pods_api::download_from_pod(&self.config, pod_id, url_path, path).await
+    }
+
+    pub async fn list_files_in_pod(
+        &self,
+        pod_id: &str,
+        url_path: &str,
+        path: Option<&str>,
+    ) -> Result<serde_json::Value, crate::apis::Error<pods_api::ListFilesInPodError>> {
+        pods_api::list_files_in_pod(&self.config, pod_id, url_path, path).await
+    }
 }
 
 /// Templates API client
@@ -258,11 +284,12 @@ pub struct TemplatesClient {
 impl TemplatesClient {
     pub async fn list_templates(
         &self,
+        include_dependencies: Option<bool>,
     ) -> Result<
         crate::models::TemplatesResponse,
         crate::apis::Error<templates_api::ListTemplatesError>,
     > {
-        templates_api::list_templates(&self.config).await
+        templates_api::list_templates(&self.config, include_dependencies).await
     }
 
     pub async fn add_template(
@@ -276,9 +303,10 @@ impl TemplatesClient {
     pub async fn get_template(
         &self,
         template_id: &str,
+        include_dependencies: Option<bool>,
     ) -> Result<crate::models::TemplateResponse, crate::apis::Error<templates_api::GetTemplateError>>
     {
-        templates_api::get_template(&self.config, template_id).await
+        templates_api::get_template(&self.config, template_id, include_dependencies).await
     }
 
     pub async fn delete_template(
@@ -306,11 +334,20 @@ impl TemplatesClient {
         &self,
         template_id: &str,
         full: Option<bool>,
+        include_configs: Option<bool>,
+        include_dependencies: Option<bool>,
     ) -> Result<
         crate::models::TemplateTagsResponse,
         crate::apis::Error<templates_api::ListTemplateTagsError>,
     > {
-        templates_api::list_template_tags(&self.config, template_id, full).await
+        templates_api::list_template_tags(
+            &self.config,
+            template_id,
+            full,
+            include_configs,
+            include_dependencies,
+        )
+        .await
     }
 
     pub async fn add_template_tag(
@@ -328,19 +365,43 @@ impl TemplatesClient {
         &self,
         template_id: &str,
         tag_id: &str,
+        include_configs: Option<bool>,
+        include_dependencies: Option<bool>,
     ) -> Result<
         crate::models::TemplateTagsResponse,
         crate::apis::Error<templates_api::GetTemplateTagError>,
     > {
-        templates_api::get_template_tag(&self.config, template_id, tag_id).await
+        templates_api::get_template_tag(
+            &self.config,
+            template_id,
+            tag_id,
+            include_configs,
+            include_dependencies,
+        )
+        .await
     }
 
     pub async fn list_templates_and_tags(
         &self,
         full: Option<bool>,
-    ) -> Result<serde_json::Value, crate::apis::Error<templates_api::ListTemplatesAndTagsError>>
-    {
-        templates_api::list_templates_and_tags(&self.config, full).await
+        include_dependencies: Option<bool>,
+    ) -> Result<
+        std::collections::HashMap<String, serde_json::Value>,
+        crate::apis::Error<templates_api::ListTemplatesAndTagsError>,
+    > {
+        templates_api::list_templates_and_tags(&self.config, full, include_dependencies).await
+    }
+
+    pub async fn delete_template_tag(
+        &self,
+        template_id: &str,
+        tag_id: &str,
+        force: Option<bool>,
+    ) -> Result<
+        crate::models::TemplateTagResponse,
+        crate::apis::Error<templates_api::DeleteTemplateTagError>,
+    > {
+        templates_api::delete_template_tag(&self.config, template_id, tag_id, force).await
     }
 }
 
@@ -410,6 +471,14 @@ impl VolumesClient {
         zip: Option<bool>,
     ) -> Result<serde_json::Value, crate::apis::Error<volumes_api::GetVolumeContentsError>> {
         volumes_api::get_volume_contents(&self.config, volume_id, path, zip).await
+    }
+
+    pub async fn download_volume_file(
+        &self,
+        volume_id: &str,
+        path: &str,
+    ) -> Result<serde_json::Value, crate::apis::Error<volumes_api::DownloadVolumeFileError>> {
+        volumes_api::download_volume_file(&self.config, volume_id, path).await
     }
 
     pub async fn upload_to_volume(
@@ -499,6 +568,15 @@ impl SnapshotsClient {
     {
         snapshots_api::get_snapshot_contents(&self.config, snapshot_id, path, zip).await
     }
+
+    pub async fn download_snapshot_file(
+        &self,
+        snapshot_id: &str,
+        path: &str,
+    ) -> Result<serde_json::Value, crate::apis::Error<snapshots_api::DownloadSnapshotFileError>>
+    {
+        snapshots_api::download_snapshot_file(&self.config, snapshot_id, path).await
+    }
 }
 
 /// Images API client
@@ -532,7 +610,7 @@ impl ImagesClient {
     pub async fn get_image(
         &self,
         image_id: &str,
-    ) -> Result<crate::models::ImageResponse, crate::apis::Error<images_api::GetImageError>> {
+    ) -> Result<crate::models::ResponseGetImage, crate::apis::Error<images_api::GetImageError>> {
         images_api::get_image(&self.config, image_id).await
     }
 
@@ -678,6 +756,65 @@ impl PermissionsClient {
         crate::apis::Error<permissions_api::DeleteSnapshotPermissionError>,
     > {
         permissions_api::delete_snapshot_permission(&self.config, snapshot_id, user).await
+    }
+}
+
+/// Secrets API client
+#[derive(Clone)]
+pub struct SecretsClient {
+    config: Arc<configuration::Configuration>,
+}
+
+impl SecretsClient {
+    pub async fn list_secrets(
+        &self,
+    ) -> Result<crate::models::SecretsResponse, crate::apis::Error<secrets_api::ListSecretsError>>
+    {
+        secrets_api::list_secrets(&self.config).await
+    }
+
+    pub async fn create_secret(
+        &self,
+        new_secret: crate::models::NewSecret,
+    ) -> Result<crate::models::SecretResponse, crate::apis::Error<secrets_api::CreateSecretError>>
+    {
+        secrets_api::create_secret(&self.config, new_secret).await
+    }
+
+    pub async fn get_secret(
+        &self,
+        secret_id: &str,
+    ) -> Result<crate::models::SecretResponse, crate::apis::Error<secrets_api::GetSecretError>> {
+        secrets_api::get_secret(&self.config, secret_id).await
+    }
+
+    pub async fn get_secret_value(
+        &self,
+        secret_id: &str,
+    ) -> Result<
+        crate::models::SecretValueResponse,
+        crate::apis::Error<secrets_api::GetSecretValueError>,
+    > {
+        secrets_api::get_secret_value(&self.config, secret_id).await
+    }
+
+    pub async fn update_secret(
+        &self,
+        secret_id: &str,
+        update_secret: crate::models::UpdateSecret,
+    ) -> Result<crate::models::SecretResponse, crate::apis::Error<secrets_api::UpdateSecretError>>
+    {
+        secrets_api::update_secret(&self.config, secret_id, update_secret).await
+    }
+
+    pub async fn delete_secret(
+        &self,
+        secret_id: &str,
+    ) -> Result<
+        crate::models::SecretDeleteResponse,
+        crate::apis::Error<secrets_api::DeleteSecretError>,
+    > {
+        secrets_api::delete_secret(&self.config, secret_id).await
     }
 }
 

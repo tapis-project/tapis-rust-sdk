@@ -44,12 +44,10 @@ pub struct SnapshotResponseModel {
     /// Current status of snapshot.
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// Time (UTC) that this snapshot was created.
-    #[serde(rename = "creation_ts", skip_serializing_if = "Option::is_none")]
-    pub creation_ts: Option<String>,
-    /// Time (UTC) that this snapshot was updated.
-    #[serde(rename = "update_ts", skip_serializing_if = "Option::is_none")]
-    pub update_ts: Option<String>,
+    #[serde(rename = "creation_ts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub creation_ts: Option<Option<String>>,
+    #[serde(rename = "update_ts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub update_ts: Option<Option<String>>,
 }
 
 impl SnapshotResponseModel {

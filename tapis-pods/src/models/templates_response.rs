@@ -16,7 +16,7 @@ pub struct TemplatesResponse {
     #[serde(rename = "message")]
     pub message: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "result")]
     pub result: Vec<models::TemplateResponseModel>,
     #[serde(rename = "status")]
@@ -26,7 +26,7 @@ pub struct TemplatesResponse {
 }
 
 impl TemplatesResponse {
-    pub fn new(message: String, metadata: serde_json::Value, result: Vec<models::TemplateResponseModel>, status: String, version: String) -> TemplatesResponse {
+    pub fn new(message: String, metadata: std::collections::HashMap<String, serde_json::Value>, result: Vec<models::TemplateResponseModel>, status: String, version: String) -> TemplatesResponse {
         TemplatesResponse {
             message,
             metadata,

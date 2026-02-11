@@ -16,7 +16,7 @@ pub struct SnapshotResponse {
     #[serde(rename = "message")]
     pub message: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "result")]
     pub result: Box<models::SnapshotResponseModel>,
     #[serde(rename = "status")]
@@ -26,7 +26,7 @@ pub struct SnapshotResponse {
 }
 
 impl SnapshotResponse {
-    pub fn new(message: String, metadata: serde_json::Value, result: models::SnapshotResponseModel, status: String, version: String) -> SnapshotResponse {
+    pub fn new(message: String, metadata: std::collections::HashMap<String, serde_json::Value>, result: models::SnapshotResponseModel, status: String, version: String) -> SnapshotResponse {
         SnapshotResponse {
             message,
             metadata,
