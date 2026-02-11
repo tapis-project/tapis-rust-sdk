@@ -1,0 +1,25 @@
+[package]
+name = "tapis_systems"
+version = "0.3.0"
+authors = ["cicsupport@tacc.utexas.edu"]
+description = "The Tapis Systems API provides for management of Tapis Systems including permissions, credentials and Scheduler Profiles."
+license = "3-Clause BSD License"
+edition = "2021"
+
+[dependencies]
+serde = { version = "^1.0", features = ["derive"] }
+serde_json = "^1.0"
+serde_repr = "^0.1"
+url = "^2.5"
+uuid = { version = "^1.8", features = ["serde", "v4"] }
+reqwest = { version = "^0.12", default-features = false, features = ["json", "multipart", "stream"] }
+
+http = "^1.0"
+
+[features]
+default = ["native-tls"]
+native-tls = ["reqwest/native-tls"]
+rustls-tls = ["reqwest/rustls-tls"]
+
+[dev-dependencies]
+tokio = { version = "^1.0", features = ["full"] }
