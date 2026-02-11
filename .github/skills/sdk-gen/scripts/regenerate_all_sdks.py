@@ -6,18 +6,22 @@ Workflow:
 2) Apply known generator fixes
 3) Generate wrappers + basic examples for each service crate
 4) Update parent crate workspace/dependencies/re-exports
-5) Build workspace and verify wrapper coverage
-6) Optionally run version bump script as final step
+5) Format Rust workspace with rustfmt
+6) Build workspace and verify wrapper coverage
+7) Optionally run version bump script as final step
+8) Optionally run clippy checks
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import socket
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Iterable, List
 from urllib.parse import urlparse
@@ -80,6 +84,22 @@ def parse_package_version(manifest: Path) -> str:
             if m:
                 return m.group(1)
     raise RuntimeError(f"Could not parse package version in {manifest}")
+
+
+def parse_package_name(manifest: Path) -> str:
+    text = manifest.read_text()
+    in_package = False
+    for line in text.splitlines():
+        if line.strip() == "[package]":
+            in_package = True
+            continue
+        if in_package and line.startswith("[") and line.strip() != "[package]":
+            in_package = False
+        if in_package:
+            m = re.match(r'^name\s*=\s*"([^"]+)"\s*$', line.strip())
+            if m:
+                return m.group(1)
+    raise RuntimeError(f"Could not parse package name in {manifest}")
 
 
 def replace_section(text: str, section: str, new_body: str) -> str:
@@ -495,11 +515,46 @@ def update_parent_lib(repo_root: Path, services: List[str], dry_run: bool) -> No
 
 
 def service_crate_name(crate_dir: Path) -> str:
-    text = (crate_dir / "Cargo.toml").read_text()
-    m = re.search(r'^name\s*=\s*"([^"]+)"\s*$', text, flags=re.M)
-    if not m:
-        raise RuntimeError(f"Could not parse package name in {crate_dir / 'Cargo.toml'}")
-    return m.group(1)
+    return parse_package_name(crate_dir / "Cargo.toml")
+
+
+def publish_crates(
+    repo_root: Path,
+    services: List[str],
+    dry_run: bool,
+    retries: int,
+    retry_delay_seconds: int,
+) -> None:
+    publish_dirs: List[Path] = []
+    for svc in services:
+        crate_dir = repo_root / f"tapis-{svc}"
+        if crate_dir.exists():
+            publish_dirs.append(crate_dir)
+    publish_dirs.append(repo_root)
+
+    for crate_dir in publish_dirs:
+        manifest = crate_dir / "Cargo.toml"
+        package_name = parse_package_name(manifest)
+        package_version = parse_package_version(manifest)
+        cmd = ["cargo", "publish", "--locked"]
+
+        for attempt in range(1, retries + 1):
+            try:
+                print(
+                    f"publishing {package_name} v{package_version} "
+                    f"(attempt {attempt}/{retries})"
+                )
+                run(cmd, cwd=crate_dir, dry_run=dry_run)
+                break
+            except subprocess.CalledProcessError:
+                if attempt >= retries:
+                    raise
+                print(
+                    f"publish retry scheduled for {package_name} in "
+                    f"{retry_delay_seconds}s"
+                )
+                if not dry_run:
+                    time.sleep(retry_delay_seconds)
 
 
 def parse_args() -> argparse.Namespace:
@@ -522,7 +577,34 @@ def parse_args() -> argparse.Namespace:
         help="Allow generation script to checkout env-mapped branch (default is no branch switch)",
     )
     p.add_argument("--skip-build", action="store_true", help="Skip final cargo build")
+    p.add_argument(
+        "--skip-format",
+        action="store_true",
+        help="Skip running cargo fmt --all (enabled by default)",
+    )
+    p.add_argument(
+        "--run-clippy",
+        action="store_true",
+        help="Run cargo clippy --workspace --all-targets at the end",
+    )
     p.add_argument("--skip-bump", action="store_true", help="Skip final version bump")
+    p.add_argument(
+        "--publish",
+        action="store_true",
+        help="Publish all generated sub-crates and the parent crate to crates.io as final step",
+    )
+    p.add_argument(
+        "--publish-retries",
+        type=int,
+        default=3,
+        help="Retries for each cargo publish command (default: 3)",
+    )
+    p.add_argument(
+        "--publish-retry-delay",
+        type=int,
+        default=20,
+        help="Seconds to wait between publish retries (default: 20)",
+    )
     p.add_argument("--dry-run", action="store_true", help="Print actions without writing files or running commands")
     p.add_argument(
         "--continue-on-generate-error",
@@ -644,6 +726,9 @@ def main() -> int:
                 )
             print(f"wrapper parity ok: tapis-{svc} ({generated})")
 
+    if not args.skip_format:
+        run(["cargo", "fmt", "--all"], cwd=repo_root, dry_run=args.dry_run)
+
     if not args.skip_build:
         run(["cargo", "build", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
 
@@ -653,6 +738,28 @@ def main() -> int:
             run(["cargo", "build", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
     elif failed_generation and not args.skip_generate:
         print("Skipping version bump due generation failures.", file=sys.stderr)
+
+    if args.publish:
+        if args.publish_retries < 1:
+            raise RuntimeError("--publish-retries must be >= 1")
+        if args.publish_retry_delay < 0:
+            raise RuntimeError("--publish-retry-delay must be >= 0")
+        if not args.dry_run and not os.getenv("CARGO_REGISTRY_TOKEN"):
+            raise RuntimeError(
+                "CARGO_REGISTRY_TOKEN is not set. Export it before publishing, e.g.:\n"
+                "  export CARGO_REGISTRY_TOKEN=<your_crates_io_token>"
+            )
+        publish_services = [svc for svc in all_env_services if (repo_root / f"tapis-{svc}").exists()]
+        publish_crates(
+            repo_root=repo_root,
+            services=publish_services,
+            dry_run=args.dry_run,
+            retries=args.publish_retries,
+            retry_delay_seconds=args.publish_retry_delay,
+        )
+
+    if args.run_clippy:
+        run(["cargo", "clippy", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
 
     print("Automation workflow completed.")
     return 0

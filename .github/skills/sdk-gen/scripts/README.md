@@ -88,11 +88,24 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --allow
 
 # Skip DNS precheck (only if your environment has custom DNS/network behavior)
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-network-precheck
+
+# Publish all sub-crates + parent crate to crates.io as final step
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --publish
+
+# Run clippy checks at the end
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy
+
+# Skip rustfmt (enabled by default)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-format
 ```
 
 Notes:
 - `regenerate_all_sdks.py` calls `generate_rust_sdk.sh --no-branch-switch` by default to avoid branch checkout failures in restricted or feature-branch workflows.
 - `regenerate_all_sdks.py` runs a DNS precheck for spec hosts before generation and fails fast when hosts are not resolvable.
+- `regenerate_all_sdks.py` runs `cargo fmt --all` by default to enforce consistent Rust formatting.
+- clippy is optional via `--run-clippy` (lint checking only; it does not replace rustfmt).
 - `--services` scopes generation/fix/wrapper/example work, but parent workspace/dependency wiring remains complete for all known service crates.
 - Version bump is skipped automatically if generation fails for every requested service.
 - Final version bump runs last unless `--skip-bump` is set.
+- Publishing requires `CARGO_REGISTRY_TOKEN` to be set:
+  `export CARGO_REGISTRY_TOKEN=<your_crates_io_token>`

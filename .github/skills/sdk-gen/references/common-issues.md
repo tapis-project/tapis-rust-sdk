@@ -126,3 +126,15 @@ Fix:
 ```bash
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-network-precheck
 ```
+
+## 12) Publish step fails due missing crates.io token
+
+Symptom:
+- Publish run exits with `CARGO_REGISTRY_TOKEN is not set`.
+
+Fix:
+- Export a valid crates.io token before running publish:
+```bash
+export CARGO_REGISTRY_TOKEN=<your_crates_io_token>
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --publish
+```
