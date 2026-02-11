@@ -1,0 +1,74 @@
+name: Manual SDK Publish (Crates.io)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-sdk-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    env:
+      # Intentionally fake token.
+      # Replace this value manually (or switch to repository secrets) when ready to publish for real.
+      CARGO_REGISTRY_TOKEN: "FAKE_TOKEN_REPLACE_WITH_TACC_CRATES_IO_TOKEN"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Safety gate for fake token
+        run: |
+          if [[ "$CARGO_REGISTRY_TOKEN" == FAKE_TOKEN_* ]]; then
+            echo "Publish blocked: CARGO_REGISTRY_TOKEN is still a fake placeholder."
+            echo "Update .github/workflows/manual-sdk-publish.yml with a real token (or migrate to secrets) before publishing."
+            exit 1
+          fi
+
+      - name: Validate workspace
+        run: |
+          cargo fmt --all --check
+          cargo clippy --workspace --all-targets
+          cargo build --workspace --all-targets
+
+      - name: Publish sub-crates to crates.io
+        run: |
+          set -euo pipefail
+          for crate_dir in \
+            tapis-actors \
+            tapis-apps \
+            tapis-authenticator \
+            tapis-files \
+            tapis-globus-proxy \
+            tapis-jobs \
+            tapis-meta \
+            tapis-notifications \
+            tapis-pgrest \
+            tapis-pods \
+            tapis-sk \
+            tapis-streams \
+            tapis-systems \
+            tapis-tenants \
+            tapis-tokens \
+            tapis-workflows
+          do
+            echo "Publishing ${crate_dir}..."
+            (cd "${crate_dir}" && cargo publish --locked)
+          done
+
+      - name: Publish parent crate to crates.io
+        run: cargo publish --locked
