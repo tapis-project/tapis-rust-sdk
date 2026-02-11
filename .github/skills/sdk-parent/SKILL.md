@@ -90,3 +90,28 @@ If adding a new service crate:
 3. Add namespaced re-export module in root `src/lib.rs`.
 4. Build workspace.
 5. Run the version bump script as the final step.
+
+## Publish Script (Sub-Crates Then Parent)
+
+To publish all service crates first and publish the parent crate last:
+
+```bash
+bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh
+```
+
+Notes:
+- Requires `CARGO_REGISTRY_TOKEN` unless `--dry-run` is used.
+- Uses workspace member order from root `Cargo.toml`.
+- Retries are configurable via:
+  - `PUBLISH_RETRIES` (default `3`)
+  - `PUBLISH_RETRY_DELAY` seconds (default `20`)
+
+Quick checks:
+
+```bash
+# Display publish order only
+bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh --list
+
+# Dry-run publish for each crate
+bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh --dry-run
+```

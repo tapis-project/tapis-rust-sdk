@@ -218,6 +218,66 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+## Pods Examples
+
+### List Pods and Read Pod Status
+
+```rust
+use tapis_sdk::pods::TapisPods;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let base_url = std::env::var("TAPIS_BASE_URL")
+        .unwrap_or_else(|_| "https://dev.develop.tapis.io/v3".to_string());
+    let token = std::env::var("TAPIS_TOKEN")?;
+
+    let pods = TapisPods::new(&base_url, Some(token.as_str()))?;
+    let resp = pods.pods.list_pods().await?;
+
+    println!("Found {} pods", resp.result.len());
+    for pod in resp.result {
+        println!("{} => {:?}", pod.pod_id, pod.status);
+    }
+
+    Ok(())
+}
+```
+
+### Create and Fetch a Pod
+
+```rust
+use tapis_sdk::pods::{models, TapisPods};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let base_url = std::env::var("TAPIS_BASE_URL")
+        .unwrap_or_else(|_| "https://dev.develop.tapis.io/v3".to_string());
+    let token = std::env::var("TAPIS_TOKEN")?;
+
+    let pods = TapisPods::new(&base_url, Some(token.as_str()))?;
+
+    let mut req = models::NewPod::new("sdk-demo-pod".to_string());
+    req.image = Some("ubuntu:22.04".to_string());
+    req.description = Some("Created by tapis-rust-sdk README example".to_string());
+
+    let create_resp = pods.pods.create_pod(req).await?;
+    println!("Created pod: {}", create_resp.result.pod_id);
+
+    let get_resp = pods.pods.get_pod("sdk-demo-pod", None, None).await?;
+    println!("Fetched pod status: {:?}", get_resp.result.status);
+
+    Ok(())
+}
+```
+
+### Full Pods Lifecycle Example (Volume + Pod + Cleanup)
+
+Use the repository example:
+
+- `tapis-pods/examples/tapis_pods_example.rs`
+
+It demonstrates creating a volume, creating a pod using that volume, deleting the pod, then deleting the volume.
+
 ## Module Imports (Umbrella Crate)
 
 ```rust

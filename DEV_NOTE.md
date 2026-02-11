@@ -99,6 +99,28 @@ export CARGO_REGISTRY_TOKEN=<your_crates_io_token>
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --publish
 ```
 
+Standalone publish script (sub-SDKs first, parent last):
+
+```bash
+bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh
+```
+
+Useful options:
+
+```bash
+# Show publish order without publishing
+bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh --list
+
+# Cargo publish dry-run for each crate
+bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh --dry-run
+```
+
+Retry controls:
+
+```bash
+PUBLISH_RETRIES=5 PUBLISH_RETRY_DELAY=30 bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh
+```
+
 Notes:
 - The script fails fast if `CARGO_REGISTRY_TOKEN` is not set.
 - It publishes all sub-crates first, then the parent crate.
