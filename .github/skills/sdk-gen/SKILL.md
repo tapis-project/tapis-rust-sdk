@@ -116,6 +116,36 @@ pub mod client;
 pub use client::Tapis<ServiceName>;
 ```
 
+### 4) Invalid `models::serde_json::Value` emitted in some generated APIs
+
+Symptom:
+- `could not find serde_json in models`
+
+Observed services:
+- `tapis-meta`
+- `tapis-streams`
+
+Fix:
+- Replace `models::serde_json::Value` with `serde_json::Value` in affected generated API files.
+- If wrapper method signatures copied the bad type, patch wrappers too.
+
+### 5) Files `HeaderByteRange` missing `Display`
+
+Symptom:
+- `HeaderByteRange doesn't implement std::fmt::Display`
+
+Fix:
+- Add `impl std::fmt::Display for HeaderByteRange` in `tapis-files/src/models/header_byte_range.rs`.
+
+### 6) Service versions reset by generator
+
+Symptom:
+- Regenerated crates revert to `1.0.0`.
+
+Fix:
+- After all generation/wrapper/debug tasks are complete, run:
+  `bash .github/skills/sdk-parent/scripts/bump_minor_version.sh`
+
 ## Verification Checklist
 
 After regenerating and applying wrapper/parent integration:
@@ -129,6 +159,13 @@ Wrapper parity check (service example):
 ```bash
 rg '^pub async fn ' tapis-pods/src/apis/*_api.rs | wc -l
 rg '^[[:space:]]*pub async fn ' tapis-pods/src/client.rs | wc -l
+```
+
+Targeted bug scans:
+
+```bash
+rg -n 'Self::\\s*$' tapis-*/src/models
+rg -n 'models::serde_json::Value' tapis-*/src/apis tapis-*/src/client.rs
 ```
 
 Expected:

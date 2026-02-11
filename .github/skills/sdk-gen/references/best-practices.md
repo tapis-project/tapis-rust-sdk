@@ -19,6 +19,7 @@ Preferred sequence:
 2. Repair/update wrapper coverage.
 3. Ensure parent crate mappings/re-exports.
 4. Build workspace all targets.
+5. Run repo-wide version bump script as the final step.
 
 ## Verify Method Parity
 
@@ -28,6 +29,20 @@ After every regeneration:
 rg '^pub async fn ' src/apis/*_api.rs | wc -l
 rg '^[[:space:]]*pub async fn ' src/client.rs | wc -l
 ```
+
+## Run Targeted Post-Generation Scans
+
+Before final build, run:
+
+```bash
+# broken empty enums
+rg -n 'Self::\\s*$' tapis-*/src/models
+
+# invalid serde_json path emitted by some specs
+rg -n 'models::serde_json::Value' tapis-*/src/apis tapis-*/src/client.rs
+```
+
+If either scan returns matches, patch before moving forward.
 
 ## Keep Fixes Minimal and Repeatable
 

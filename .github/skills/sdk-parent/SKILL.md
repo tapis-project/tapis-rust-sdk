@@ -44,6 +44,8 @@ tapis-pods = { package = "tapis_pods", version = "1.0.0", path = "./tapis-pods" 
 
 Ensure every service crate is present in `[workspace].members`.
 
+When generating all TAPIS services from `OpenAPI_specs.json`, ensure all `tapis-*` crates are listed in workspace members and parent dependencies.
+
 ### 4) Service export expectations
 
 Each service crate should export its wrapper from `src/lib.rs`:
@@ -72,6 +74,9 @@ What it does:
 - Bumps to next minor (`MAJOR.(MINOR+1).0`).
 - Applies the same version to root and all workspace member crate package versions.
 - Updates inline path dependency `version = "..."` fields in workspace manifests.
+
+Note:
+- OpenAPI regeneration typically resets service crate versions to `1.0.0`; this script is the required final normalization step.
 
 Dry run:
 

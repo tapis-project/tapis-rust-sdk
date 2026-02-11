@@ -106,8 +106,11 @@ cargo build --all-targets
 
 For every wrapper method, ensure:
 - Same non-configuration parameters as generated method
-- Same `Result<SuccessType, crate::apis::Error<ModuleErrorType>>`
+- Same `Result<SuccessType, crate::apis::Error<module_api::ModuleErrorType>>`
 - Delegation call uses `&self.config` then forwards all arguments
+
+Important:
+- Keep error types module-qualified (for example `Error<pods_api::ListPodsError>`), not bare `Error<ListPodsError>`.
 
 ## Common Regeneration Regressions
 
@@ -118,6 +121,8 @@ Regeneration can add methods that wrappers do not expose (for example new secret
 ### Signature drift
 
 Existing wrapper methods can become stale when OpenAPI adds optional query params or changes return type aliases. Update wrappers to match generated signatures exactly.
+
+Also check for generated types that are invalid in wrappers (for example `models::serde_json::Value`); use `serde_json::Value` when that appears.
 
 ### Export drift
 
