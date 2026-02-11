@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **String** |  | 
-**metadata** | [**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md) |  | 
+**metadata** | **std::collections::HashMap<String, serde_json::Value>** |  | 
 **result** | **std::collections::HashMap<String, String>** |  | 
 **status** | **String** |  | 
 **version** | **String** |  | 

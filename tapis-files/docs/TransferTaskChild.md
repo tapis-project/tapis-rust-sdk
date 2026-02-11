@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **parent_task_id** | Option<**i32**> |  | [optional]
 **retries** | Option<**i32**> |  | [optional]
 **dir** | Option<**bool**> |  | [optional]
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> | Unique ID of the task. | [optional]
+**uuid** | Option<**uuid::Uuid**> | Unique ID of the task. | [optional]
 **status** | Option<[**models::TransferStatusEnum**](TransferStatusEnum.md)> |  | [optional]
 **created** | Option<**String**> |  | [optional]
 **start_time** | Option<**String**> |  | [optional]
