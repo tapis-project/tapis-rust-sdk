@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum FileTypeEnum {
     #[serde(rename = "file")]
+    #[default]
     File,
     #[serde(rename = "dir")]
     Dir,
@@ -35,11 +38,5 @@ impl std::fmt::Display for FileTypeEnum {
             Self::Other => write!(f, "other"),
             Self::Unknown => write!(f, "unknown"),
         }
-    }
-}
-
-impl Default for FileTypeEnum {
-    fn default() -> FileTypeEnum {
-        Self::File
     }
 }

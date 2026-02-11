@@ -72,18 +72,15 @@ impl UpdateTenant {
     }
 }
 /// The status of the tenant; Tenants can be created in \"draft\" status without a public key; Tenants in both \"inactive\" and \"draft\" status are by default not returned in the tenants listing.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Status {
     #[serde(rename = "draft")]
+    #[default]
     Draft,
     #[serde(rename = "active")]
     Active,
     #[serde(rename = "inactive")]
     Inactive,
-}
-
-impl Default for Status {
-    fn default() -> Status {
-        Self::Draft
-    }
 }

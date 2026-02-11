@@ -80,9 +80,12 @@ impl VolumeMount {
     }
 }
 /// Type of mount: 'tapisvolume', 'tapissnapshot', 'ephemeral', or 'pvc'.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Type {
     #[serde(rename = "tapisvolume")]
+    #[default]
     Tapisvolume,
     #[serde(rename = "tapissnapshot")]
     Tapissnapshot,
@@ -90,10 +93,4 @@ pub enum Type {
     Ephemeral,
     #[serde(rename = "pvc")]
     Pvc,
-}
-
-impl Default for Type {
-    fn default() -> Type {
-        Self::Tapisvolume
-    }
 }

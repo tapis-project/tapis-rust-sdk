@@ -58,54 +58,45 @@ impl NewArchiveSettings {
     }
 }
 /// The archive file format - zip is currently supported
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum ArchiveFormat {
     #[serde(rename = "zip")]
+    #[default]
     Zip,
 }
 
-impl Default for ArchiveFormat {
-    fn default() -> ArchiveFormat {
-        Self::Zip
-    }
-}
 /// The data measurement format - csv or JSON is currently supported
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum DataFormat {
     #[serde(rename = "csv")]
+    #[default]
     Csv,
     #[serde(rename = "json")]
     Json,
 }
 
-impl Default for DataFormat {
-    fn default() -> DataFormat {
-        Self::Csv
-    }
-}
 /// How often should this archive occur - currently supports one-time_now
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Frequency {
     #[serde(rename = "one-time")]
+    #[default]
     OneTime,
 }
 
-impl Default for Frequency {
-    fn default() -> Frequency {
-        Self::OneTime
-    }
-}
 /// The range of data to archive_type - all or custom supported
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Range {
     #[serde(rename = "custom")]
+    #[default]
     Custom,
     #[serde(rename = "all")]
     All,
-}
-
-impl Default for Range {
-    fn default() -> Range {
-        Self::Custom
-    }
 }

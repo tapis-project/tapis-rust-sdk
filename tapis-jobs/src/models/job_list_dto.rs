@@ -64,9 +64,12 @@ impl JobListDto {
     }
 }
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Status {
     #[serde(rename = "PENDING")]
+    #[default]
     Pending,
     #[serde(rename = "PROCESSING_INPUTS")]
     ProcessingInputs,
@@ -94,15 +97,13 @@ pub enum Status {
     Failed,
 }
 
-impl Default for Status {
-    fn default() -> Status {
-        Self::Pending
-    }
-}
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Condition {
     #[serde(rename = "CANCELLED_BY_USER")]
+    #[default]
     CancelledByUser,
     #[serde(rename = "JOB_ARCHIVING_FAILED")]
     JobArchivingFailed,
@@ -154,10 +155,4 @@ pub enum Condition {
     SchedulerTimeout,
     #[serde(rename = "SCHEDULER_TERMINATED")]
     SchedulerTerminated,
-}
-
-impl Default for Condition {
-    fn default() -> Condition {
-        Self::CancelledByUser
-    }
 }

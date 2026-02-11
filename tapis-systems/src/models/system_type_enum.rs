@@ -13,9 +13,12 @@ use serde::{Deserialize, Serialize};
 
 /// SystemTypeEnum : Type of system
 /// Type of system
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum SystemTypeEnum {
     #[serde(rename = "LINUX")]
+    #[default]
     Linux,
     #[serde(rename = "S3")]
     S3,
@@ -33,11 +36,5 @@ impl std::fmt::Display for SystemTypeEnum {
             Self::Irods => write!(f, "IRODS"),
             Self::Globus => write!(f, "GLOBUS"),
         }
-    }
-}
-
-impl Default for SystemTypeEnum {
-    fn default() -> SystemTypeEnum {
-        Self::Linux
     }
 }

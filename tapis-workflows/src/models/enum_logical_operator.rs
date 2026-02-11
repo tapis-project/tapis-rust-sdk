@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumLogicalOperator {
     #[serde(rename = "and")]
+    #[default]
     And,
     #[serde(rename = "or")]
     Or,
@@ -38,11 +41,5 @@ impl std::fmt::Display for EnumLogicalOperator {
             Self::Nor => write!(f, "nor"),
             Self::Xnor => write!(f, "xnor"),
         }
-    }
-}
-
-impl Default for EnumLogicalOperator {
-    fn default() -> EnumLogicalOperator {
-        Self::And
     }
 }

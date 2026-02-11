@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum GlobusTaskCancelEnum {
     #[serde(rename = "COMPLETE")]
+    #[default]
     Complete,
     #[serde(rename = "CANCELLED")]
     Cancelled,
@@ -29,11 +32,5 @@ impl std::fmt::Display for GlobusTaskCancelEnum {
             Self::Cancelled => write!(f, "CANCELLED"),
             Self::Accepted => write!(f, "ACCEPTED"),
         }
-    }
-}
-
-impl Default for GlobusTaskCancelEnum {
-    fn default() -> GlobusTaskCancelEnum {
-        Self::Complete
     }
 }

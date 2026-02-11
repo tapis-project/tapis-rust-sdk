@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumComparisonOperator {
     #[serde(rename = "eq")]
+    #[default]
     Eq,
     #[serde(rename = "ne")]
     Ne,
@@ -38,11 +41,5 @@ impl std::fmt::Display for EnumComparisonOperator {
             Self::Ge => write!(f, "ge"),
             Self::Le => write!(f, "le"),
         }
-    }
-}
-
-impl Default for EnumComparisonOperator {
-    fn default() -> EnumComparisonOperator {
-        Self::Eq
     }
 }

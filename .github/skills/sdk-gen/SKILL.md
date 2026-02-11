@@ -85,7 +85,7 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-
 # Publish all crates to crates.io at the end
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --publish
 
-# Run clippy checks at the end
+# Run clippy auto-fix before formatting/build
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy
 ```
 
@@ -93,8 +93,8 @@ Automation notes:
 - `--services` limits generation/fixes/wrappers/examples to those services only.
 - `regenerate_all_sdks.py` uses `--no-branch-switch` for generation by default, which avoids git checkout failures in restricted environments and on feature branches.
 - `regenerate_all_sdks.py` performs a DNS precheck for spec hosts and fails fast when host resolution is unavailable.
+- `--run-clippy` applies `cargo clippy --fix --allow-dirty --workspace --all-targets` before rustfmt/build.
 - `regenerate_all_sdks.py` runs `cargo fmt --all` by default; use `--skip-format` only for special cases.
-- clippy checks are optional (`--run-clippy`) and are complementary to rustfmt.
 - Parent workspace members and root dependency mappings are still refreshed for all known service crates, so subset runs do not drop crates from the parent SDK.
 - Version bump is skipped automatically when generation fails for all requested services.
 - Publishing requires `CARGO_REGISTRY_TOKEN` in the environment.

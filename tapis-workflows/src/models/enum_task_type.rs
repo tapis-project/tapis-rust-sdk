@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumTaskType {
     #[serde(rename = "image_build")]
+    #[default]
     ImageBuild,
     #[serde(rename = "application")]
     Application,
@@ -41,11 +44,5 @@ impl std::fmt::Display for EnumTaskType {
             Self::Function => write!(f, "function"),
             Self::Template => write!(f, "template"),
         }
-    }
-}
-
-impl Default for EnumTaskType {
-    fn default() -> EnumTaskType {
-        Self::ImageBuild
     }
 }

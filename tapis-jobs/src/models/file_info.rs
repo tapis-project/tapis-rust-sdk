@@ -52,9 +52,12 @@ impl FileInfo {
     }
 }
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Type {
     #[serde(rename = "file")]
+    #[default]
     File,
     #[serde(rename = "dir")]
     Dir,
@@ -64,10 +67,4 @@ pub enum Type {
     Other,
     #[serde(rename = "unknown")]
     Unknown,
-}
-
-impl Default for Type {
-    fn default() -> Type {
-        Self::File
-    }
 }

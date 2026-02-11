@@ -60,13 +60,14 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --servi
 # Skip rustfmt (not recommended)
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-format
 
-# Run clippy checks at the end
+# Run clippy auto-fix before formatting/build
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy
 ```
 
 ## Validate Before Publish
 
 The automation already runs:
+- `cargo clippy --fix --allow-dirty --workspace --all-targets` (if `--run-clippy`)
 - `cargo fmt --all` (unless `--skip-format`)
 - `cargo build --workspace --all-targets`
 
@@ -97,16 +98,16 @@ Notes:
 - The script fails fast if `CARGO_REGISTRY_TOKEN` is not set.
 - It publishes all sub-crates first, then the parent crate.
 - It retries failed publish commands automatically.
-- clippy is optional in automation (`--run-clippy`); rustfmt is enabled by default.
+- `--run-clippy` applies clippy auto-fixes before rustfmt/build; rustfmt is enabled by default.
 
-## GitHub Action (Daily Regeneration)
+## GitHub Action (Weekly Regeneration)
 
 Workflow file:
 
 `/Users/wei.zhang/Developer/git/TAPIS/tapis-rust-sdk/.github/workflows/daily-sdk-regeneration.yml`
 
 Behavior:
-- Runs daily via cron (`0 6 * * *`) and supports manual trigger (`workflow_dispatch`).
+- Runs weekly via cron (`0 6 * * 1`) and supports manual trigger (`workflow_dispatch`).
 - Executes:
   `python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump --run-clippy`
 - Opens/updates an automated PR with regeneration changes.

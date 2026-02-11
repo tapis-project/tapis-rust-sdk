@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumIdentityType {
     #[serde(rename = "github")]
+    #[default]
     Github,
     #[serde(rename = "dockerhub")]
     Dockerhub,
@@ -26,11 +29,5 @@ impl std::fmt::Display for EnumIdentityType {
             Self::Github => write!(f, "github"),
             Self::Dockerhub => write!(f, "dockerhub"),
         }
-    }
-}
-
-impl Default for EnumIdentityType {
-    fn default() -> EnumIdentityType {
-        Self::Github
     }
 }

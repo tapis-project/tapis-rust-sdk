@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumContextType {
     #[serde(rename = "github")]
+    #[default]
     Github,
     #[serde(rename = "gitlab")]
     Gitlab,
@@ -32,11 +35,5 @@ impl std::fmt::Display for EnumContextType {
             Self::Dockerhub => write!(f, "dockerhub"),
             Self::Local => write!(f, "local"),
         }
-    }
-}
-
-impl Default for EnumContextType {
-    fn default() -> EnumContextType {
-        Self::Github
     }
 }

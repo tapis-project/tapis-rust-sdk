@@ -30,18 +30,15 @@ impl ActorPermission {
     }
 }
 /// The level associated with the permission.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Level {
     #[serde(rename = "READ")]
+    #[default]
     Read,
     #[serde(rename = "EXECUTE")]
     Execute,
     #[serde(rename = "WRITE")]
     Write,
-}
-
-impl Default for Level {
-    fn default() -> Level {
-        Self::Read
-    }
 }

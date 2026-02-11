@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum JobEventCategoryFilter {
     #[serde(rename = "ALL")]
+    #[default]
     All,
     #[serde(rename = "JOB_NEW_STATUS")]
     JobNewStatus,
@@ -38,11 +41,5 @@ impl std::fmt::Display for JobEventCategoryFilter {
             Self::JobErrorMessage => write!(f, "JOB_ERROR_MESSAGE"),
             Self::JobSubscription => write!(f, "JOB_SUBSCRIPTION"),
         }
-    }
-}
-
-impl Default for JobEventCategoryFilter {
-    fn default() -> JobEventCategoryFilter {
-        Self::All
     }
 }

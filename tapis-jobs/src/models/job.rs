@@ -280,9 +280,12 @@ impl Job {
     }
 }
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Status {
     #[serde(rename = "PENDING")]
+    #[default]
     Pending,
     #[serde(rename = "PROCESSING_INPUTS")]
     ProcessingInputs,
@@ -310,15 +313,13 @@ pub enum Status {
     Failed,
 }
 
-impl Default for Status {
-    fn default() -> Status {
-        Self::Pending
-    }
-}
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Condition {
     #[serde(rename = "CANCELLED_BY_USER")]
+    #[default]
     CancelledByUser,
     #[serde(rename = "JOB_ARCHIVING_FAILED")]
     JobArchivingFailed,
@@ -372,15 +373,13 @@ pub enum Condition {
     SchedulerTerminated,
 }
 
-impl Default for Condition {
-    fn default() -> Condition {
-        Self::CancelledByUser
-    }
-}
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum RemoteOutcome {
     #[serde(rename = "FINISHED")]
+    #[default]
     Finished,
     #[serde(rename = "FAILED")]
     Failed,
@@ -388,29 +387,25 @@ pub enum RemoteOutcome {
     FailedSkipArchive,
 }
 
-impl Default for RemoteOutcome {
-    fn default() -> RemoteOutcome {
-        Self::Finished
-    }
-}
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum JobType {
     #[serde(rename = "FORK")]
+    #[default]
     Fork,
     #[serde(rename = "BATCH")]
     Batch,
 }
 
-impl Default for JobType {
-    fn default() -> JobType {
-        Self::Fork
-    }
-}
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum SharedAppCtxAttribs {
     #[serde(rename = "SAC_EXEC_SYSTEM_ID")]
+    #[default]
     SacExecSystemId,
     #[serde(rename = "SAC_EXEC_SYSTEM_EXEC_DIR")]
     SacExecSystemExecDir,
@@ -428,10 +423,4 @@ pub enum SharedAppCtxAttribs {
     SacDtnSystemInputDir,
     #[serde(rename = "SAC_DTN_SYSTEM_OUTPUT_DIR")]
     SacDtnSystemOutputDir,
-}
-
-impl Default for SharedAppCtxAttribs {
-    fn default() -> SharedAppCtxAttribs {
-        Self::SacExecSystemId
-    }
 }

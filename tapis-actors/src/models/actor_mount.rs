@@ -34,16 +34,13 @@ impl ActorMount {
     }
 }
 /// Mode for the mount (ro for read-only, rw for read-write).
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Mode {
     #[serde(rename = "ro")]
+    #[default]
     Ro,
     #[serde(rename = "rw")]
     Rw,
-}
-
-impl Default for Mode {
-    fn default() -> Mode {
-        Self::Ro
-    }
 }

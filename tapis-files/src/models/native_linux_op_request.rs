@@ -29,18 +29,15 @@ impl NativeLinuxOpRequest {
     }
 }
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Operation {
     #[serde(rename = "CHMOD")]
+    #[default]
     Chmod,
     #[serde(rename = "CHOWN")]
     Chown,
     #[serde(rename = "CHGRP")]
     Chgrp,
-}
-
-impl Default for Operation {
-    fn default() -> Operation {
-        Self::Chmod
-    }
 }

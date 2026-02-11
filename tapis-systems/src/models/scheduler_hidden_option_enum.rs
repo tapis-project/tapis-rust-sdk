@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum SchedulerHiddenOptionEnum {
     #[serde(rename = "MEM")]
+    #[default]
     Mem,
     #[serde(rename = "PARTITION")]
     Partition,
@@ -26,11 +29,5 @@ impl std::fmt::Display for SchedulerHiddenOptionEnum {
             Self::Mem => write!(f, "MEM"),
             Self::Partition => write!(f, "PARTITION"),
         }
-    }
-}
-
-impl Default for SchedulerHiddenOptionEnum {
-    fn default() -> SchedulerHiddenOptionEnum {
-        Self::Mem
     }
 }

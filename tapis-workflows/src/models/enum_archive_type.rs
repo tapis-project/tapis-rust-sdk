@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumArchiveType {
     #[serde(rename = "system")]
+    #[default]
     System,
     #[serde(rename = "s3")]
     S3,
@@ -26,11 +29,5 @@ impl std::fmt::Display for EnumArchiveType {
             Self::System => write!(f, "system"),
             Self::S3 => write!(f, "s3"),
         }
-    }
-}
-
-impl Default for EnumArchiveType {
-    fn default() -> EnumArchiveType {
-        Self::System
     }
 }

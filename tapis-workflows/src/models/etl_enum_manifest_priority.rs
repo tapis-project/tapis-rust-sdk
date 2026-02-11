@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EtlEnumManifestPriority {
     #[serde(rename = "oldest")]
+    #[default]
     Oldest,
     #[serde(rename = "newest")]
     Newest,
@@ -29,11 +32,5 @@ impl std::fmt::Display for EtlEnumManifestPriority {
             Self::Newest => write!(f, "newest"),
             Self::Any => write!(f, "any"),
         }
-    }
-}
-
-impl Default for EtlEnumManifestPriority {
-    fn default() -> EtlEnumManifestPriority {
-        Self::Oldest
     }
 }

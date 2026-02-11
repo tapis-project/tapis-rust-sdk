@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumInvocationMode {
     #[serde(rename = "async")]
+    #[default]
     Async,
     #[serde(rename = "sync")]
     Sync,
@@ -26,11 +29,5 @@ impl std::fmt::Display for EnumInvocationMode {
             Self::Async => write!(f, "async"),
             Self::Sync => write!(f, "sync"),
         }
-    }
-}
-
-impl Default for EnumInvocationMode {
-    fn default() -> EnumInvocationMode {
-        Self::Async
     }
 }

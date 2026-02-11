@@ -6,10 +6,10 @@ Workflow:
 2) Apply known generator fixes
 3) Generate wrappers + basic examples for each service crate
 4) Update parent crate workspace/dependencies/re-exports
-5) Format Rust workspace with rustfmt
-6) Build workspace and verify wrapper coverage
-7) Optionally run version bump script as final step
-8) Optionally run clippy checks
+5) Optionally apply clippy auto-fixes
+6) Format Rust workspace with rustfmt
+7) Build workspace and verify wrapper coverage
+8) Optionally run version bump script as final step
 """
 
 from __future__ import annotations
@@ -142,7 +142,9 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
         text = replace_section(
             text,
             "dependencies",
-            _append_line_to_section_body(_section_body(text, "dependencies"), 'http = "^1.0"'),
+            _append_line_to_section_body(
+                _section_body(text, "dependencies"), 'http = "^1.0"'
+            ),
         )
 
     dev_body = _section_body(text, "dev-dependencies")
@@ -152,11 +154,17 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
             "dev-dependencies",
             'tokio = { version = "^1.0", features = ["full"] }',
         )
-    elif not re.search(r'^tokio\s*=\s*\{[^\n]*features\s*=\s*\["full"\][^\n]*\}\s*$', dev_body, flags=re.M):
+    elif not re.search(
+        r'^tokio\s*=\s*\{[^\n]*features\s*=\s*\["full"\][^\n]*\}\s*$',
+        dev_body,
+        flags=re.M,
+    ):
         text = replace_section(
             text,
             "dev-dependencies",
-            _append_line_to_section_body(dev_body, 'tokio = { version = "^1.0", features = ["full"] }'),
+            _append_line_to_section_body(
+                dev_body, 'tokio = { version = "^1.0", features = ["full"] }'
+            ),
         )
 
     if text != original:
@@ -219,7 +227,9 @@ def fix_empty_enum_defaults(crate_dir: Path, dry_run: bool) -> None:
         # Recovery path for previously partially-patched files where the enum was removed
         # but the field type still references Result.
         if "pub enum Result" not in text:
-            text = text.replace("Option<Option<Result>>", "Option<Option<serde_json::Value>>")
+            text = text.replace(
+                "Option<Option<Result>>", "Option<Option<serde_json::Value>>"
+            )
             text = text.replace("Option<Result>", "Option<serde_json::Value>")
 
         if text != original:
@@ -269,7 +279,9 @@ impl std::fmt::Display for HeaderByteRange {
         path.write_text(text.rstrip() + "\n\n" + snippet.strip() + "\n")
 
 
-def generate_client(crate_dir: Path, service: str, wrapper_name: str, dry_run: bool) -> None:
+def generate_client(
+    crate_dir: Path, service: str, wrapper_name: str, dry_run: bool
+) -> None:
     api_dir = crate_dir / "src" / "apis"
     modules = sorted(p.stem.replace("_api", "") for p in api_dir.glob("*_api.rs"))
 
@@ -291,64 +303,63 @@ def generate_client(crate_dir: Path, service: str, wrapper_name: str, dry_run: b
     out.extend(["}", "", f"impl {wrapper_name} {{"])
 
     if service == "authenticator":
-        out.extend(
-            [
-                "    pub fn new(base_url: &str, jwt_token: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {",
-                "        let mut headers = HeaderMap::new();",
-                "        if let Some(token) = jwt_token {",
-                "            headers.insert(\"X-Tapis-Token\", HeaderValue::from_str(token)?);",
-                "        }",
-            ]
-        )
+        out.extend([
+            "    pub fn new(base_url: &str, jwt_token: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {",
+            "        let mut headers = HeaderMap::new();",
+            "        if let Some(token) = jwt_token {",
+            '            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);',
+            "        }",
+        ])
     else:
-        out.extend(
-            [
-                "    pub fn new(base_url: &str, jwt_token: &str) -> Result<Self, Box<dyn std::error::Error>> {",
-                "        let mut headers = HeaderMap::new();",
-                "        headers.insert(\"X-Tapis-Token\", HeaderValue::from_str(jwt_token)?);",
-            ]
-        )
+        out.extend([
+            "    pub fn new(base_url: &str, jwt_token: &str) -> Result<Self, Box<dyn std::error::Error>> {",
+            "        let mut headers = HeaderMap::new();",
+            '        headers.insert("X-Tapis-Token", HeaderValue::from_str(jwt_token)?);',
+        ])
 
-    out.extend(
-        [
-            "",
-            "        let client = reqwest::Client::builder()",
-            "            .default_headers(headers)",
-            "            .build()?;",
-            "",
-            "        let mut config = configuration::Configuration::default();",
-            "        config.base_path = base_url.to_string();",
-            "        config.client = client;",
-            "",
-            "        let config = Arc::new(config);",
-            "",
-            "        Ok(Self {",
-            "            config: config.clone(),",
-        ]
-    )
+    out.extend([
+        "",
+        "        let client = reqwest::Client::builder()",
+        "            .default_headers(headers)",
+        "            .build()?;",
+        "",
+        "        let mut config = configuration::Configuration::default();",
+        "        config.base_path = base_url.to_string();",
+        "        config.client = client;",
+        "",
+        "        let config = Arc::new(config);",
+        "",
+        "        Ok(Self {",
+        "            config: config.clone(),",
+    ])
 
     for module in modules:
         cname = pascal_from_snake(module) + "Client"
         out.append(f"            {module}: {cname} {{ config: config.clone() }},")
 
-    out.extend(
-        [
-            "        })",
-            "    }",
-            "",
-            "    pub fn config(&self) -> &configuration::Configuration {",
-            "        &self.config",
-            "    }",
-            "}",
-            "",
-        ]
-    )
+    out.extend([
+        "        })",
+        "    }",
+        "",
+        "    pub fn config(&self) -> &configuration::Configuration {",
+        "        &self.config",
+        "    }",
+        "}",
+        "",
+    ])
 
     sig_re = re.compile(r"^pub async fn\s+([A-Za-z0-9_]+)\((.*)\)\s*->\s*(.*)\s*\{$")
 
     for module in modules:
         cname = pascal_from_snake(module) + "Client"
-        out.extend(["#[derive(Clone)]", f"pub struct {cname} {{", "    config: Arc<configuration::Configuration>,", "}", "", f"impl {cname} {{"])
+        out.extend([
+            "#[derive(Clone)]",
+            f"pub struct {cname} {{",
+            "    config: Arc<configuration::Configuration>,",
+            "}",
+            "",
+            f"impl {cname} {{",
+        ])
 
         for line in (api_dir / f"{module}_api.rs").read_text().splitlines():
             if not line.startswith("pub async fn "):
@@ -414,13 +425,15 @@ def update_service_lib(crate_dir: Path, wrapper_name: str, dry_run: bool) -> Non
             lib_path.write_text(updated)
 
 
-def generate_basic_example(crate_dir: Path, service: str, crate_name: str, wrapper_name: str, dry_run: bool) -> None:
+def generate_basic_example(
+    crate_dir: Path, service: str, crate_name: str, wrapper_name: str, dry_run: bool
+) -> None:
     examples_dir = crate_dir / "examples"
     target = examples_dir / f"{service}_basic_example.rs"
     examples_dir.mkdir(parents=True, exist_ok=True)
 
     if service == "authenticator":
-        text = f'''use {crate_name}::{wrapper_name};
+        text = f"""use {crate_name}::{wrapper_name};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {{
@@ -432,9 +445,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {{
 
     Ok(())
 }}
-'''
+"""
     else:
-        text = f'''use {crate_name}::{wrapper_name};
+        text = f"""use {crate_name}::{wrapper_name};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {{
@@ -448,7 +461,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {{
 
     Ok(())
 }}
-'''
+"""
 
     print(f"generated example: {target}")
     if not dry_run:
@@ -458,10 +471,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {{
 def check_wrapper_coverage(crate_dir: Path) -> tuple[int, int]:
     api_total = 0
     for api_file in (crate_dir / "src" / "apis").glob("*_api.rs"):
-        api_total += sum(1 for line in api_file.read_text().splitlines() if line.startswith("pub async fn "))
+        api_total += sum(
+            1
+            for line in api_file.read_text().splitlines()
+            if line.startswith("pub async fn ")
+        )
 
     client_file = crate_dir / "src" / "client.rs"
-    wrapper_total = sum(1 for line in client_file.read_text().splitlines() if line.lstrip().startswith("pub async fn "))
+    wrapper_total = sum(
+        1
+        for line in client_file.read_text().splitlines()
+        if line.lstrip().startswith("pub async fn ")
+    )
 
     return api_total, wrapper_total
 
@@ -483,7 +504,9 @@ def update_parent_cargo(repo_root: Path, services: List[str], dry_run: bool) -> 
     ws_members = [f'    "tapis-{svc}",' for svc in services]
 
     text = replace_section(text, "dependencies", "\n".join(dep_lines))
-    text = replace_section(text, "workspace", "members = [\n" + "\n".join(ws_members) + "\n]")
+    text = replace_section(
+        text, "workspace", "members = [\n" + "\n".join(ws_members) + "\n]"
+    )
 
     print(f"updated parent manifest: {root_manifest}")
     if not dry_run:
@@ -498,15 +521,13 @@ def update_parent_lib(repo_root: Path, services: List[str], dry_run: bool) -> No
         module = svc.replace("-", "_")
         pkg = f"tapis_{svc.replace('-', '_')}"
         display = " ".join(part.capitalize() for part in svc.split("-"))
-        lines.extend(
-            [
-                f"/// Tapis {display} service client",
-                f"pub mod {module} {{",
-                f"    pub use {pkg}::*;",
-                "}",
-                "",
-            ]
-        )
+        lines.extend([
+            f"/// Tapis {display} service client",
+            f"pub mod {module} {{",
+            f"    pub use {pkg}::*;",
+            "}",
+            "",
+        ])
 
     text = "\n".join(lines).rstrip() + "\n"
     print(f"updated parent lib: {path}")
@@ -558,14 +579,20 @@ def publish_crates(
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Regenerate TAPIS SDKs with wrappers/examples and parent wiring")
-    p.add_argument("--env", default="prod", help="OpenAPI environment key (prod/staging/dev)")
+    p = argparse.ArgumentParser(
+        description="Regenerate TAPIS SDKs with wrappers/examples and parent wiring"
+    )
+    p.add_argument(
+        "--env", default="prod", help="OpenAPI environment key (prod/staging/dev)"
+    )
     p.add_argument(
         "--services",
         default="all",
         help="Comma-separated services to process, or 'all' (default)",
     )
-    p.add_argument("--skip-generate", action="store_true", help="Skip OpenAPI generation step")
+    p.add_argument(
+        "--skip-generate", action="store_true", help="Skip OpenAPI generation step"
+    )
     p.add_argument(
         "--skip-network-precheck",
         action="store_true",
@@ -585,7 +612,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--run-clippy",
         action="store_true",
-        help="Run cargo clippy --workspace --all-targets at the end",
+        help="Run cargo clippy --fix --workspace --all-targets before formatting/build",
     )
     p.add_argument("--skip-bump", action="store_true", help="Skip final version bump")
     p.add_argument(
@@ -605,7 +632,11 @@ def parse_args() -> argparse.Namespace:
         default=20,
         help="Seconds to wait between publish retries (default: 20)",
     )
-    p.add_argument("--dry-run", action="store_true", help="Print actions without writing files or running commands")
+    p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print actions without writing files or running commands",
+    )
     p.add_argument(
         "--continue-on-generate-error",
         action="store_true",
@@ -662,9 +693,30 @@ def main() -> int:
 
     script_dir = Path(__file__).resolve().parent
     repo_root = script_dir.parents[3]
-    specs_json = repo_root / ".github" / "skills" / "sdk-gen" / "references" / "OpenAPI_specs.json"
-    generate_script = repo_root / ".github" / "skills" / "sdk-gen" / "scripts" / "generate_rust_sdk.sh"
-    bump_script = repo_root / ".github" / "skills" / "sdk-parent" / "scripts" / "bump_minor_version.sh"
+    specs_json = (
+        repo_root
+        / ".github"
+        / "skills"
+        / "sdk-gen"
+        / "references"
+        / "OpenAPI_specs.json"
+    )
+    generate_script = (
+        repo_root
+        / ".github"
+        / "skills"
+        / "sdk-gen"
+        / "scripts"
+        / "generate_rust_sdk.sh"
+    )
+    bump_script = (
+        repo_root
+        / ".github"
+        / "skills"
+        / "sdk-parent"
+        / "scripts"
+        / "bump_minor_version.sh"
+    )
 
     all_env_services = load_services(specs_json, args.env, "all")
     services = load_services(specs_json, args.env, args.services)
@@ -691,7 +743,9 @@ def main() -> int:
 
     processed_services = [s for s in services if s not in failed_generation]
     if failed_generation and not processed_services and not args.skip_generate:
-        raise RuntimeError("All generation steps failed. Aborting before build/version bump.")
+        raise RuntimeError(
+            "All generation steps failed. Aborting before build/version bump."
+        )
 
     for svc in processed_services:
         crate_dir = repo_root / f"tapis-{svc}"
@@ -711,7 +765,9 @@ def main() -> int:
         crate_name = service_crate_name(crate_dir)
         generate_basic_example(crate_dir, svc, crate_name, wrapper, args.dry_run)
 
-    parent_services = [svc for svc in all_env_services if (repo_root / f"tapis-{svc}").exists()]
+    parent_services = [
+        svc for svc in all_env_services if (repo_root / f"tapis-{svc}").exists()
+    ]
     if parent_services:
         update_parent_cargo(repo_root, parent_services, args.dry_run)
         update_parent_lib(repo_root, parent_services, args.dry_run)
@@ -726,16 +782,38 @@ def main() -> int:
                 )
             print(f"wrapper parity ok: tapis-{svc} ({generated})")
 
+    if args.run_clippy:
+        run(
+            [
+                "cargo",
+                "clippy",
+                "--fix",
+                "--allow-dirty",
+                "--workspace",
+                "--all-targets",
+            ],
+            cwd=repo_root,
+            dry_run=args.dry_run,
+        )
+
     if not args.skip_format:
         run(["cargo", "fmt", "--all"], cwd=repo_root, dry_run=args.dry_run)
 
     if not args.skip_build:
-        run(["cargo", "build", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
+        run(
+            ["cargo", "build", "--workspace", "--all-targets"],
+            cwd=repo_root,
+            dry_run=args.dry_run,
+        )
 
     if not args.skip_bump and not (failed_generation and not args.skip_generate):
         run(["bash", str(bump_script)], cwd=repo_root, dry_run=args.dry_run)
         if not args.skip_build:
-            run(["cargo", "build", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
+            run(
+                ["cargo", "build", "--workspace", "--all-targets"],
+                cwd=repo_root,
+                dry_run=args.dry_run,
+            )
     elif failed_generation and not args.skip_generate:
         print("Skipping version bump due generation failures.", file=sys.stderr)
 
@@ -749,7 +827,9 @@ def main() -> int:
                 "CARGO_REGISTRY_TOKEN is not set. Export it before publishing, e.g.:\n"
                 "  export CARGO_REGISTRY_TOKEN=<your_crates_io_token>"
             )
-        publish_services = [svc for svc in all_env_services if (repo_root / f"tapis-{svc}").exists()]
+        publish_services = [
+            svc for svc in all_env_services if (repo_root / f"tapis-{svc}").exists()
+        ]
         publish_crates(
             repo_root=repo_root,
             services=publish_services,
@@ -757,9 +837,6 @@ def main() -> int:
             retries=args.publish_retries,
             retry_delay_seconds=args.publish_retry_delay,
         )
-
-    if args.run_clippy:
-        run(["cargo", "clippy", "--workspace", "--all-targets"], cwd=repo_root, dry_run=args.dry_run)
 
     print("Automation workflow completed.")
     return 0

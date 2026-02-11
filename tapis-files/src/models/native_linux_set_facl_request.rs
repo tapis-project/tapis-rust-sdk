@@ -33,9 +33,12 @@ impl NativeLinuxSetFaclRequest {
     }
 }
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Operation {
     #[serde(rename = "ADD")]
+    #[default]
     Add,
     #[serde(rename = "REMOVE")]
     Remove,
@@ -45,24 +48,16 @@ pub enum Operation {
     RemoveAll,
 }
 
-impl Default for Operation {
-    fn default() -> Operation {
-        Self::Add
-    }
-}
 /// Recursion may be set to physical (don't follow symlinks) or logical (follow symlinks), or none (don't recurse).
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum RecursionMethod {
     #[serde(rename = "NONE")]
+    #[default]
     None,
     #[serde(rename = "PHYSICAL")]
     Physical,
     #[serde(rename = "LOGICAL")]
     Logical,
-}
-
-impl Default for RecursionMethod {
-    fn default() -> RecursionMethod {
-        Self::None
-    }
 }

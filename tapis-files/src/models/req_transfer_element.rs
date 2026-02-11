@@ -42,18 +42,15 @@ impl ReqTransferElement {
     }
 }
 /// If this value is set to anything other than TRANSFER, both the source and target MUST, be on the same tapis system.  If the value is SERVICE_MOVE_DIRECTORY_CONTENTS, the  source URI is expected to be a directory, and the contents of that directory will be transfered to the target URI.  The target must be an existing directory or the operation will fail.  If the value is SERVICE_MOVE_FILE_OR_DIRECTORY the file or directory will be moved to the target URI.  If the target already exists, it will be overwritten.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum TransferType {
     #[serde(rename = "TRANSFER")]
+    #[default]
     Transfer,
     #[serde(rename = "SERVICE_MOVE_DIRECTORY_CONTENTS")]
     ServiceMoveDirectoryContents,
     #[serde(rename = "SERVICE_MOVE_FILE_OR_DIRECTORY")]
     ServiceMoveFileOrDirectory,
-}
-
-impl Default for TransferType {
-    fn default() -> TransferType {
-        Self::Transfer
-    }
 }

@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumRetryPolicy {
     #[serde(rename = "exponential_backoff")]
+    #[default]
     ExponentialBackoff,
 }
 
@@ -23,11 +26,5 @@ impl std::fmt::Display for EnumRetryPolicy {
         match self {
             Self::ExponentialBackoff => write!(f, "exponential_backoff"),
         }
-    }
-}
-
-impl Default for EnumRetryPolicy {
-    fn default() -> EnumRetryPolicy {
-        Self::ExponentialBackoff
     }
 }

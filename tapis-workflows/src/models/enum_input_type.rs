@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumInputType {
     #[serde(rename = "string")]
+    #[default]
     String,
     #[serde(rename = "int")]
     Int,
@@ -29,11 +32,5 @@ impl std::fmt::Display for EnumInputType {
             Self::Int => write!(f, "int"),
             Self::Float => write!(f, "float"),
         }
-    }
-}
-
-impl Default for EnumInputType {
-    fn default() -> EnumInputType {
-        Self::String
     }
 }

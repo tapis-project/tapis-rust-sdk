@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EtlEnumManifestGenerationPolicy {
     #[serde(rename = "manual")]
+    #[default]
     Manual,
     #[serde(rename = "auto_one_per_file")]
     AutoOnePerFile,
@@ -29,11 +32,5 @@ impl std::fmt::Display for EtlEnumManifestGenerationPolicy {
             Self::AutoOnePerFile => write!(f, "auto_one_per_file"),
             Self::AutoOneForAll => write!(f, "auto_one_for_all"),
         }
-    }
-}
-
-impl Default for EtlEnumManifestGenerationPolicy {
-    fn default() -> EtlEnumManifestGenerationPolicy {
-        Self::Manual
     }
 }

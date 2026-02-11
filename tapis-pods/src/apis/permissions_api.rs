@@ -122,8 +122,8 @@ pub async fn delete_pod_permission(
     let uri_str = format!(
         "{}/pods/{pod_id}/permissions/{user}",
         configuration.base_path,
-        pod_id = p_path_pod_id.to_string(),
-        user = p_path_user.to_string()
+        pod_id = p_path_pod_id,
+        user = p_path_user
     );
     let mut req_builder = configuration
         .client
@@ -148,8 +148,8 @@ pub async fn delete_pod_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PodPermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PodPermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PodPermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PodPermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -175,8 +175,8 @@ pub async fn delete_snapshot_permission(
     let uri_str = format!(
         "{}/pods/snapshots/{snapshot_id}/permissions/{user}",
         configuration.base_path,
-        snapshot_id = p_path_snapshot_id.to_string(),
-        user = p_path_user.to_string()
+        snapshot_id = p_path_snapshot_id,
+        user = p_path_user
     );
     let mut req_builder = configuration
         .client
@@ -201,8 +201,8 @@ pub async fn delete_snapshot_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SnapshotPermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::SnapshotPermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SnapshotPermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::SnapshotPermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -228,8 +228,8 @@ pub async fn delete_template_permission(
     let uri_str = format!(
         "{}/pods/templates/{template_id}/permissions/{user}",
         configuration.base_path,
-        template_id = p_path_template_id.to_string(),
-        user = p_path_user.to_string()
+        template_id = p_path_template_id,
+        user = p_path_user
     );
     let mut req_builder = configuration
         .client
@@ -254,8 +254,8 @@ pub async fn delete_template_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TemplatePermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::TemplatePermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TemplatePermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::TemplatePermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -281,8 +281,8 @@ pub async fn delete_volume_permission(
     let uri_str = format!(
         "{}/pods/volumes/{volume_id}/permissions/{user}",
         configuration.base_path,
-        volume_id = p_path_volume_id.to_string(),
-        user = p_path_user.to_string()
+        volume_id = p_path_volume_id,
+        user = p_path_user
     );
     let mut req_builder = configuration
         .client
@@ -307,8 +307,8 @@ pub async fn delete_volume_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::VolumePermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::VolumePermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::VolumePermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::VolumePermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -332,7 +332,7 @@ pub async fn get_pod_permissions(
     let uri_str = format!(
         "{}/pods/{pod_id}/permissions",
         configuration.base_path,
-        pod_id = p_path_pod_id.to_string()
+        pod_id = p_path_pod_id
     );
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
@@ -355,8 +355,8 @@ pub async fn get_pod_permissions(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PodPermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PodPermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PodPermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PodPermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -380,7 +380,7 @@ pub async fn get_snapshot_permissions(
     let uri_str = format!(
         "{}/pods/snapshots/{snapshot_id}/permissions",
         configuration.base_path,
-        snapshot_id = p_path_snapshot_id.to_string()
+        snapshot_id = p_path_snapshot_id
     );
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
@@ -403,8 +403,8 @@ pub async fn get_snapshot_permissions(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SnapshotPermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::SnapshotPermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SnapshotPermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::SnapshotPermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -428,7 +428,7 @@ pub async fn get_template_permissions(
     let uri_str = format!(
         "{}/pods/templates/{template_id}/permissions",
         configuration.base_path,
-        template_id = p_path_template_id.to_string()
+        template_id = p_path_template_id
     );
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
@@ -451,8 +451,8 @@ pub async fn get_template_permissions(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TemplatePermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::TemplatePermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TemplatePermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::TemplatePermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -476,7 +476,7 @@ pub async fn get_volume_permissions(
     let uri_str = format!(
         "{}/pods/volumes/{volume_id}/permissions",
         configuration.base_path,
-        volume_id = p_path_volume_id.to_string()
+        volume_id = p_path_volume_id
     );
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
@@ -499,8 +499,8 @@ pub async fn get_volume_permissions(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::VolumePermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::VolumePermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::VolumePermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::VolumePermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -526,7 +526,7 @@ pub async fn set_pod_permission(
     let uri_str = format!(
         "{}/pods/{pod_id}/permissions",
         configuration.base_path,
-        pod_id = p_path_pod_id.to_string()
+        pod_id = p_path_pod_id
     );
     let mut req_builder = configuration
         .client
@@ -552,8 +552,8 @@ pub async fn set_pod_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PodPermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PodPermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PodPermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::PodPermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -579,7 +579,7 @@ pub async fn set_snapshot_permission(
     let uri_str = format!(
         "{}/pods/snapshots/{snapshot_id}/permissions",
         configuration.base_path,
-        snapshot_id = p_path_snapshot_id.to_string()
+        snapshot_id = p_path_snapshot_id
     );
     let mut req_builder = configuration
         .client
@@ -605,8 +605,8 @@ pub async fn set_snapshot_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SnapshotPermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::SnapshotPermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SnapshotPermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::SnapshotPermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -632,7 +632,7 @@ pub async fn set_template_permission(
     let uri_str = format!(
         "{}/pods/templates/{template_id}/permissions",
         configuration.base_path,
-        template_id = p_path_template_id.to_string()
+        template_id = p_path_template_id
     );
     let mut req_builder = configuration
         .client
@@ -658,8 +658,8 @@ pub async fn set_template_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TemplatePermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::TemplatePermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TemplatePermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::TemplatePermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -685,7 +685,7 @@ pub async fn set_volume_permission(
     let uri_str = format!(
         "{}/pods/volumes/{volume_id}/permissions",
         configuration.base_path,
-        volume_id = p_path_volume_id.to_string()
+        volume_id = p_path_volume_id
     );
     let mut req_builder = configuration
         .client
@@ -711,8 +711,8 @@ pub async fn set_volume_permission(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::VolumePermissionsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::VolumePermissionsResponse`")))),
+            ContentType::Text => Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::VolumePermissionsResponse`"))),
+            ContentType::Unsupported(unknown_type) => Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::VolumePermissionsResponse`")))),
         }
     } else {
         let content = resp.text().await?;

@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum ArchiveModeEnum {
     #[serde(rename = "ALWAYS")]
+    #[default]
     Always,
     #[serde(rename = "SKIP_ON_FAIL")]
     SkipOnFail,
@@ -29,11 +32,5 @@ impl std::fmt::Display for ArchiveModeEnum {
             Self::SkipOnFail => write!(f, "SKIP_ON_FAIL"),
             Self::Never => write!(f, "NEVER"),
         }
-    }
-}
-
-impl Default for ArchiveModeEnum {
-    fn default() -> ArchiveModeEnum {
-        Self::Always
     }
 }

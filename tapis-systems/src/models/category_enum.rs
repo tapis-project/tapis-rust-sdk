@@ -12,9 +12,12 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 ///
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum CategoryEnum {
     #[serde(rename = "SCHEDULER")]
+    #[default]
     Scheduler,
     #[serde(rename = "OS")]
     Os,
@@ -44,11 +47,5 @@ impl std::fmt::Display for CategoryEnum {
             Self::Misc => write!(f, "MISC"),
             Self::Custom => write!(f, "CUSTOM"),
         }
-    }
-}
-
-impl Default for CategoryEnum {
-    fn default() -> CategoryEnum {
-        Self::Scheduler
     }
 }
