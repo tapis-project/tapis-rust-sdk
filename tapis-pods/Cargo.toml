@@ -1,28 +1,23 @@
 [package]
-name = "tapis-pods"
-version = "0.1.1"
+name = "tapis_pods"
+version = "0.6.0"
 authors = ["cicsupport@tacc.utexas.edu"]
-description = "Rust client SDK for Tapis Pods Service - a web service providing pods-as-a-service (PaaS) for deploying Docker containers with HTTP/TCP endpoints."
-license = "BSD-3-Clause"
+description = " The Pods Service is a web service and distributed computing platform providing pods-as-a-service (PaaS). The service  implements a message broker and processor model that requests pods, alongside a health module to poll for pod data, including logs, status, and health. The primary use of this service is to have quick to deploy long-lived services based on Docker images that are exposed via HTTP or TCP endpoints listed by the API.  **The Pods service provides functionality for two types of pod solutions:**  * **Templated Pods** for run-as-is popular images. Neo4J is one example, the template manages TCP ports, user creation, and permissions.  * **Custom Pods** for arbitrary docker images with less functionality. In this case we will expose port 5000 and do nothing else.   The live-docs act as the most up-to-date API reference. Visit the [documentation for more information](https://tapis.readthedocs.io/en/latest/technical/pods.html). "
+license = "BSD 3.0"
 edition = "2021"
-repository = "https://github.com/tapis-project/tapis-rust-sdk"
-homepage = "https://tapis-project.org"
 
 [dependencies]
 serde = { version = "^1.0", features = ["derive"] }
+serde_with = { version = "^3.8", default-features = false, features = ["base64", "std", "macros"] }
 serde_json = "^1.0"
 serde_repr = "^0.1"
 url = "^2.5"
+reqwest = { version = "^0.12", default-features = false, features = ["json", "multipart", "stream"] }
 http = "^1.0"
-reqwest = { version = "^0.12", default-features = false, features = [
-    "json",
-    "multipart",
-] }
-
-[dev-dependencies]
-tokio = { version = "^1.0", features = ["full"] }
-
 [features]
 default = ["native-tls"]
 native-tls = ["reqwest/native-tls"]
 rustls-tls = ["reqwest/rustls-tls"]
+
+[dev-dependencies]
+tokio = { version = "^1.0", features = ["full"] }

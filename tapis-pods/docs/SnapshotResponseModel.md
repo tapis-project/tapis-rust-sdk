@@ -14,8 +14,8 @@ Name | Type | Description | Notes
 **retention_policy** | Option<**String**> | retention_policy bits | [optional][default to ]
 **size** | Option<**i32**> | Size of snapshot currently in MB | [optional][default to 0]
 **status** | Option<**String**> | Current status of snapshot. | [optional][default to REQUESTED]
-**creation_ts** | Option<**String**> | Time (UTC) that this snapshot was created. | [optional]
-**update_ts** | Option<**String**> | Time (UTC) that this snapshot was updated. | [optional]
+**creation_ts** | Option<**String**> |  | [optional]
+**update_ts** | Option<**String**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

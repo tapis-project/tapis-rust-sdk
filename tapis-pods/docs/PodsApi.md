@@ -6,11 +6,13 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_pod**](PodsApi.md#create_pod) | **POST** /pods | create_pod
 [**delete_pod**](PodsApi.md#delete_pod) | **DELETE** /pods/{pod_id} | delete_pod
+[**download_from_pod**](PodsApi.md#download_from_pod) | **GET** /pods/{pod_id}/download_from_pod{url_path} | Download a file from the pod's filesystem
 [**exec_pod_commands**](PodsApi.md#exec_pod_commands) | **POST** /pods/{pod_id}/exec | exec_pod_commands
 [**get_derived_pod**](PodsApi.md#get_derived_pod) | **GET** /pods/{pod_id}/derived | get_derived_pod
 [**get_pod**](PodsApi.md#get_pod) | **GET** /pods/{pod_id} | get_pod
 [**get_pod_credentials**](PodsApi.md#get_pod_credentials) | **GET** /pods/{pod_id}/credentials | get_pod_credentials
 [**get_pod_logs**](PodsApi.md#get_pod_logs) | **GET** /pods/{pod_id}/logs | get_pod_logs
+[**list_files_in_pod**](PodsApi.md#list_files_in_pod) | **GET** /pods/{pod_id}/list_files{url_path} | List files in the pod's filesystem
 [**list_pods**](PodsApi.md#list_pods) | **GET** /pods | list_pods
 [**pod_auth**](PodsApi.md#pod_auth) | **GET** /pods/{pod_id_net}/auth | pod_auth
 [**pod_auth_callback**](PodsApi.md#pod_auth_callback) | **GET** /pods/{pod_id_net}/auth/callback | pod_auth_callback
@@ -83,6 +85,38 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## download_from_pod
+
+> serde_json::Value download_from_pod(pod_id, url_path, path)
+Download a file from the pod's filesystem
+
+Download a file from a specific path inside the pod using Kubernetes exec.  Path options (use one, not both): - URL path: Relative paths only (e.g., /download_from_pod/myfile.txt -> \"myfile.txt\") - Query parameter: Absolute paths allowed (e.g., ?path=/tmp/myfile.txt -> \"/tmp/myfile.txt\")  Notes: - Pod must have /bin/sh and base64 available (most standard images include these) - Distroless or minimal images without a shell or base64 will not work with this endpoint.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**pod_id** | **String** | Unique identifier for the pod. | [required] |
+**url_path** | **String** | Path to the file inside the pod to download. | [required] |
+**path** | Option<**String**> |  |  |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## exec_pod_commands
 
 > serde_json::Value exec_pod_commands(pod_id, execute_pod_commands)
@@ -116,10 +150,10 @@ No authorization required
 
 ## get_derived_pod
 
-> models::PodResponse get_derived_pod(pod_id)
+> models::PodResponse get_derived_pod(pod_id, include_configs, resolve_secrets)
 get_derived_pod
 
-Derive a pod's final definition if templates are used.  Returns final pod definition to be used for pod creation.
+Derive a pod's final definition if templates are used.  Returns final pod definition to be used for pod creation.  Use resolve_secrets=true (admin only) to preview how secrets will be interpolated into environment_variables and config_content.
 
 ### Parameters
 
@@ -127,6 +161,8 @@ Derive a pod's final definition if templates are used.  Returns final pod defini
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **pod_id** | **String** |  | [required] |
+**include_configs** | Option<**bool**> | Include full config_content for volume mounts using field. Default: false (shows placeholder with size) |  |[default to false]
+**resolve_secrets** | Option<**bool**> | Resolve and show actual secret values (admin only). Default: false. Use to preview how secrets will be interpolated. |  |[default to false]
 
 ### Return type
 
@@ -146,10 +182,10 @@ No authorization required
 
 ## get_pod
 
-> models::PodResponse get_pod(pod_id)
+> models::PodResponse get_pod(pod_id, include_configs, check_unresolved)
 get_pod
 
-Get a pod.  Returns retrieved pod object.
+Get a pod.  Returns retrieved pod object.  Use check_unresolved=true to detect any ${...} patterns that haven't been resolved.
 
 ### Parameters
 
@@ -157,6 +193,8 @@ Get a pod.  Returns retrieved pod object.
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **pod_id** | **String** |  | [required] |
+**include_configs** | Option<**bool**> | Include full config_content for volume mounts using field. Default: false (shows placeholder with size) |  |[default to false]
+**check_unresolved** | Option<**bool**> | Check for unresolved ${...} patterns and include in metadata. Default: True |  |[default to true]
 
 ### Return type
 
@@ -221,6 +259,38 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::PodLogsResponse**](PodLogsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## list_files_in_pod
+
+> serde_json::Value list_files_in_pod(pod_id, url_path, path)
+List files in the pod's filesystem
+
+List files and directories at a specific path inside the pod using Kubernetes exec.  Path options (use one, not both): - URL path: Relative paths only (e.g., /list_files/mydir -> \"mydir\") - Query parameter: Absolute paths allowed (e.g., ?path=/tmp -> \"/tmp\")  Notes: - Pod must have /bin/sh and ls available (most standard images include these) - Distroless or minimal images without a shell will return a 500 error.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**pod_id** | **String** | Unique identifier for the pod. | [required] |
+**url_path** | **String** | Path to list files from inside the pod. | [required] |
+**path** | Option<**String**> | Alternative query parameter for path. |  |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 
@@ -477,7 +547,7 @@ No authorization required
 > serde_json::Value upload_to_pod(pod_id, file, dest_path)
 Upload a file directly into the pod's filesystem
 
-Upload a file to a specific path inside the pod using Kubernetes exec/copy (chunked streaming, no temp file).
+Upload a file to a specific path inside the pod using Kubernetes exec.  Notes: - Pod must have /bin/sh available (most standard images include this) - Distroless or minimal images without a shell will not work with this endpoint.
 
 ### Parameters
 

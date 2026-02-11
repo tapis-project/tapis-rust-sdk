@@ -1,112 +1,58 @@
 # TAPIS Rust SDK Agent Skills
 
-This directory contains modular agent skills for working with TAPIS Rust SDKs. Each skill follows the [agentskills.io specification](https://agentskills.io/specification) for maximum compatibility with AI agents.
+This directory contains modular agent skills for working with TAPIS Rust SDKs.
 
 ## Available Skills
 
 ### [sdk-gen](./sdk-gen/SKILL.md)
-**Generate base Rust SDK from OpenAPI specifications**
+Generate base Rust SDK crates from TAPIS OpenAPI specs using the repository automation script.
 
-Use this skill to:
-- Generate Rust code from OpenAPI specs (YAML/JSON)
-- Set up initial project structure
-- Create API modules and models
-- Configure dependencies
-
-**When to use:** Starting a new SDK or regenerating after API changes
-
----
+Use this when:
+- Regenerating an existing service crate (`tapis-pods`, `tapis-authenticator`, etc.)
+- Adding a new TAPIS service crate from the OpenAPI registry
 
 ### [sdk-wrapper](./sdk-wrapper/SKILL.md)
-**Create high-level client wrapper with ergonomic API**
+Create or repair high-level wrapper clients (`Tapis*`) on top of generated APIs.
 
-Use this skill to:
-- Build `TapisClient` wrapper with sub-clients
-- Implement global JWT authentication
-- Ensure 100% API coverage
-- Provide clean, ergonomic interface
-
-**When to use:** After generating base SDK, to create production-ready client
-
----
+Use this when:
+- `src/lib.rs` was overwritten by regeneration and wrapper exports were dropped
+- New endpoints were generated and wrapper coverage is no longer 100%
 
 ### [sdk-debug](./sdk-debug/SKILL.md)
-**Fix compilation errors and remove warnings**
+Fix build failures and warning regressions after generation/wrapper updates.
 
-Use this skill to:
-- Diagnose compilation errors
-- Resolve dependency conflicts
-- Fix clippy warnings
-- Handle generator quirks
+Use this when:
+- `cargo build` fails
+- New generator output introduces known Rust/OpenAPI quirks
 
-**When to use:** When SDK fails to compile or has many warnings
+### [sdk-parent](./sdk-parent/SKILL.md)
+Maintain the parent `tapis-sdk` crate and workspace exports.
 
-### [sdk-parent][./sdk-parent/SKILL.md]
-**Parent project management tips**
+Use this when:
+- Service crate names or package IDs change
+- Parent re-exports or dependency mappings need updates
 
-Use this skill to:
-- Modify parent project when new sub-projects are added
-- Publish project to crates.io
-- Check sdk module re-export
+## Canonical Workflow
 
----
+1. `sdk-gen` - Regenerate service crate(s) from OpenAPI.
+2. `sdk-wrapper` - Restore/update wrappers and `lib.rs` exports.
+3. `sdk-parent` - Ensure parent dependency mappings and re-exports are correct.
+4. `sdk-debug` - Build all targets and clear errors/warnings.
+5. `sdk-parent` - As the final step, bump repo-wide minor version for root + all sub-crates:
+   `bash .github/skills/sdk-parent/scripts/bump_minor_version.sh`
 
-## Workflow
+## Verification Baseline
 
-The typical workflow uses all three skills in sequence:
-
-```
-1. sdk-gen    → Generate base SDK from OpenAPI spec
-2. sdk-wrapper → Create high-level client wrapper
-3. sdk-debug   → Fix any compilation issues
-```
-
-## Format
-
-All skills follow the [agentskills.io specification](https://agentskills.io/specification):
-
-```yaml
----
-name: skill-name
-description: What the skill does and when to use it
-license: Apache-2.0
----
-
-# Markdown content with step-by-step instructions
-```
-
-### Name Constraints
-- Lowercase with hyphens only
-- 1-64 characters
-- No consecutive hyphens
-- No leading/trailing hyphens
-
-### Description Constraints
-- 1-1024 characters
-- Should describe both WHAT the skill does and WHEN to use it
-
-## Example Usage
+Run from repository root:
 
 ```bash
-# 1. Generate SDK
-openapi-generator-cli generate -i spec.yaml -g rust -o ./tapis-service
-
-# 2. Create wrapper (follow sdk-wrapper/SKILL.md)
-cd tapis-service
-# ... implement client.rs following guide
-
-# 3. Fix issues (follow sdk-debug/SKILL.md)
-cargo build
-cargo clippy --fix
-cargo fmt
+cargo build --workspace --all-targets
 ```
 
-## References
+If regeneration touched wrappers, also verify wrapper parity:
 
-- **Documentation:** `../docs/` - Examples and guides
-- **Specification:** https://agentskills.io/specification
-- **TAPIS API:** https://tapis.readthedocs.io/
-
-## License
-
-Apache-2.0
+```bash
+# service example
+rg '^pub async fn ' tapis-pods/src/apis/*_api.rs | wc -l
+rg '^[[:space:]]*pub async fn ' tapis-pods/src/client.rs | wc -l
+```

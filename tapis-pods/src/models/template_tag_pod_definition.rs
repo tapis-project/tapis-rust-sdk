@@ -13,33 +13,29 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TemplateTagPodDefinition {
-    /// Which docker image to use, must be on allowlist, check /pods/images for list.
-    #[serde(rename = "image", skip_serializing_if = "Option::is_none")]
-    pub image: Option<String>,
-    /// Name of template to base this template off of.
-    #[serde(rename = "template", skip_serializing_if = "Option::is_none")]
-    pub template: Option<String>,
-    /// Description of this pod.
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// Command to run in pod. ex. `[\"sleep\", \"5000\"]` or `[\"/bin/bash\", \"-c\", \"(exec myscript.sh)\"]`
-    #[serde(rename = "command", skip_serializing_if = "Option::is_none")]
-    pub command: Option<Vec<String>>,
-    /// Arguments for the Pod's command.
-    #[serde(rename = "arguments", skip_serializing_if = "Option::is_none")]
-    pub arguments: Option<Vec<String>>,
-    /// Environment variables to inject into k8 pod; Only for custom pods.
+    #[serde(rename = "image", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub image: Option<Option<String>>,
+    #[serde(rename = "template", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub template: Option<Option<String>>,
+    #[serde(rename = "description", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub description: Option<Option<String>>,
+    #[serde(rename = "command", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub command: Option<Option<Vec<String>>>,
+    #[serde(rename = "arguments", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub arguments: Option<Option<Vec<String>>>,
+    /// Environment variables to inject into pod. Use `${pods:secrets:KEY}` to reference secret_map entries.
     #[serde(rename = "environment_variables", skip_serializing_if = "Option::is_none")]
-    pub environment_variables: Option<serde_json::Value>,
-    /// Key: Volume name. Value: List of strs specifying volume folders/files to mount in pod
+    pub environment_variables: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Map of keys to secret references or placeholders. Use ${secret:name} for user secrets, ${pods:default:val:?desc} for placeholders with defaults, ${:?desc} for required placeholders. Secrets resolved at pod start.
+    #[serde(rename = "secret_map", skip_serializing_if = "Option::is_none")]
+    pub secret_map: Option<std::collections::HashMap<String, String>>,
+    /// Volume mounts keyed by mount_path. For templates, tapisvolume/tapissnapshot MUST use placeholder source_id (e.g., \"${:?Description}\"). Ex: {\"/data\": {\"type\": \"tapisvolume\", \"source_id\": \"${:?User data volume}\"}, \"/etc/config.ini\": {\"type\": \"ephemeral\", \"config_content\": \"key=value\"}}
     #[serde(rename = "volume_mounts", skip_serializing_if = "Option::is_none")]
-    pub volume_mounts: Option<std::collections::HashMap<String, models::ModelsTemplatesTagsVolumeMount>>,
-    /// Default time (sec) for pod to run from instance start. -1 for unlimited. 12 hour default.
-    #[serde(rename = "time_to_stop_default", skip_serializing_if = "Option::is_none")]
-    pub time_to_stop_default: Option<i32>,
-    /// Time (sec) for pod to run from instance start. Reset each time instance is started. -1 for unlimited. None uses default.
-    #[serde(rename = "time_to_stop_instance", skip_serializing_if = "Option::is_none")]
-    pub time_to_stop_instance: Option<i32>,
+    pub volume_mounts: Option<std::collections::HashMap<String, models::VolumeMountsValue>>,
+    #[serde(rename = "time_to_stop_default", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub time_to_stop_default: Option<Option<i32>>,
+    #[serde(rename = "time_to_stop_instance", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub time_to_stop_instance: Option<Option<i32>>,
     /// Networking information. `{\"url_suffix\": {\"protocol\": \"http\"  \"tcp\", \"port\": int}}`
     #[serde(rename = "networking", skip_serializing_if = "Option::is_none")]
     pub networking: Option<std::collections::HashMap<String, models::ModelsTemplatesTagsNetworking>>,
@@ -60,6 +56,7 @@ impl TemplateTagPodDefinition {
             command: None,
             arguments: None,
             environment_variables: None,
+            secret_map: None,
             volume_mounts: None,
             time_to_stop_default: None,
             time_to_stop_instance: None,

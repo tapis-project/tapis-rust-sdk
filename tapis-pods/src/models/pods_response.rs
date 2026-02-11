@@ -16,7 +16,7 @@ pub struct PodsResponse {
     #[serde(rename = "message")]
     pub message: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "result")]
     pub result: Vec<models::PodResponseModel>,
     #[serde(rename = "status")]
@@ -26,7 +26,7 @@ pub struct PodsResponse {
 }
 
 impl PodsResponse {
-    pub fn new(message: String, metadata: serde_json::Value, result: Vec<models::PodResponseModel>, status: String, version: String) -> PodsResponse {
+    pub fn new(message: String, metadata: std::collections::HashMap<String, serde_json::Value>, result: Vec<models::PodResponseModel>, status: String, version: String) -> PodsResponse {
         PodsResponse {
             message,
             metadata,

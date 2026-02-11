@@ -25,15 +25,26 @@ pub struct TemplateTag {
     /// Tag for this template. Default is 'latest'.
     #[serde(rename = "tag", skip_serializing_if = "Option::is_none")]
     pub tag: Option<String>,
+    /// Description of template tag.
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// If set, metadata message to give users of this template tag.
+    #[serde(rename = "archive_message", skip_serializing_if = "Option::is_none")]
+    pub archive_message: Option<String>,
     /// tag@timestamp for this template tag.
     #[serde(rename = "tag_timestamp", skip_serializing_if = "Option::is_none")]
     pub tag_timestamp: Option<String>,
     /// User who added this template tag.
     #[serde(rename = "added_by", skip_serializing_if = "Option::is_none")]
     pub added_by: Option<String>,
-    /// Time (UTC) that this template tag was created.
-    #[serde(rename = "creation_ts", skip_serializing_if = "Option::is_none")]
-    pub creation_ts: Option<String>,
+    #[serde(rename = "creation_ts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub creation_ts: Option<Option<String>>,
+    /// Tapis tenant used during creation of this template tag.
+    #[serde(rename = "tenant_id", skip_serializing_if = "Option::is_none")]
+    pub tenant_id: Option<String>,
+    /// Tapis site used during creation of this template tag.
+    #[serde(rename = "site_id", skip_serializing_if = "Option::is_none")]
+    pub site_id: Option<String>,
 }
 
 impl TemplateTag {
@@ -43,9 +54,13 @@ impl TemplateTag {
             pod_definition: None,
             commit_message: None,
             tag: None,
+            description: None,
+            archive_message: None,
             tag_timestamp: None,
             added_by: None,
             creation_ts: None,
+            tenant_id: None,
+            site_id: None,
         }
     }
 }

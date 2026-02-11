@@ -31,6 +31,14 @@ pub enum DeleteSnapshotError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`download_snapshot_file`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum DownloadSnapshotFileError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`get_snapshot`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -81,7 +89,8 @@ pub async fn create_snapshot(configuration: &configuration::Configuration, new_s
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    req_builder = req_builder.json(&p_body_new_snapshot);
+    }
+    req_builder = req_builder.json(&p_body_new_snapshot);
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
@@ -118,7 +127,9 @@ pub async fn delete_snapshot(configuration: &configuration::Configuration, snaps
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -143,6 +154,44 @@ pub async fn delete_snapshot(configuration: &configuration::Configuration, snaps
     }
 }
 
+/// Download a specific file from a Tapis Snapshot.  Efficiently handles large files (100MB - 10GB) from NFS-backed storage by streaming in chunks.  Note: - This endpoint is for downloading individual files - For directories, use get_snapshot_contents with zip=true - Path cannot be empty or / to prevent downloading entire snapshot
+pub async fn download_snapshot_file(configuration: &configuration::Configuration, snapshot_id: &str, path: &str) -> Result<serde_json::Value, Error<DownloadSnapshotFileError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_path_snapshot_id = snapshot_id;
+    let p_path_path = path;
+
+    let uri_str = format!("{}/pods/snapshots/{snapshot_id}/download/{path}", configuration.base_path, snapshot_id=crate::apis::urlencode(p_path_snapshot_id), path=crate::apis::urlencode(p_path_path));
+    let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<DownloadSnapshotFileError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
+
 /// Get a snapshot.  Returns retrieved snapshot object.
 pub async fn get_snapshot(configuration: &configuration::Configuration, snapshot_id: &str) -> Result<models::SnapshotResponse, Error<GetSnapshotError>> {
     // add a prefix to parameters to efficiently prevent name collisions
@@ -153,7 +202,9 @@ pub async fn get_snapshot(configuration: &configuration::Configuration, snapshot
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -193,7 +244,9 @@ pub async fn get_snapshot_contents(configuration: &configuration::Configuration,
     }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -228,7 +281,9 @@ pub async fn list_snapshot_files(configuration: &configuration::Configuration, s
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -261,7 +316,9 @@ pub async fn list_snapshots(configuration: &configuration::Configuration, ) -> R
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -297,7 +354,8 @@ pub async fn update_snapshot(configuration: &configuration::Configuration, snaps
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    req_builder = req_builder.json(&p_body_update_snapshot);
+    }
+    req_builder = req_builder.json(&p_body_update_snapshot);
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;

@@ -1,148 +1,111 @@
-# SDK Generation Scripts
+# SDK Generation Script
 
-Automation scripts for generating TAPIS Rust SDKs from OpenAPI specifications.
+Automation script for regenerating TAPIS Rust SDK service crates.
 
-## Available Scripts
+## Script
 
-### [generate_rust_sdk.sh](./generate_rust_sdk.sh)
+- `generate_rust_sdk.sh`
+- `regenerate_all_sdks.py`
 
-Automated SDK generation with environment-based branch switching and spec URL lookup.
+## Usage
 
-**Usage:**
-```bash
-./generate_rust_sdk.sh <env> <service>
-```
-
-**Arguments:**
-- `env` - Environment: `prod`, `staging`, or `dev`
-- `service` - TAPIS service name (e.g., pods, files, systems, actors)
-
-**Examples:**
-```bash
-# Generate pods SDK for production (uses main branch)
-./generate_rust_sdk.sh prod pods
-
-# Generate files SDK for staging (uses staging branch)
-./generate_rust_sdk.sh staging files
-
-# Generate systems SDK for dev (uses dev branch)
-./generate_rust_sdk.sh dev systems
-```
-
-**What the script does:**
-1. 🔀 Switches to the appropriate git branch (prod→main, staging→staging, dev→dev)
-2. 🔍 Looks up OpenAPI spec URL from `references/OpenAPI_specs.json`
-3. ⬇️  Downloads the spec file from GitHub
-4. 🔧 Generates SDK in `<repo_root>/tapis-<service>/`
-5. 📦 Uses package name `tapis_<service_name>`
-6. ✅ Validates all inputs and prerequisites
-
-**Features:**
-- ✅ Automatic git branch management aligned with environments
-- ✅ Validates uncommitted changes before branch switching
-- ✅ Downloads specs from OpenAPI_specs.json registry
-- ✅ Finds repository root automatically (where LICENSE file exists)
-- ✅ Generates SDK with proper reqwest configuration
-- ✅ Colored output for easy reading
-- ✅ Error handling and validation
-- ✅ Follows naming convention: `tapis-<service>` directories, `tapis_<service>` packages
-
-**Requirements:**
-- `openapi-generator` installed (via npm or brew)
-- `jq` installed (for JSON parsing)
-- `curl` installed (for downloading specs)
-- Clean git working directory (no uncommitted changes)
-
-**Available TAPIS Services:**
-actors, authenticator, meta, files, sk, streams, systems, tenants, tokens, pgrest, pods, jobs, apps, workflows, notifications, globus-proxy
-
-**Available Environments:**
-- `prod` - Production environment (→ main branch)
-- `staging` - Staging environment (→ staging branch)
-- `dev` - Development environment (→ dev branch)
-
-**Available Environments:**
-- `prod` - Production environment (→ main branch)
-- `staging` - Staging environment (→ staging branch)
-- `dev` - Development environment (→ dev branch)
-
-## Output Structure
-
-Generated SDKs are placed in the repository root:
-
-```
-tapis-rust-sdk/
-├── LICENSE              ← Repository root marker
-├── skills/
-│   └── sdk-gen/
-│       └── scripts/     ← You are here
-├── tapis-pods/          ← Example existing SDK
-├── tapis-files/         ← Your generated SDK
-├── tapis-systems/       ← Your generated SDK
-└── tapis-<service>/     ← Generated SDK location
-```
-
-Each directory is a complete Rust project ready for wrapper creation.
-
-## Installation Guide
-
-**Install openapi-generator:**
-```bash
-# Via npm (recommended)
-npm install -g @openapitools/openapi-generator-cli
-
-# Via Homebrew (macOS)
-brew install openapi-generator
-```
-
-**Install jq:**
-```bash
-# Via Homebrew (macOS)
-brew install jq
-
-# Via apt (Ubuntu/Debian)
-sudo apt-get install jq
-```
-
-## Usage from Skill
-
-When following the `sdk-gen` skill:
+From repository root:
 
 ```bash
-cd skills/sdk-gen/scripts
-
-# Generate SDK for desired environment
-./generate_rust_sdk.sh prod pods
-./generate_rust_sdk.sh staging files
-./generate_rust_sdk.sh dev systems
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh <env> <service>
 ```
 
-The script handles:
-- Git branch management
-- OpenAPI spec URL lookup
-- Spec file download
-- SDK generation with proper configuration
-- Cleanup of temporary files
+If your workflow should not modify branches:
 
-## Troubleshooting
-
-**Issue: Uncommitted changes**
-```
-Error: You have uncommitted changes. Please commit or stash them first.
-```
-Solution: Commit or stash your changes before running the script.
-
-**Issue: Branch doesn't exist**
-```
-Error: Failed to switch to branch staging
-```
-Solution: Create the branch first:
 ```bash
-git checkout -b staging
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh --no-branch-switch <env> <service>
 ```
 
-**Issue: Service not found**
+Examples:
+
+```bash
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod pods
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod authenticator
+bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh staging files
 ```
-Error: No spec URL found for service 'xyz' in environment 'prod'
+
+## Behavior
+
+The script:
+1. Maps env to branch (`prod->main`, `staging->staging`, `dev->dev`).
+2. Reads spec URL from `.github/skills/sdk-gen/references/OpenAPI_specs.json`.
+3. Downloads spec via `curl`.
+4. Runs openapi-generator into `tapis-<service>/`.
+
+## Requirements
+
+- `openapi-generator`
+- `jq`
+- `curl`
+- Clean git tree if branch switching is required
+
+## Outputs
+
+Generated service crate under repo root:
+
+- `tapis-<service>/Cargo.toml`
+- `tapis-<service>/src/apis/*`
+- `tapis-<service>/src/models/*`
+- `tapis-<service>/docs/*`
+
+## Follow-up
+
+After generation, run:
+
+```bash
+cargo build --workspace --all-targets
 ```
-Solution: Check available services by running the script without arguments or verify the service name in `references/OpenAPI_specs.json`.
+
+Then apply wrapper/parent fixes using `sdk-wrapper` and `sdk-parent` skills.
+
+## Full Automation
+
+For end-to-end regeneration (generation + known fixes + wrappers + examples + parent wiring + build + optional version bump), use:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod
+```
+
+Useful flags:
+
+```bash
+# Preview actions only
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --dry-run
+
+# Regenerate specific services only
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --services pods,authenticator
+
+# Skip final bump (if you want manual control)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump
+
+# Let the generation script perform branch checkout (default is disabled)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --allow-branch-switch
+
+# Skip DNS precheck (only if your environment has custom DNS/network behavior)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-network-precheck
+
+# Publish all sub-crates + parent crate to crates.io as final step
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --publish
+
+# Run clippy checks at the end
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy
+
+# Skip rustfmt (enabled by default)
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-format
+```
+
+Notes:
+- `regenerate_all_sdks.py` calls `generate_rust_sdk.sh --no-branch-switch` by default to avoid branch checkout failures in restricted or feature-branch workflows.
+- `regenerate_all_sdks.py` runs a DNS precheck for spec hosts before generation and fails fast when hosts are not resolvable.
+- `regenerate_all_sdks.py` runs `cargo fmt --all` by default to enforce consistent Rust formatting.
+- clippy is optional via `--run-clippy` (lint checking only; it does not replace rustfmt).
+- `--services` scopes generation/fix/wrapper/example work, but parent workspace/dependency wiring remains complete for all known service crates.
+- Version bump is skipped automatically if generation fails for every requested service.
+- Final version bump runs last unless `--skip-bump` is set.
+- Publishing requires `CARGO_REGISTRY_TOKEN` to be set:
+  `export CARGO_REGISTRY_TOKEN=<your_crates_io_token>`

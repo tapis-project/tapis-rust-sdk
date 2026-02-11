@@ -14,18 +14,14 @@ use serde::{Deserialize, Serialize};
 /// UpdateSnapshot : Object with fields that users are allowed to specify when updating the Snapshot class.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateSnapshot {
-    /// Description of this snapshot.
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// Size in MB to limit snapshot to. We'll start warning if you've gone past the limit.
-    #[serde(rename = "size_limit", skip_serializing_if = "Option::is_none")]
-    pub size_limit: Option<i32>,
-    /// cron bits
-    #[serde(rename = "cron", skip_serializing_if = "Option::is_none")]
-    pub cron: Option<String>,
-    /// retention_policy bits
-    #[serde(rename = "retention_policy", skip_serializing_if = "Option::is_none")]
-    pub retention_policy: Option<String>,
+    #[serde(rename = "description", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub description: Option<Option<String>>,
+    #[serde(rename = "size_limit", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub size_limit: Option<Option<i32>>,
+    #[serde(rename = "cron", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub cron: Option<Option<String>>,
+    #[serde(rename = "retention_policy", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub retention_policy: Option<Option<String>>,
 }
 
 impl UpdateSnapshot {

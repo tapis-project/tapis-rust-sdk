@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**add_template**](TemplatesApi.md#add_template) | **POST** /pods/templates | add_template
 [**add_template_tag**](TemplatesApi.md#add_template_tag) | **POST** /pods/templates/{template_id}/tags | add_template_tag
 [**delete_template**](TemplatesApi.md#delete_template) | **DELETE** /pods/templates/{template_id} | delete_template
+[**delete_template_tag**](TemplatesApi.md#delete_template_tag) | **DELETE** /pods/templates/{template_id}/tags/{tag_id} | delete_template_tag
 [**get_template**](TemplatesApi.md#get_template) | **GET** /pods/templates/{template_id} | get_template
 [**get_template_tag**](TemplatesApi.md#get_template_tag) | **GET** /pods/templates/{template_id}/tags/{tag_id} | get_template_tag
 [**list_template_tags**](TemplatesApi.md#list_template_tags) | **GET** /pods/templates/{template_id}/tags | list_template_tags
@@ -50,6 +51,8 @@ No authorization required
 
 > models::TemplateTagResponse add_template_tag(template_id, new_template_tag)
 add_template_tag
+
+Add a new tag to a template.  Template tags can include a ``pod_definition`` with ``secret_map`` to define placeholders  that users must or can optionally override when creating pods from this template.  Secret Placeholders (25Q4 Feature): - ``${pods:default:value:?description}`` - Placeholder with a default value - ``${:?description}`` - Required placeholder (pod creation fails if not overridden) - ``${secret:name}`` - Direct secret reference (for templates with pre-configured secrets)  When users create pods from this template, they can override placeholders with actual secret references in their pod's ``secret_map``.  Returns new template tag object.
 
 ### Parameters
 
@@ -105,12 +108,12 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## get_template
+## delete_template_tag
 
-> models::TemplateResponse get_template(template_id)
-get_template
+> models::TemplateTagResponse delete_template_tag(template_id, tag_id, force)
+delete_template_tag
 
-Get a templates.  Returns retrieved templates object.
+Delete a specific template tag. (Admin only)  If the tag has dependent pods or other template tags that inherit from it, deletion will fail unless the `force=true` query parameter is provided.  Returns the deleted tag information.
 
 ### Parameters
 
@@ -118,6 +121,39 @@ Get a templates.  Returns retrieved templates object.
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **template_id** | **String** |  | [required] |
+**tag_id** | **String** |  | [required] |
+**force** | Option<**bool**> | Force deletion even if pods or other template tags depend on this tag. Use with caution. |  |[default to false]
+
+### Return type
+
+[**models::TemplateTagResponse**](TemplateTagResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_template
+
+> models::TemplateResponse get_template(template_id, include_dependencies)
+get_template
+
+Get a template.  Returns retrieved templates object.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**template_id** | **String** |  | [required] |
+**include_dependencies** | Option<**bool**> | Include dependency information (admin only). Shows which pods and tags depend on each template tag. |  |[default to false]
 
 ### Return type
 
@@ -137,7 +173,7 @@ No authorization required
 
 ## get_template_tag
 
-> models::TemplateTagsResponse get_template_tag(template_id, tag_id)
+> models::TemplateTagsResponse get_template_tag(template_id, tag_id, include_configs, include_dependencies)
 get_template_tag
 
 Get a specific tag entry the template has  Returns the tag entry
@@ -149,6 +185,8 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **template_id** | **String** |  | [required] |
 **tag_id** | **String** |  | [required] |
+**include_configs** | Option<**bool**> | Include full config_content for volume mounts using field. Default: false (shows placeholder with size) |  |[default to false]
+**include_dependencies** | Option<**bool**> | Include dependency information (admin only). Shows which pods and tags depend on this template tag. |  |[default to false]
 
 ### Return type
 
@@ -168,7 +206,7 @@ No authorization required
 
 ## list_template_tags
 
-> models::TemplateTagsResponse list_template_tags(template_id, full)
+> models::TemplateTagsResponse list_template_tags(template_id, full, include_configs, include_dependencies)
 list_template_tags
 
 List tag entries the template has  Returns the ledger of template tags
@@ -180,6 +218,8 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **template_id** | **String** |  | [required] |
 **full** | Option<**bool**> | Return pod_definition in tag when full=true |  |[default to true]
+**include_configs** | Option<**bool**> | Include full config_content for volume mounts using field. Default: false (shows placeholder with size) |  |[default to false]
+**include_dependencies** | Option<**bool**> | Include dependency information (admin only). Shows which pods and tags depend on each template tag. |  |[default to false]
 
 ### Return type
 
@@ -199,14 +239,17 @@ No authorization required
 
 ## list_templates
 
-> models::TemplatesResponse list_templates()
+> models::TemplatesResponse list_templates(include_dependencies)
 list_templates
 
 Get all templates allowed globally + in respective tenant + for specific user. Returns a list of templates.
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**include_dependencies** | Option<**bool**> | Include dependency information (admin only). Shows which pods and tags depend on each template tag. |  |[default to false]
 
 ### Return type
 
@@ -226,7 +269,7 @@ No authorization required
 
 ## list_templates_and_tags
 
-> serde_json::Value list_templates_and_tags(full)
+> std::collections::HashMap<String, serde_json::Value> list_templates_and_tags(full, include_dependencies)
 list_templates_and_tags
 
 Get all templates and their tags for the user. Returns a dictionary with templates and their tags.
@@ -237,10 +280,11 @@ Get all templates and their tags for the user. Returns a dictionary with templat
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **full** | Option<**bool**> | Returns tag pod_definition with tag when full=true |  |[default to true]
+**include_dependencies** | Option<**bool**> | Include dependency information (admin only). Shows which pods and tags depend on each template tag. |  |[default to false]
 
 ### Return type
 
-[**serde_json::Value**](serde_json::Value.md)
+[**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md)
 
 ### Authorization
 

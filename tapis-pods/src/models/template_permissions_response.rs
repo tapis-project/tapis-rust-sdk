@@ -16,7 +16,7 @@ pub struct TemplatePermissionsResponse {
     #[serde(rename = "message")]
     pub message: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "result")]
     pub result: Box<models::PermissionsModel>,
     #[serde(rename = "status")]
@@ -26,7 +26,7 @@ pub struct TemplatePermissionsResponse {
 }
 
 impl TemplatePermissionsResponse {
-    pub fn new(message: String, metadata: serde_json::Value, result: models::PermissionsModel, status: String, version: String) -> TemplatePermissionsResponse {
+    pub fn new(message: String, metadata: std::collections::HashMap<String, serde_json::Value>, result: models::PermissionsModel, status: String, version: String) -> TemplatePermissionsResponse {
         TemplatePermissionsResponse {
             message,
             metadata,

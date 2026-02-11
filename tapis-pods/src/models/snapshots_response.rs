@@ -16,7 +16,7 @@ pub struct SnapshotsResponse {
     #[serde(rename = "message")]
     pub message: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "result")]
     pub result: Vec<models::SnapshotResponseModel>,
     #[serde(rename = "status")]
@@ -26,7 +26,7 @@ pub struct SnapshotsResponse {
 }
 
 impl SnapshotsResponse {
-    pub fn new(message: String, metadata: serde_json::Value, result: Vec<models::SnapshotResponseModel>, status: String, version: String) -> SnapshotsResponse {
+    pub fn new(message: String, metadata: std::collections::HashMap<String, serde_json::Value>, result: Vec<models::SnapshotResponseModel>, status: String, version: String) -> SnapshotsResponse {
         SnapshotsResponse {
             message,
             metadata,

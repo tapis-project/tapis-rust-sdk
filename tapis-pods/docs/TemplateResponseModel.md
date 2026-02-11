@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **description** | Option<**String**> | Description of template. | [optional][default to ]
 **metatags** | Option<**Vec<String>**> | Metadata tags for additional search/listing functionality for the template. | [optional][default to []]
 **archive_message** | Option<**String**> | If set, metadata message to give users of this template. | [optional][default to ]
-**creation_ts** | Option<**String**> | Time (UTC) that this template was created. | [optional]
-**update_ts** | Option<**String**> | Time (UTC) that this template was updated. | [optional]
+**creation_ts** | Option<**String**> |  | [optional]
+**update_ts** | Option<**String**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -105,7 +105,7 @@ No authorization required
 
 ## get_image
 
-> models::ImageResponse get_image(image_id)
+> models::ResponseGetImage get_image(image_id)
 get_image
 
 Get an image.  Returns retrieved image object.
@@ -119,7 +119,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::ImageResponse**](ImageResponse.md)
+[**models::ResponseGetImage**](Response_Get_Image.md)
 
 ### Authorization
 

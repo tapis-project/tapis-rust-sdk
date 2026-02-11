@@ -26,27 +26,27 @@ pub struct PodResponseModel {
     /// Description of this pod.
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// Command to run in pod. ex. `[\"sleep\", \"5000\"]` or `[\"/bin/bash\", \"-c\", \"(exec myscript.sh)\"]`
-    #[serde(rename = "command", skip_serializing_if = "Option::is_none")]
-    pub command: Option<Vec<String>>,
-    /// Arguments for the Pod's command.
-    #[serde(rename = "arguments", skip_serializing_if = "Option::is_none")]
-    pub arguments: Option<Vec<String>>,
-    /// Environment variables to inject into k8 pod; Only for custom pods.
+    #[serde(rename = "command", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub command: Option<Option<Vec<String>>>,
+    #[serde(rename = "arguments", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub arguments: Option<Option<Vec<String>>>,
+    /// Environment variables to inject into k8 pod. Use `${pods:secrets:KEY}` to reference secret_map entries.
     #[serde(rename = "environment_variables", skip_serializing_if = "Option::is_none")]
-    pub environment_variables: Option<serde_json::Value>,
+    pub environment_variables: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Map of keys to secret values. Syntax: ${secret:name} (user secret), ${secret:user:name} (explicit owner). Reference in environment_variables via ${pods:secrets:KEY}. Resolved at pod start.
+    #[serde(rename = "secret_map", skip_serializing_if = "Option::is_none")]
+    pub secret_map: Option<std::collections::HashMap<String, String>>,
     /// Status requested by user, `ON`, `OFF`, or `RESTART`.
     #[serde(rename = "status_requested", skip_serializing_if = "Option::is_none")]
     pub status_requested: Option<String>,
-    /// Key: Volume name. Value: List of strs specifying volume folders/files to mount in pod
+    /// Volume mounts keyed by mount_path. Values are VolumeMount objects (see schema) or null (to remove inherited mount). Ex: {\"/data\": {\"type\": \"tapisvolume\", \"source_id\": \"myvolume\"}, \"/etc/config.ini\": {\"type\": \"ephemeral\", \"config_content\": \"key=value\"}}
     #[serde(rename = "volume_mounts", skip_serializing_if = "Option::is_none")]
-    pub volume_mounts: Option<std::collections::HashMap<String, models::ModelsPodsVolumeMount>>,
+    pub volume_mounts: Option<std::collections::HashMap<String, models::VolumeMountsValue>>,
     /// Default time (sec) for pod to run from instance start. -1 for unlimited. 12 hour default.
     #[serde(rename = "time_to_stop_default", skip_serializing_if = "Option::is_none")]
     pub time_to_stop_default: Option<i32>,
-    /// Time (sec) for pod to run from instance start. Reset each time instance is started. -1 for unlimited. None uses default.
-    #[serde(rename = "time_to_stop_instance", skip_serializing_if = "Option::is_none")]
-    pub time_to_stop_instance: Option<i32>,
+    #[serde(rename = "time_to_stop_instance", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub time_to_stop_instance: Option<Option<i32>>,
     /// Networking information. `{\"url_suffix\": {\"protocol\": \"http\"  \"tcp\", \"port\": int}}`
     #[serde(rename = "networking", skip_serializing_if = "Option::is_none")]
     pub networking: Option<std::collections::HashMap<String, models::ModelsPodsNetworking>>,
@@ -56,24 +56,22 @@ pub struct PodResponseModel {
     /// Queue to run pod in. `default` is the default queue.
     #[serde(rename = "compute_queue", skip_serializing_if = "Option::is_none")]
     pub compute_queue: Option<String>,
-    /// Time (UTC) that this pod is scheduled to be stopped. Change with time_to_stop_instance.
-    #[serde(rename = "time_to_stop_ts", skip_serializing_if = "Option::is_none")]
-    pub time_to_stop_ts: Option<String>,
+    #[serde(rename = "template_overrides", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub template_overrides: Option<Option<std::collections::HashMap<String, serde_json::Value>>>,
+    #[serde(rename = "time_to_stop_ts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub time_to_stop_ts: Option<Option<String>>,
     /// Current status of pod.
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// Status of container if exists. Gives phase.
     #[serde(rename = "status_container", skip_serializing_if = "Option::is_none")]
-    pub status_container: Option<serde_json::Value>,
-    /// Time (UTC) that this pod was created.
-    #[serde(rename = "creation_ts", skip_serializing_if = "Option::is_none")]
-    pub creation_ts: Option<String>,
-    /// Time (UTC) that this pod was updated.
-    #[serde(rename = "update_ts", skip_serializing_if = "Option::is_none")]
-    pub update_ts: Option<String>,
-    /// Time (UTC) that this pod instance was started.
-    #[serde(rename = "start_instance_ts", skip_serializing_if = "Option::is_none")]
-    pub start_instance_ts: Option<String>,
+    pub status_container: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "creation_ts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub creation_ts: Option<Option<String>>,
+    #[serde(rename = "update_ts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub update_ts: Option<Option<String>>,
+    #[serde(rename = "start_instance_ts", default, with = "::serde_with::rust::double_option", skip_serializing_if = "Option::is_none")]
+    pub start_instance_ts: Option<Option<String>>,
 }
 
 impl PodResponseModel {
@@ -87,6 +85,7 @@ impl PodResponseModel {
             command: None,
             arguments: None,
             environment_variables: None,
+            secret_map: None,
             status_requested: None,
             volume_mounts: None,
             time_to_stop_default: None,
@@ -94,6 +93,7 @@ impl PodResponseModel {
             networking: None,
             resources: None,
             compute_queue: None,
+            template_overrides: None,
             time_to_stop_ts: None,
             status: None,
             status_container: None,

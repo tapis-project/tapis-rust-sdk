@@ -65,7 +65,8 @@ pub async fn add_image(configuration: &configuration::Configuration, new_image: 
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    req_builder = req_builder.json(&p_body_new_image);
+    }
+    req_builder = req_builder.json(&p_body_new_image);
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
@@ -106,7 +107,8 @@ pub async fn add_images(configuration: &configuration::Configuration, new_image:
     }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    req_builder = req_builder.json(&p_body_new_image);
+    }
+    req_builder = req_builder.json(&p_body_new_image);
 
     let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
@@ -143,7 +145,9 @@ pub async fn delete_image(configuration: &configuration::Configuration, image_id
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -169,7 +173,7 @@ pub async fn delete_image(configuration: &configuration::Configuration, image_id
 }
 
 /// Get an image.  Returns retrieved image object.
-pub async fn get_image(configuration: &configuration::Configuration, image_id: &str) -> Result<models::ImageResponse, Error<GetImageError>> {
+pub async fn get_image(configuration: &configuration::Configuration, image_id: &str) -> Result<models::ResponseGetImage, Error<GetImageError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_path_image_id = image_id;
 
@@ -178,7 +182,9 @@ pub async fn get_image(configuration: &configuration::Configuration, image_id: &
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();
@@ -193,8 +199,8 @@ pub async fn get_image(configuration: &configuration::Configuration, image_id: &
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ImageResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ImageResponse`")))),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ResponseGetImage`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::ResponseGetImage`")))),
         }
     } else {
         let content = resp.text().await?;
@@ -211,7 +217,9 @@ pub async fn get_images(configuration: &configuration::Configuration, ) -> Resul
 
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
-    }    let req = req_builder.build()?;
+    }
+
+    let req = req_builder.build()?;
     let resp = configuration.client.execute(req).await?;
 
     let status = resp.status();

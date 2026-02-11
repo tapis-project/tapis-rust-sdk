@@ -1,0 +1,71 @@
+name: Daily SDK Regeneration
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: daily-sdk-regeneration
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Install generation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq curl
+          npm install -g @openapitools/openapi-generator-cli
+          mkdir -p "$HOME/.local/bin"
+          cat > "$HOME/.local/bin/openapi-generator" <<'EOF'
+          #!/usr/bin/env bash
+          exec openapi-generator-cli "$@"
+          EOF
+          chmod +x "$HOME/.local/bin/openapi-generator"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Regenerate SDKs and validate
+        run: |
+          python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py \
+            --env prod \
+            --skip-bump \
+            --run-clippy
+
+      - name: Create pull request for regeneration updates
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: daily sdk regeneration"
+          title: "chore: daily sdk regeneration"
+          body: |
+            Automated daily TAPIS Rust SDK regeneration run.
+
+            Generated with:
+            `python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump --run-clippy`
+          branch: "automation/daily-sdk-regeneration"
+          delete-branch: true
+          labels: |
+            automation
+            sdk

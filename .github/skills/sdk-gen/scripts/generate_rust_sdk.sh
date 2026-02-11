@@ -6,11 +6,12 @@
 # It supports both direct spec file input and environment-based generation from OpenAPI_specs.json.
 #
 # Usage:
-#   ./generate_rust_sdk.sh <env> <service>
+#   ./generate_rust_sdk.sh [--no-branch-switch] <env> <service>
 #
 # Arguments:
-#   env      - Environment: prod, staging, or dev
-#   service  - TAPIS service name (e.g., pods, files, systems, actors, etc.)
+#   --no-branch-switch - Optional. Skip git checkout and generate from current branch.
+#   env                - Environment: prod, staging, or dev
+#   service            - TAPIS service name (e.g., pods, files, systems, actors, etc.)
 #
 # Examples:
 #   ./generate_rust_sdk.sh prod pods
@@ -115,9 +116,17 @@ get_branch_for_env() {
     esac
 }
 
+# Optional branch-switch control.
+# Can be set via flag or environment variable TAPIS_SDK_NO_BRANCH_SWITCH=1
+NO_BRANCH_SWITCH="${TAPIS_SDK_NO_BRANCH_SWITCH:-0}"
+if [ "${1:-}" == "--no-branch-switch" ]; then
+    NO_BRANCH_SWITCH=1
+    shift
+fi
+
 # Validate input parameters
 if [ $# -ne 2 ]; then
-    print_msg $RED "Usage: $0 <env> <service>"
+    print_msg $RED "Usage: $0 [--no-branch-switch] <env> <service>"
     echo ""
     echo "Arguments:"
     echo "  env     - Environment: prod, staging, or dev"
@@ -163,34 +172,37 @@ fi
 
 # Determine target branch
 TARGET_BRANCH=$(get_branch_for_env "$ENV")
-print_msg $YELLOW "🔀 Switching to branch: $TARGET_BRANCH"
-
-# Switch to target branch
 cd "$REPO_ROOT"
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
 
-if [ "$CURRENT_BRANCH" != "$TARGET_BRANCH" ]; then
-    print_msg $YELLOW "   Current branch: $CURRENT_BRANCH → $TARGET_BRANCH"
-    
-    # Check for uncommitted changes
-    if ! git diff-index --quiet HEAD -- 2>/dev/null; then
-        print_msg $RED "❌ Error: You have uncommitted changes. Please commit or stash them first."
-        echo ""
-        git status --short
-        exit 1
-    fi
-    
-    # Switch branch
-    if ! git checkout "$TARGET_BRANCH" 2>/dev/null; then
-        print_msg $RED "❌ Error: Failed to switch to branch $TARGET_BRANCH"
-        print_msg $YELLOW "   Available branches:"
-        git branch -a
-        exit 1
-    fi
-    
-    print_msg $GREEN "✓ Switched to branch: $TARGET_BRANCH"
+if [ "$NO_BRANCH_SWITCH" = "1" ]; then
+    print_msg $YELLOW "⏭️  Skipping branch switch (current: $CURRENT_BRANCH, target for env: $TARGET_BRANCH)"
 else
-    print_msg $GREEN "✓ Already on branch: $TARGET_BRANCH"
+    print_msg $YELLOW "🔀 Switching to branch: $TARGET_BRANCH"
+
+    if [ "$CURRENT_BRANCH" != "$TARGET_BRANCH" ]; then
+        print_msg $YELLOW "   Current branch: $CURRENT_BRANCH → $TARGET_BRANCH"
+
+        # Check for uncommitted changes
+        if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+            print_msg $RED "❌ Error: You have uncommitted changes. Please commit or stash them first."
+            echo ""
+            git status --short
+            exit 1
+        fi
+
+        # Switch branch
+        if ! git checkout "$TARGET_BRANCH"; then
+            print_msg $RED "❌ Error: Failed to switch to branch $TARGET_BRANCH"
+            print_msg $YELLOW "   Available branches:"
+            git branch -a
+            exit 1
+        fi
+
+        print_msg $GREEN "✓ Switched to branch: $TARGET_BRANCH"
+    else
+        print_msg $GREEN "✓ Already on branch: $TARGET_BRANCH"
+    fi
 fi
 
 echo ""
