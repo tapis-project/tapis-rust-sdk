@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **service_ldap_connection_id** | Option<**String**> | The unique identifier for the LDAP object for service accounts in the tenant. | [optional]
 **user_ldap_connection_id** | Option<**String**> | The unique identifier for the LDAP object for user accounts in the tenant. | [optional]
 **public_key** | Option<**String**> | The public key that should be used to validate the signatures of JWTs associated with the tenant. | [optional]
-**status** | Option<**String**> | The status of the tenant; Tenants can be created in \"draft\" status without a public key; Tenants in both \"inactive\" and \"draft\" status are by default not returned in the tenants listing. | [optional]
+**status** | Option<**Status**> | The status of the tenant; Tenants can be created in \"draft\" status without a public key; Tenants in both \"inactive\" and \"draft\" status are by default not returned in the tenants listing. (enum: draft, active, inactive) | [optional]
 **description** | Option<**String**> | A description of the tenant. | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

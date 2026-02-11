@@ -225,7 +225,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **role_name** | **String** |  | [required] |
 **tenant** | Option<**String**> |  |  |
-**role_type** | Option<[**RoleTypeEnum**](.md)> |  |  |
+**role_type** | Option<[**RoleTypeEnum**](RoleTypeEnum.md)> |  |  |
 
 ### Return type
 

@@ -117,7 +117,7 @@ Retrieve a list of all PostIts.  Use *listType* and *select* query  parameters t
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_type** | Option<[**ListTypeEnum**](.md)> |  |  |
+**list_type** | Option<[**ListTypeEnum**](ListTypeEnum.md)> |  |  |
 **limit** | Option<**i32**> | Limit number of items returned. For example limit=10. Use -1 for unlimited. Default is 100. |  |[default to 100]
 **order_by** | Option<**String**> | Attribute for sorting. Direction may be included. For example orderBy=id(desc). Default direction is (asc). |  |
 **skip** | Option<**i32**> | Number of items to skip. Use one of skip or startAfter. For example skip=10. Default is 0. |  |

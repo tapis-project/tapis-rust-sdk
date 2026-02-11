@@ -10,10 +10,10 @@ Name | Type | Description | Notes
 **description** | Option<**String**> |  | [optional]
 **execution_profile** | Option<[**models::TaskExecutionProfile**](TaskExecutionProfile.md)> |  | [optional]
 **input** | Option<[**std::collections::HashMap<String, models::SpecWithValue>**](SpecWithValue.md)> |  | [optional]
-**output** | Option<[**std::collections::HashMap<String, models::OutputValue>**](Output_value.md)> |  | [optional]
-**conditions** | Option<[**Vec<std::collections::HashMap<String, serde_json::Value>>**](std::collections::HashMap.md)> |  | [optional]
+**output** | Option<[**std::collections::HashMap<String, models::OutputValue>**](OutputValue.md)> |  | [optional]
+**conditions** | Option<**Vec<std::collections::HashMap<String, serde_json::Value>>**> |  | [optional]
 **poll** | Option<**bool**> |  | [optional][default to true]
-**tapis_job_def** | [**serde_json::Value**](.md) |  | 
+**tapis_job_def** | **serde_json::Value** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

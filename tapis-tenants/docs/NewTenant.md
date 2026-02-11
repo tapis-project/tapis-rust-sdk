@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **token_gen_services** | **Vec<String>** | The list of services that are automatically granted the token_generator role for this tenant by the Security Kernel. | 
 **service_ldap_connection_id** | Option<**String**> | The unique identifier for the LDAP object for service accounts in the tenant. | [optional]
 **user_ldap_connection_id** | Option<**String**> | The unique identifier for the LDAP object for user accounts in the tenant. | [optional]
-**status** | Option<**String**> | The status of the tenant; Tenants can be created in \"draft\" status without a public key; Tenants in both \"inactive\" and \"draft\" status are by default not returned in the tenants listing. | [optional]
+**status** | Option<**Status**> | The status of the tenant; Tenants can be created in \"draft\" status without a public key; Tenants in both \"inactive\" and \"draft\" status are by default not returned in the tenants listing. (enum: draft, active, inactive) | [optional]
 **public_key** | Option<**String**> | The public key associated with the private key used for signing tokens in this tenant. Note that the public key is optional in that tenants can be created without the public key but only in \"draft\" status. | [optional]
 **description** | Option<**String**> | A description of the tenant. | [optional]
 

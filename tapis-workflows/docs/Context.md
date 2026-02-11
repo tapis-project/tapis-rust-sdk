@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **branch** | Option<**String**> |  | [optional]
-**credentials** | Option<[**serde_json::Value**](.md)> |  | [optional][default to null]
+**credentials** | Option<**serde_json::Value**> |  | [optional][default to null]
 **build_file_path** | Option<**String**> |  | [optional]
 **sub_path** | Option<**String**> |  | [optional]
 **r#type** | [**models::EnumContextType**](EnumContextType.md) |  | 
