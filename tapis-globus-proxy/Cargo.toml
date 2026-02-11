@@ -3,7 +3,7 @@ name = "tapis_globus_proxy"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Globus Proxy API proxies calls to Globus coming from a Tapis service."
-license = "3-Clause BSD License"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

@@ -3,7 +3,7 @@ name = "tapis_sk"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Security API provides for management of Security Kernel (SK) role-based authorization and secrets resources. "
-license = "3-Clause BSD License"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

@@ -3,7 +3,7 @@ name = "tapis_systems"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Systems API provides for management of Tapis Systems including permissions, credentials and Scheduler Profiles."
-license = "3-Clause BSD License"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

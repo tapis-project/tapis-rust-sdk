@@ -3,7 +3,7 @@ name = "tapis_tokens"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Manage Tapis Tokens."
-license = "BSD 3"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

@@ -3,7 +3,7 @@ name = "tapis_pgrest"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis PgREST API provides a RESTful interface to a managed SQL-db-as-a-service."
-license = "3-Clause BSD License"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

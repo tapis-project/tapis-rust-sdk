@@ -3,7 +3,7 @@ name = "tapis_actors"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Abaco (Actor Based Containers) is an API and distributed computing platform funded by the National Science Foundation to provide Functions-as-a-service to the research computing community. Abaco leverages Docker containers and the Actor Model of Concurrent Computation to provide generic function primitives that are portable, composable and scalable."
-license = "BSD 3"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

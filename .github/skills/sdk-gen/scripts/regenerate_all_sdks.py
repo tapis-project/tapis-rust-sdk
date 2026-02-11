@@ -125,6 +125,9 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
     text = manifest.read_text()
     original = text
 
+    # crates.io requires SPDX license expressions.
+    text = re.sub(r'^license\s*=\s*".*"\s*$', 'license = "BSD-3-Clause"', text, flags=re.M)
+
     def with_stream(match: re.Match[str]) -> str:
         block = match.group(0)
         if '"stream"' in block:

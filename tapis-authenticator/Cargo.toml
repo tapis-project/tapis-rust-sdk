@@ -3,7 +3,7 @@ name = "tapis_authenticator"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "REST API and web server providing authentication for a Tapis v3 instance."
-license = "BSD 3"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

@@ -3,7 +3,7 @@ name = "tapis_notifications"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Notifications API provides for management of subscriptions and event publication"
-license = "3-Clause BSD License"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

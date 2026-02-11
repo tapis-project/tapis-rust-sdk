@@ -3,7 +3,7 @@ name = "tapis_meta"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Meta API provides access to a MongoDB database. A standalone service which connects to a MongoDB database and immediately exposes all of MongoDB’s capabilities through a complete REST API, which allows the user to read and write JSON messages and binary data via HTTP."
-license = "3-Clause BSD License"
+license = "BSD-3-Clause"
 edition = "2021"
 
 [dependencies]

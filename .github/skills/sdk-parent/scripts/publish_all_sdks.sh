@@ -10,11 +10,15 @@ PUBLISH_RETRY_DELAY="${PUBLISH_RETRY_DELAY:-20}"
 
 LIST_ONLY=0
 EXTRA_ARGS=()
+DRY_RUN_REQUESTED=0
 for arg in "$@"; do
     if [[ "$arg" == "--list" ]]; then
         LIST_ONLY=1
     else
         EXTRA_ARGS+=("$arg")
+        if [[ "$arg" == "--dry-run" ]]; then
+            DRY_RUN_REQUESTED=1
+        fi
     fi
 done
 
@@ -67,7 +71,11 @@ publish_dir() {
     
     for attempt in $(seq 1 "$PUBLISH_RETRIES"); do
         echo "Publishing $package_name v$package_version (attempt $attempt/$PUBLISH_RETRIES)"
-        if (cd "$crate_dir" && cargo publish --locked "${EXTRA_ARGS[@]}"); then
+        if [[ "${#EXTRA_ARGS[@]}" -gt 0 ]]; then
+            if (cd "$crate_dir" && cargo publish --locked "${EXTRA_ARGS[@]}"); then
+                return 0
+            fi
+        elif (cd "$crate_dir" && cargo publish --locked); then
             return 0
         fi
         
@@ -81,7 +89,7 @@ publish_dir() {
     return 1
 }
 
-if [[ "$LIST_ONLY" -eq 0 ]] && ! has_arg "--dry-run" "${EXTRA_ARGS[@]}"; then
+if [[ "$LIST_ONLY" -eq 0 ]] && [[ "$DRY_RUN_REQUESTED" -eq 0 ]]; then
     if [[ -z "${CARGO_REGISTRY_TOKEN:-}" ]]; then
         echo "CARGO_REGISTRY_TOKEN is not set." >&2
         echo "Export it before publishing, for example:" >&2
