@@ -1,6 +1,6 @@
 [package]
 name = "tapis_tenants"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Manage Tapis Tenants."
 license = "BSD 3"

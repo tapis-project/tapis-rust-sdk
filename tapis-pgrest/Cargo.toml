@@ -1,6 +1,6 @@
 [package]
 name = "tapis_pgrest"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis PgREST API provides a RESTful interface to a managed SQL-db-as-a-service."
 license = "3-Clause BSD License"

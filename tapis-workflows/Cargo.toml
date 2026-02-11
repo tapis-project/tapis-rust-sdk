@@ -1,6 +1,6 @@
 [package]
 name = "tapis_workflows"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Create and manage pipelines"
 license = "3-Clause BSD License"
