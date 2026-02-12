@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**postit_id** | Option<[**uuid::Uuid**](uuid::Uuid.md)> | The unique ID of the PostIt. | [optional]
+**postit_id** | Option<**uuid::Uuid**> | The unique ID of the PostIt. | [optional]
 **system_id** | Option<**String**> | The ID of the system where the file pointed to by the PostIt resides. | [optional]
 **owner** | Option<**String**> | The owner of the PostIt. | [optional]
 **tenant_id** | Option<**String**> | the tenant that tthe PostIt belongs to. | [optional]

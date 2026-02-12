@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **username** | Option<**String**> |  | [optional]
 **tenant_id** | Option<**String**> |  | [optional]
 **tag** | Option<**String**> |  | [optional]
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**uuid** | Option<**uuid::Uuid**> |  | [optional]
 **status** | Option<[**models::TransferStatusEnum**](TransferStatusEnum.md)> |  | [optional]
 **parent_tasks** | Option<[**Vec<models::TransferTaskParent>**](TransferTaskParent.md)> |  | [optional]
 **estimated_total_bytes** | Option<**i64**> |  | [optional]

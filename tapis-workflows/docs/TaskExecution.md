@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
-**pipeline_run** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**uuid** | Option<**uuid::Uuid**> |  | [optional]
+**pipeline_run** | Option<**uuid::Uuid**> |  | [optional]
 **task_id** | Option<**String**> |  | [optional]
 **status** | Option<[**models::EnumRunStatus**](EnumRunStatus.md)> |  | [optional]
 **started_at** | Option<**String**> |  | [optional]

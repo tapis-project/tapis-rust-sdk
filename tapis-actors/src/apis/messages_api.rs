@@ -200,8 +200,7 @@ pub async fn send_binary_message(
         .request(reqwest::Method::POST, &uri_str);
 
     if let Some(ref param_value) = p_query__abaco_synchronous {
-        req_builder =
-            req_builder.query(&[("_abaco_synchronous", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("_abaco_synchronous", &param_value.to_string())]);
     }
     if let Some(ref apikey) = configuration.api_key {
         let key = apikey.key.clone();
@@ -275,8 +274,7 @@ pub async fn send_json_message(
         .request(reqwest::Method::POST, &uri_str);
 
     if let Some(ref param_value) = p_query__abaco_synchronous {
-        req_builder =
-            req_builder.query(&[("_abaco_synchronous", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("_abaco_synchronous", &param_value.to_string())]);
     }
     if let Some(ref apikey) = configuration.api_key {
         let key = apikey.key.clone();
@@ -350,8 +348,7 @@ pub async fn send_message(
         .request(reqwest::Method::POST, &uri_str);
 
     if let Some(ref param_value) = p_query__abaco_synchronous {
-        req_builder =
-            req_builder.query(&[("_abaco_synchronous", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("_abaco_synchronous", &param_value.to_string())]);
     }
     if let Some(ref apikey) = configuration.api_key {
         let key = apikey.key.clone();
