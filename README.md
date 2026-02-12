@@ -6,7 +6,7 @@
 
 A comprehensive Rust SDK for the [Tapis Framework](https://tapis-project.org), providing type-safe async clients for Tapis v3 services.
 
-Current release line: `0.6.0`
+Current release line: `0.2.0`
 
 ## About Tapis
 
@@ -47,7 +47,7 @@ Use the umbrella crate:
 
 ```toml
 [dependencies]
-tapis-sdk = "0.6.0"
+tapis-sdk = "0.2.0"
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -55,9 +55,9 @@ Or use individual crates:
 
 ```toml
 [dependencies]
-tapis-systems = "0.6.0"
-tapis-apps = "0.6.0"
-tapis-jobs = "0.6.0"
+tapis-systems = "0.2.0"
+tapis-apps = "0.2.0"
+tapis-jobs = "0.2.0"
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -292,7 +292,7 @@ use tapis_sdk::jobs::TapisJobs;
 
 ```toml
 [dependencies]
-tapis-sdk = { version = "0.6.0", default-features = false, features = ["rustls-tls"] }
+tapis-sdk = { version = "0.2.0", default-features = false, features = ["rustls-tls"] }
 ```
 
 Available TLS features:
