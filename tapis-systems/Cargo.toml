@@ -1,5 +1,5 @@
 [package]
-name = "tapis_systems"
+name = "tapis-systems"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Systems API provides for management of Tapis Systems including permissions, credentials and Scheduler Profiles."

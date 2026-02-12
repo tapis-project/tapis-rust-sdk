@@ -1,5 +1,5 @@
 [package]
-name = "tapis_tokens"
+name = "tapis-tokens"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Manage Tapis Tokens."

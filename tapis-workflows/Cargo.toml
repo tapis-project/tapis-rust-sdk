@@ -1,5 +1,5 @@
 [package]
-name = "tapis_workflows"
+name = "tapis-workflows"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Create and manage pipelines"

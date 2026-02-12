@@ -22,17 +22,6 @@ for arg in "$@"; do
     fi
 done
 
-has_arg() {
-    local needle="$1"
-    shift
-    for item in "$@"; do
-        if [[ "$item" == "$needle" ]]; then
-            return 0
-        fi
-    done
-    return 1
-}
-
 manifest_field() {
     local manifest_path="$1"
     local field_name="$2"
@@ -55,6 +44,8 @@ publish_dir() {
     local package_name
     local package_version
     local attempt
+    local publish_log
+    local publish_status
     
     if [[ ! -f "$crate_manifest" ]]; then
         echo "Missing manifest: $crate_manifest" >&2
@@ -71,13 +62,33 @@ publish_dir() {
     
     for attempt in $(seq 1 "$PUBLISH_RETRIES"); do
         echo "Publishing $package_name v$package_version (attempt $attempt/$PUBLISH_RETRIES)"
+        publish_log="$(mktemp)"
         if [[ "${#EXTRA_ARGS[@]}" -gt 0 ]]; then
-            if (cd "$crate_dir" && cargo publish --locked "${EXTRA_ARGS[@]}"); then
+            if (cd "$crate_dir" && cargo publish --locked "${EXTRA_ARGS[@]}") >"$publish_log" 2>&1; then
+                cat "$publish_log"
+                rm -f "$publish_log"
                 return 0
+            else
+                publish_status=$?
             fi
-        elif (cd "$crate_dir" && cargo publish --locked); then
+        elif (cd "$crate_dir" && cargo publish --locked) >"$publish_log" 2>&1; then
+            cat "$publish_log"
+            rm -f "$publish_log"
             return 0
+        else
+            publish_status=$?
         fi
+
+        cat "$publish_log"
+
+        if grep -Eqi \
+            "crate was previously named|unknown or invalid license expression|status 40[0-9]|already exists|already uploaded|is already uploaded" \
+            "$publish_log"; then
+            echo "Non-retryable publish error for $package_name. Aborting retries." >&2
+            rm -f "$publish_log"
+            return "$publish_status"
+        fi
+        rm -f "$publish_log"
         
         if [[ "$attempt" -lt "$PUBLISH_RETRIES" ]]; then
             echo "Retrying $package_name in ${PUBLISH_RETRY_DELAY}s"

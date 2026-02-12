@@ -1,5 +1,5 @@
 [package]
-name = "tapis_authenticator"
+name = "tapis-authenticator"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "REST API and web server providing authentication for a Tapis v3 instance."

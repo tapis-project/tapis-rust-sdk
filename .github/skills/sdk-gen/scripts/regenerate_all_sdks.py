@@ -459,8 +459,9 @@ def generate_basic_example(
     examples_dir = crate_dir / "examples"
     target = examples_dir / f"{service}_basic_example.rs"
     examples_dir.mkdir(parents=True, exist_ok=True)
+    crate_import = crate_name.replace("-", "_")
 
-    text = f"""use {crate_name}::{wrapper_name};
+    text = f"""use {crate_import}::{wrapper_name};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {{
@@ -506,12 +507,17 @@ def update_parent_cargo(repo_root: Path, services: List[str], dry_run: bool) -> 
     dep_lines = []
     for svc in services:
         svc_dir = repo_root / f"tapis-{svc}"
+        package_name = parse_package_name(svc_dir / "Cargo.toml")
         version = parse_package_version(svc_dir / "Cargo.toml")
         dep_key = f"tapis-{svc}"
-        pkg_name = f"tapis_{svc.replace('-', '_')}"
-        dep_lines.append(
-            f'{dep_key} = {{ package = "{pkg_name}", version = "{version}", path = "./tapis-{svc}" }}'
-        )
+        if package_name == dep_key:
+            dep_lines.append(
+                f'{dep_key} = {{ version = "{version}", path = "./tapis-{svc}" }}'
+            )
+        else:
+            dep_lines.append(
+                f'{dep_key} = {{ package = "{package_name}", version = "{version}", path = "./tapis-{svc}" }}'
+            )
 
     ws_members = [f'    "tapis-{svc}",' for svc in services]
 

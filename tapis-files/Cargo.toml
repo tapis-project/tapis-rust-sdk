@@ -1,5 +1,5 @@
 [package]
-name = "tapis_files"
+name = "tapis-files"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Files API provides for management of file resources on Tapis systems"

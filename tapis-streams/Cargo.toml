@@ -1,5 +1,5 @@
 [package]
-name = "tapis_streams"
+name = "tapis-streams"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Manage Tapis Streams API."

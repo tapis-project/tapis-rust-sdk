@@ -1,5 +1,5 @@
 [package]
-name = "tapis_globus_proxy"
+name = "tapis-globus-proxy"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Globus Proxy API proxies calls to Globus coming from a Tapis service."

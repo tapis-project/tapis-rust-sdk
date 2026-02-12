@@ -23,22 +23,22 @@ The repository is a Cargo workspace:
 
 | Module (`tapis-sdk`) | Crate | Purpose | Docs |
 |---|---|---|---|
-| `actors` | `tapis_actors` | Actor-based functions and executions | [docs.rs/tapis_actors](https://docs.rs/tapis_actors) |
-| `apps` | `tapis_apps` | Application definitions and sharing | [docs.rs/tapis_apps](https://docs.rs/tapis_apps) |
-| `authenticator` | `tapis_authenticator` | AuthN/AuthZ, clients, and token APIs | [docs.rs/tapis_authenticator](https://docs.rs/tapis_authenticator) |
-| `files` | `tapis_files` | File operations, permissions, transfers | [docs.rs/tapis_files](https://docs.rs/tapis_files) |
-| `globus_proxy` | `tapis_globus_proxy` | Globus proxy and transfer operations | [docs.rs/tapis_globus_proxy](https://docs.rs/tapis_globus_proxy) |
-| `jobs` | `tapis_jobs` | Job submission and lifecycle management | [docs.rs/tapis_jobs](https://docs.rs/tapis_jobs) |
-| `meta` | `tapis_meta` | Metadata collections and documents | [docs.rs/tapis_meta](https://docs.rs/tapis_meta) |
-| `notifications` | `tapis_notifications` | Event subscriptions and notifications | [docs.rs/tapis_notifications](https://docs.rs/tapis_notifications) |
-| `pgrest` | `tapis_pgrest` | Postgres REST-style data access | [docs.rs/tapis_pgrest](https://docs.rs/tapis_pgrest) |
-| `pods` | `tapis_pods` | Pods, templates, volumes, snapshots | [docs.rs/tapis_pods](https://docs.rs/tapis_pods) |
-| `sk` | `tapis_sk` | Security kernel and vault/secret APIs | [docs.rs/tapis_sk](https://docs.rs/tapis_sk) |
-| `streams` | `tapis_streams` | Streams/channels and telemetry resources | [docs.rs/tapis_streams](https://docs.rs/tapis_streams) |
-| `systems` | `tapis_systems` | Systems, credentials, scheduler profiles | [docs.rs/tapis_systems](https://docs.rs/tapis_systems) |
-| `tenants` | `tapis_tenants` | Tenant, site, owner, LDAP management | [docs.rs/tapis_tenants](https://docs.rs/tapis_tenants) |
-| `tokens` | `tapis_tokens` | Token service APIs | [docs.rs/tapis_tokens](https://docs.rs/tapis_tokens) |
-| `workflows` | `tapis_workflows` | Workflow and pipeline orchestration | [docs.rs/tapis_workflows](https://docs.rs/tapis_workflows) |
+| `actors` | `tapis-actors` | Actor-based functions and executions | [docs.rs/tapis-actors](https://docs.rs/tapis-actors) |
+| `apps` | `tapis-apps` | Application definitions and sharing | [docs.rs/tapis-apps](https://docs.rs/tapis-apps) |
+| `authenticator` | `tapis-authenticator` | AuthN/AuthZ, clients, and token APIs | [docs.rs/tapis-authenticator](https://docs.rs/tapis-authenticator) |
+| `files` | `tapis-files` | File operations, permissions, transfers | [docs.rs/tapis-files](https://docs.rs/tapis-files) |
+| `globus_proxy` | `tapis-globus-proxy` | Globus proxy and transfer operations | [docs.rs/tapis-globus-proxy](https://docs.rs/tapis-globus-proxy) |
+| `jobs` | `tapis-jobs` | Job submission and lifecycle management | [docs.rs/tapis-jobs](https://docs.rs/tapis-jobs) |
+| `meta` | `tapis-meta` | Metadata collections and documents | [docs.rs/tapis-meta](https://docs.rs/tapis-meta) |
+| `notifications` | `tapis-notifications` | Event subscriptions and notifications | [docs.rs/tapis-notifications](https://docs.rs/tapis-notifications) |
+| `pgrest` | `tapis-pgrest` | Postgres REST-style data access | [docs.rs/tapis-pgrest](https://docs.rs/tapis-pgrest) |
+| `pods` | `tapis-pods` | Pods, templates, volumes, snapshots | [docs.rs/tapis-pods](https://docs.rs/tapis-pods) |
+| `sk` | `tapis-sk` | Security kernel and vault/secret APIs | [docs.rs/tapis-sk](https://docs.rs/tapis-sk) |
+| `streams` | `tapis-streams` | Streams/channels and telemetry resources | [docs.rs/tapis-streams](https://docs.rs/tapis-streams) |
+| `systems` | `tapis-systems` | Systems, credentials, scheduler profiles | [docs.rs/tapis-systems](https://docs.rs/tapis-systems) |
+| `tenants` | `tapis-tenants` | Tenant, site, owner, LDAP management | [docs.rs/tapis-tenants](https://docs.rs/tapis-tenants) |
+| `tokens` | `tapis-tokens` | Token service APIs | [docs.rs/tapis-tokens](https://docs.rs/tapis-tokens) |
+| `workflows` | `tapis-workflows` | Workflow and pipeline orchestration | [docs.rs/tapis-workflows](https://docs.rs/tapis-workflows) |
 | umbrella | `tapis-sdk` | Re-exports all modules above | [docs.rs/tapis-sdk](https://docs.rs/tapis-sdk) |
 
 ## Installation
@@ -55,9 +55,9 @@ Or use individual crates:
 
 ```toml
 [dependencies]
-tapis_systems = "0.6.0"
-tapis_apps = "0.6.0"
-tapis_jobs = "0.6.0"
+tapis-systems = "0.6.0"
+tapis-apps = "0.6.0"
+tapis-jobs = "0.6.0"
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -338,8 +338,8 @@ cargo test --workspace
 Publish service crates before publishing the parent crate:
 
 ```bash
-cargo publish -p tapis_actors
-cargo publish -p tapis_apps
+cargo publish -p tapis-actors
+cargo publish -p tapis-apps
 # ...publish remaining service crates...
 cargo publish -p tapis-sdk
 ```

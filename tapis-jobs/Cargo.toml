@@ -1,5 +1,5 @@
 [package]
-name = "tapis_jobs"
+name = "tapis-jobs"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Jobs API executes jobs on Tapis systems."

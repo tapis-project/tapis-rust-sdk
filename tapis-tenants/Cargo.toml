@@ -1,5 +1,5 @@
 [package]
-name = "tapis_tenants"
+name = "tapis-tenants"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Manage Tapis Tenants."

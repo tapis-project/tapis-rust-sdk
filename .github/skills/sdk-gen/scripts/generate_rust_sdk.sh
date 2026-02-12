@@ -265,7 +265,7 @@ echo ""
 
 # Set up output directory and package name
 OUTPUT_DIR="$REPO_ROOT/tapis-${SERVICE}"
-PACKAGE_NAME="tapis_$(echo $SERVICE | tr '-' '_')"
+PACKAGE_NAME="tapis-${SERVICE}"
 
 print_msg $GREEN "📁 Output Directory: $OUTPUT_DIR"
 print_msg $GREEN "📦 Package Name: $PACKAGE_NAME"

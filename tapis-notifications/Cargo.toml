@@ -1,5 +1,5 @@
 [package]
-name = "tapis_notifications"
+name = "tapis-notifications"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Notifications API provides for management of subscriptions and event publication"

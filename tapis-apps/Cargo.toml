@@ -1,5 +1,5 @@
 [package]
-name = "tapis_apps"
+name = "tapis-apps"
 version = "0.2.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Applications API provides for management of Tapis applications including permissions."
