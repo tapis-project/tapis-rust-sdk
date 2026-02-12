@@ -9,11 +9,14 @@ PUBLISH_RETRIES="${PUBLISH_RETRIES:-3}"
 PUBLISH_RETRY_DELAY="${PUBLISH_RETRY_DELAY:-20}"
 
 LIST_ONLY=0
+CONTINUE_ON_ERROR=0
 EXTRA_ARGS=()
 DRY_RUN_REQUESTED=0
 for arg in "$@"; do
     if [[ "$arg" == "--list" ]]; then
         LIST_ONLY=1
+    elif [[ "$arg" == "--continue-on-error" ]]; then
+        CONTINUE_ON_ERROR=1
     else
         EXTRA_ARGS+=("$arg")
         if [[ "$arg" == "--dry-run" ]]; then
@@ -138,10 +141,24 @@ fi
 
 echo "Publishing workspace members first (${#WORKSPACE_MEMBERS[@]} crates), then parent crate."
 
+FAILED_MEMBERS=()
 for member in "${WORKSPACE_MEMBERS[@]}"; do
-    publish_dir "$REPO_ROOT/$member"
+    if ! publish_dir "$REPO_ROOT/$member"; then
+        if [[ "$CONTINUE_ON_ERROR" -eq 1 ]]; then
+            echo "Skipping failed crate and continuing: $member" >&2
+            FAILED_MEMBERS+=("$member")
+            continue
+        fi
+        exit 1
+    fi
 done
 
-publish_dir "$REPO_ROOT"
+if [[ "${#FAILED_MEMBERS[@]}" -gt 0 ]]; then
+    echo "Sub-crate publish failures detected: ${FAILED_MEMBERS[*]}" >&2
+    echo "Skipping parent crate publish because parent depends on all sub-crates." >&2
+    exit 2
+fi
+
+publish_dir "$REPO_ROOT" || exit 1
 
 echo "Publish sequence completed."
