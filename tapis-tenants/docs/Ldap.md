@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **user_dn** | Option<**String**> | base DN for users | [optional]
 **bind_dn** | Option<**String**> | DN used for binding to the LDAP. | [optional]
 **bind_credential** | Option<**String**> | Pointed to a Tapis credential for binding to the LDAP. | [optional]
-**account_type** | Option<**String**> | Whether this LDAP is used for service accounts or user accounts. | [optional]
+**account_type** | Option<**AccountType**> | Whether this LDAP is used for service accounts or user accounts. (enum: service, user) | [optional]
 **create_time** | Option<**String**> | The time the client was created. | [optional]
 **last_update_time** | Option<**String**> | The time the client was last updated. | [optional]
 

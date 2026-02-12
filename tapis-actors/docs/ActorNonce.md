@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | Option<**String**> | the id of the nonce | [optional]
-**level** | Option<**String**> | The permission level associated with the nonce. | [optional]
+**level** | Option<**Level**> | The permission level associated with the nonce. (enum: READ, WRITE, EXECUTE) | [optional]
 **max_uses** | Option<**i32**> | Max uses for the nonce; set to -1 for unlimited uses. | [optional]
 **actor_id** | Option<**String**> | the id of the actor | [optional]
 **api_server** | Option<**String**> | the base URL for this Abaco instance. | [optional]

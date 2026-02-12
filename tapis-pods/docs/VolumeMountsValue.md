@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**r#type** | **String** | Type of mount: 'tapisvolume', 'tapissnapshot', 'ephemeral', or 'pvc'. | 
+**r#type** | **Type** | Type of mount: 'tapisvolume', 'tapissnapshot', 'ephemeral', or 'pvc'. (enum: tapisvolume, tapissnapshot, ephemeral, pvc) | 
 **source_id** | Option<**String**> |  | [optional]
 **mounted_by** | Option<**String**> |  | [optional]
 **sub_path** | Option<**String**> | Sub-path within the source volume/snapshot to mount. Not used for ephemeral. | [optional][default to ]
