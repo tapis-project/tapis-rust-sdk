@@ -7,6 +7,7 @@ ROOT_MANIFEST="$REPO_ROOT/Cargo.toml"
 
 PUBLISH_RETRIES="${PUBLISH_RETRIES:-3}"
 PUBLISH_RETRY_DELAY="${PUBLISH_RETRY_DELAY:-20}"
+INTER_CRATE_DELAY="${INTER_CRATE_DELAY:-60}"
 
 LIST_ONLY=0
 CONTINUE_ON_ERROR=0
@@ -15,7 +16,7 @@ DRY_RUN_REQUESTED=0
 for arg in "$@"; do
     if [[ "$arg" == "--list" ]]; then
         LIST_ONLY=1
-    elif [[ "$arg" == "--continue-on-error" ]]; then
+        elif [[ "$arg" == "--continue-on-error" ]]; then
         CONTINUE_ON_ERROR=1
     else
         EXTRA_ARGS+=("$arg")
@@ -41,6 +42,29 @@ manifest_field() {
     ' "$manifest_path"
 }
 
+check_version_published() {
+    local package_name="$1"
+    local package_version="$2"
+    local api_url="https://crates.io/api/v1/crates/$package_name"
+    local response
+    
+    if ! command -v curl &>/dev/null; then
+        echo "curl not found, skipping version check" >&2
+        return 1
+    fi
+    
+    response=$(curl -sf "$api_url" 2>/dev/null || echo "")
+    if [[ -z "$response" ]]; then
+        return 1
+    fi
+    
+    if echo "$response" | grep -q "\"num\":\"$package_version\""; then
+        return 0
+    fi
+    
+    return 1
+}
+
 publish_dir() {
     local crate_dir="$1"
     local crate_manifest="$crate_dir/Cargo.toml"
@@ -63,6 +87,11 @@ publish_dir() {
         return 0
     fi
     
+    if [[ "$DRY_RUN_REQUESTED" -eq 0 ]] && check_version_published "$package_name" "$package_version"; then
+        echo "⏭️  Skipping $package_name v$package_version (already published)"
+        return 0
+    fi
+    
     for attempt in $(seq 1 "$PUBLISH_RETRIES"); do
         echo "Publishing $package_name v$package_version (attempt $attempt/$PUBLISH_RETRIES)"
         publish_log="$(mktemp)"
@@ -74,19 +103,19 @@ publish_dir() {
             else
                 publish_status=$?
             fi
-        elif (cd "$crate_dir" && cargo publish --locked) >"$publish_log" 2>&1; then
+            elif (cd "$crate_dir" && cargo publish --locked) >"$publish_log" 2>&1; then
             cat "$publish_log"
             rm -f "$publish_log"
             return 0
         else
             publish_status=$?
         fi
-
+        
         cat "$publish_log"
-
+        
         if grep -Eqi \
-            "crate was previously named|unknown or invalid license expression|status 40[0-9]|already exists|already uploaded|is already uploaded" \
-            "$publish_log"; then
+        "crate was previously named|unknown or invalid license expression|status 40[0-9]|already exists|already uploaded|is already uploaded" \
+        "$publish_log"; then
             echo "Non-retryable publish error for $package_name. Aborting retries." >&2
             rm -f "$publish_log"
             return "$publish_status"
@@ -142,7 +171,8 @@ fi
 echo "Publishing workspace members first (${#WORKSPACE_MEMBERS[@]} crates), then parent crate."
 
 FAILED_MEMBERS=()
-for member in "${WORKSPACE_MEMBERS[@]}"; do
+for idx in "${!WORKSPACE_MEMBERS[@]}"; do
+    member="${WORKSPACE_MEMBERS[$idx]}"
     if ! publish_dir "$REPO_ROOT/$member"; then
         if [[ "$CONTINUE_ON_ERROR" -eq 1 ]]; then
             echo "Skipping failed crate and continuing: $member" >&2
@@ -151,12 +181,22 @@ for member in "${WORKSPACE_MEMBERS[@]}"; do
         fi
         exit 1
     fi
+    
+    if [[ "$idx" -lt "$((${#WORKSPACE_MEMBERS[@]} - 1))" ]] && [[ "$DRY_RUN_REQUESTED" -eq 0 ]] && [[ "$INTER_CRATE_DELAY" -gt 0 ]]; then
+        echo "⏱️  Waiting ${INTER_CRATE_DELAY}s before next publish (rate limit compliance)..."
+        sleep "$INTER_CRATE_DELAY"
+    fi
 done
 
 if [[ "${#FAILED_MEMBERS[@]}" -gt 0 ]]; then
     echo "Sub-crate publish failures detected: ${FAILED_MEMBERS[*]}" >&2
     echo "Skipping parent crate publish because parent depends on all sub-crates." >&2
     exit 2
+fi
+
+if [[ "$DRY_RUN_REQUESTED" -eq 0 ]] && [[ "$INTER_CRATE_DELAY" -gt 0 ]]; then
+    echo "⏱️  Waiting ${INTER_CRATE_DELAY}s before parent crate publish..."
+    sleep "$INTER_CRATE_DELAY"
 fi
 
 publish_dir "$REPO_ROOT" || exit 1
