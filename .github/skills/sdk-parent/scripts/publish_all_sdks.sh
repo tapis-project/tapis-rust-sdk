@@ -8,6 +8,7 @@ ROOT_MANIFEST="$REPO_ROOT/Cargo.toml"
 PUBLISH_RETRIES="${PUBLISH_RETRIES:-3}"
 PUBLISH_RETRY_DELAY="${PUBLISH_RETRY_DELAY:-20}"
 INTER_CRATE_DELAY="${INTER_CRATE_DELAY:-60}"
+SKIP_DELAY="${SKIP_DELAY:-2}"
 
 LIST_ONLY=0
 CONTINUE_ON_ERROR=0
@@ -89,7 +90,7 @@ publish_dir() {
     
     if [[ "$DRY_RUN_REQUESTED" -eq 0 ]] && check_version_published "$package_name" "$package_version"; then
         echo "⏭️  Skipping $package_name v$package_version (already published)"
-        return 0
+        return 10
     fi
     
     for attempt in $(seq 1 "$PUBLISH_RETRIES"); do
@@ -173,7 +174,12 @@ echo "Publishing workspace members first (${#WORKSPACE_MEMBERS[@]} crates), then
 FAILED_MEMBERS=()
 for idx in "${!WORKSPACE_MEMBERS[@]}"; do
     member="${WORKSPACE_MEMBERS[$idx]}"
-    if ! publish_dir "$REPO_ROOT/$member"; then
+    set +e
+    publish_dir "$REPO_ROOT/$member"
+    status=$?
+    set -e
+    
+    if [[ $status -ne 0 ]] && [[ $status -ne 10 ]]; then
         if [[ "$CONTINUE_ON_ERROR" -eq 1 ]]; then
             echo "Skipping failed crate and continuing: $member" >&2
             FAILED_MEMBERS+=("$member")
@@ -182,9 +188,16 @@ for idx in "${!WORKSPACE_MEMBERS[@]}"; do
         exit 1
     fi
     
-    if [[ "$idx" -lt "$((${#WORKSPACE_MEMBERS[@]} - 1))" ]] && [[ "$DRY_RUN_REQUESTED" -eq 0 ]] && [[ "$INTER_CRATE_DELAY" -gt 0 ]]; then
-        echo "⏱️  Waiting ${INTER_CRATE_DELAY}s before next publish (rate limit compliance)..."
-        sleep "$INTER_CRATE_DELAY"
+    if [[ "$idx" -lt "$((${#WORKSPACE_MEMBERS[@]} - 1))" ]] && [[ "$DRY_RUN_REQUESTED" -eq 0 ]]; then
+        if [[ $status -eq 10 ]]; then
+            if [[ "$SKIP_DELAY" -gt 0 ]]; then
+                echo "⏱️  Waiting ${SKIP_DELAY}s before next crate..."
+                sleep "$SKIP_DELAY"
+            fi
+            elif [[ "$INTER_CRATE_DELAY" -gt 0 ]]; then
+            echo "⏱️  Waiting ${INTER_CRATE_DELAY}s before next publish (rate limit compliance)..."
+            sleep "$INTER_CRATE_DELAY"
+        fi
     fi
 done
 
@@ -194,11 +207,19 @@ if [[ "${#FAILED_MEMBERS[@]}" -gt 0 ]]; then
     exit 2
 fi
 
-if [[ "$DRY_RUN_REQUESTED" -eq 0 ]] && [[ "$INTER_CRATE_DELAY" -gt 0 ]]; then
-    echo "⏱️  Waiting ${INTER_CRATE_DELAY}s before parent crate publish..."
-    sleep "$INTER_CRATE_DELAY"
+if [[ "$DRY_RUN_REQUESTED" -eq 0 ]]; then
+    if [[ "$INTER_CRATE_DELAY" -gt 0 ]]; then
+        echo "⏱️  Waiting ${INTER_CRATE_DELAY}s before parent crate publish..."
+        sleep "$INTER_CRATE_DELAY"
+    fi
 fi
 
-publish_dir "$REPO_ROOT" || exit 1
+set +e
+publish_dir "$REPO_ROOT"
+parent_status=$?
+set -e
+if [[ $parent_status -ne 0 ]] && [[ $parent_status -ne 10 ]]; then
+    exit 1
+fi
 
 echo "Publish sequence completed."
