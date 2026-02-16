@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **description** | Option<**String**> |  | [optional]
 **input_mode** | Option<[**models::FileInputModeEnum**](FileInputModeEnum.md)> |  | [optional]
 **env_key** | Option<**String**> |  | [optional]
-**notes** | Option<[**serde_json::Value**](.md)> |  | [optional]
+**notes** | Option<**serde_json::Value**> |  | [optional]
 **source_urls** | Option<**Vec<String>**> |  | [optional]
 **target_dir** | **String** |  | 
 

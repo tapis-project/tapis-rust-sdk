@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **task_id** | Option<**i32**> |  | [optional]
 **children** | Option<[**Vec<models::TransferTaskChild>**](TransferTaskChild.md)> |  | [optional]
 **error_message** | Option<**String**> |  | [optional]
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> | Unique ID of the task. | [optional]
+**uuid** | Option<**uuid::Uuid**> | Unique ID of the task. | [optional]
 **status** | Option<[**models::TransferStatusEnum**](TransferStatusEnum.md)> |  | [optional]
 **created** | Option<**String**> |  | [optional]
 **start_time** | Option<**String**> |  | [optional]

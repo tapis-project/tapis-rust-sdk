@@ -46,7 +46,7 @@ pub async fn search(
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
     if let Some(ref param_value) = p_query_list_type {
-        req_builder = req_builder.query(&[("listType", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("listType", &param_value.to_string())]);
     }
     if let Some(ref param_value) = p_query_skip {
         req_builder = req_builder.query(&[("skip", &param_value.to_string())]);
