@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **build_file_path** | **String** |  | 
 **sub_path** | Option<**String**> |  | [optional]
 **credentials** | Option<[**models::ReqGithubCred**](ReqGithubCred.md)> |  | [optional]
-**identity_uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**identity_uuid** | Option<**uuid::Uuid**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

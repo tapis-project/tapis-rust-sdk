@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **user_dn** | **String** | base DN for users | 
 **bind_dn** | **String** | DN used for binding to the LDAP. | 
 **bind_credential** | **String** | Pointed to a Tapis credential for binding to the LDAP. | 
-**account_type** | **String** | Whether this LDAP is used for service accounts or user accounts. | 
+**account_type** | **AccountType** | Whether this LDAP is used for service accounts or user accounts. (enum: service, user) | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -154,8 +154,8 @@ Name | Type | Description  | Required | Notes
 **collection** | **String** |  | [required] |
 **page** | Option<**i32**> |  |  |[default to 1]
 **pagesize** | Option<**i32**> |  |  |[default to 10]
-**filter** | Option<[**serde_json::Value**](.md)> |  |  |[default to {}]
-**sort** | Option<[**serde_json::Value**](.md)> |  |  |[default to {}]
+**filter** | Option<[**serde_json::Value**](SerdeJson__Value.md)> |  |  |[default to {}]
+**sort** | Option<[**serde_json::Value**](SerdeJson__Value.md)> |  |  |[default to {}]
 **keys** | Option<[**Vec<String>**](String.md)> |  |  |
 
 ### Return type
@@ -190,7 +190,7 @@ Name | Type | Description  | Required | Notes
 **collection** | **String** |  | [required] |
 **page** | Option<**i32**> |  |  |[default to 1]
 **pagesize** | Option<**i32**> |  |  |[default to 10]
-**sort** | Option<[**serde_json::Value**](.md)> |  |  |[default to {}]
+**sort** | Option<[**serde_json::Value**](SerdeJson__Value.md)> |  |  |[default to {}]
 **keys** | Option<[**Vec<String>**](String.md)> |  |  |
 **body** | Option<**serde_json::Value**> | the json document as a MongoDB query document |  |
 
