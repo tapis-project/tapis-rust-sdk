@@ -6,8 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | Option<**String**> |  | [optional]
 **description** | Option<**String**> |  | [optional]
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
-**pipeline** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**uuid** | Option<**uuid::Uuid**> |  | [optional]
+**pipeline** | Option<**uuid::Uuid**> |  | [optional]
 **status** | Option<[**models::EnumRunStatus**](EnumRunStatus.md)> |  | [optional]
 **started_at** | Option<**String**> |  | [optional]
 **last_modified** | Option<**String**> |  | [optional]

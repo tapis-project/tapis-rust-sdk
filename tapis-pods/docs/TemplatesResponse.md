@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **String** |  | 
-**metadata** | [**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md) |  | 
+**metadata** | **std::collections::HashMap<String, serde_json::Value>** |  | 
 **result** | [**Vec<models::TemplateResponseModel>**](TemplateResponseModel.md) |  | 
 **status** | **String** |  | 
 **version** | **String** |  | 

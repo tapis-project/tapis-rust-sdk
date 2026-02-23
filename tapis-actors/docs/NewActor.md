@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **image** | **String** | The Docker image associated with the actor. | 
 **token** | Option<**bool**> | Whether this actor requires an OAuth token. | [optional][default to false]
-**default_environment** | Option<[**serde_json::Value**](.md)> | The default environment variables and values for the actor. | [optional]
+**default_environment** | Option<**serde_json::Value**> | The default environment variables and values for the actor. | [optional]
 **description** | Option<**String**> | User provided description of the actor. | [optional]
 **privileged** | Option<**bool**> | Whether the actor runs in privileged mode (requires admin role). | [optional][default to false]
 **queue** | Option<**String**> | The command channel that this actor uses. | [optional]

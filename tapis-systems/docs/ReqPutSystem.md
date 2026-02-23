@@ -27,7 +27,7 @@ Name | Type | Description | Notes
 **batch_scheduler_profile** | Option<**String**> |  | [optional]
 **job_capabilities** | Option<[**Vec<models::Capability>**](Capability.md)> |  | [optional]
 **tags** | Option<**Vec<String>**> |  | [optional]
-**notes** | Option<[**serde_json::Value**](.md)> |  | [optional]
+**notes** | Option<**serde_json::Value**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

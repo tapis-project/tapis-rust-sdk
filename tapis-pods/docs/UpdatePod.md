@@ -9,13 +9,13 @@ Name | Type | Description | Notes
 **description** | Option<**String**> |  | [optional]
 **command** | Option<**Vec<String>**> |  | [optional]
 **arguments** | Option<**Vec<String>**> |  | [optional]
-**environment_variables** | Option<[**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md)> |  | [optional]
+**environment_variables** | Option<**std::collections::HashMap<String, serde_json::Value>**> |  | [optional]
 **status_requested** | Option<**String**> |  | [optional]
-**volume_mounts** | Option<[**std::collections::HashMap<String, models::VolumeMountsValue>**](Volume_Mounts_value.md)> |  | [optional]
+**volume_mounts** | Option<[**std::collections::HashMap<String, models::VolumeMountsValue>**](VolumeMountsValue.md)> |  | [optional]
 **time_to_stop_default** | Option<**i32**> |  | [optional]
 **time_to_stop_instance** | Option<**i32**> |  | [optional]
-**networking** | Option<[**std::collections::HashMap<String, models::ModelsPodsNetworking>**](models_pods__Networking.md)> |  | [optional]
-**resources** | Option<[**models::ModelsPodsResources**](models_pods__Resources.md)> |  | [optional]
+**networking** | Option<[**std::collections::HashMap<String, models::ModelsPodsNetworking>**](ModelsPodsNetworking.md)> |  | [optional]
+**resources** | Option<[**models::ModelsPodsResources**](ModelsPodsResources.md)> |  | [optional]
 **compute_queue** | Option<**String**> | Queue to run pod in. `default` is the default queue. | [optional][default to default]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
