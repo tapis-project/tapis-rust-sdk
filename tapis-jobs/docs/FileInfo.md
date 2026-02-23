@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **mime_type** | Option<**String**> |  | [optional]
-**r#type** | Option<**String**> |  | [optional]
+**r#type** | Option<**Type**> |  (enum: file, dir, symbolic_link, other, unknown) | [optional]
 **owner** | Option<**String**> |  | [optional]
 **group** | Option<**String**> |  | [optional]
 **native_permissions** | Option<**String**> |  | [optional]
