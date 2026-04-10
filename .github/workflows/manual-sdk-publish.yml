@@ -2,6 +2,11 @@ name: Manual SDK Publish (Crates.io)
 
 on:
   workflow_dispatch:
+    inputs:
+      cargo_registry_token:
+        description: "Crates.io API token (from https://crates.io/settings/tokens)"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -16,9 +21,7 @@ jobs:
     timeout-minutes: 120
 
     env:
-      # Intentionally fake token.
-      # Replace this value manually (or switch to repository secrets) when ready to publish for real.
-      CARGO_REGISTRY_TOKEN: "FAKE_TOKEN_REPLACE_WITH_TACC_CRATES_IO_TOKEN"
+      CARGO_REGISTRY_TOKEN: ${{ inputs.cargo_registry_token }}
 
     steps:
       - name: Checkout repository
@@ -31,11 +34,10 @@ jobs:
         with:
           components: rustfmt, clippy
 
-      - name: Safety gate for fake token
+      - name: Safety gate — validate token
         run: |
-          if [[ "$CARGO_REGISTRY_TOKEN" == FAKE_TOKEN_* ]]; then
-            echo "Publish blocked: CARGO_REGISTRY_TOKEN is still a fake placeholder."
-            echo "Update .github/workflows/manual-sdk-publish.yml with a real token (or migrate to secrets) before publishing."
+          if [[ -z "$CARGO_REGISTRY_TOKEN" ]]; then
+            echo "Publish blocked: CARGO_REGISTRY_TOKEN is empty."
             exit 1
           fi
 
@@ -52,6 +54,7 @@ jobs:
             tapis-actors \
             tapis-apps \
             tapis-authenticator \
+            tapis-core \
             tapis-files \
             tapis-globus-proxy \
             tapis-jobs \
