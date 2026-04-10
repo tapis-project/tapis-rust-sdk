@@ -268,7 +268,7 @@ No authorization required
 > models::PodPermissionsResponse set_pod_permission(pod_id, set_permission)
 set_pod_permission
 
-Set a permission for a pod.  Returns updated pod permissions.
+Set a permission for a pod.  Permission formats: - username:LEVEL - Standard user permission (e.g., 'jsmith:READ') - tenant.<tenant_id>:READ - Cross-tenant auth permission. Allows users from <tenant_id> to authenticate   to this pod via tapis_auth. Only settable by admins. Must use READ level. ex. tenant.public, tenant.dev  Notes: - 'tenant.*' permissions require admin privileges (like '**' on templates) - 'tenant.*' permissions only support READ level (they gate cross-tenant auth access, not authorization) - There are 3 levels of permissions, READ, USER, and ADMIN.  Returns updated pod permissions.
 
 ### Parameters
 

@@ -126,7 +126,9 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
     original = text
 
     # crates.io requires SPDX license expressions.
-    text = re.sub(r'^license\s*=\s*".*"\s*$', 'license = "BSD-3-Clause"', text, flags=re.M)
+    text = re.sub(
+        r'^license\s*=\s*".*"\s*$', 'license = "BSD-3-Clause"', text, flags=re.M
+    )
 
     def with_stream(match: re.Match[str]) -> str:
         block = match.group(0)
@@ -158,6 +160,47 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
             text,
             "dependencies",
             _append_line_to_section_body(deps_body, 'async-trait = "^0.1"'),
+        )
+
+    # tokio rt is needed for task_local! / with_headers in the generated client wrapper.
+    tokio_dep = 'tokio = { version = "^1.0", features = ["rt"] }'
+    deps_body = _section_body(text, "dependencies")
+    # Also detect dotted-key form `[dependencies.tokio]` to avoid a duplicate.
+    has_tokio_dotted = re.search(r"^\[dependencies\.tokio\]", text, flags=re.M)
+    if deps_body is None and not has_tokio_dotted:
+        text = replace_section(text, "dependencies", tokio_dep)
+    elif (
+        deps_body is not None
+        and not re.search(r"^tokio\s*=", deps_body, flags=re.M)
+        and not has_tokio_dotted
+    ):
+        text = replace_section(
+            text,
+            "dependencies",
+            _append_line_to_section_body(deps_body, tokio_dep),
+        )
+
+    # anyhow is needed for TrackingIdMiddleware error construction.
+    deps_body = _section_body(text, "dependencies")
+    if deps_body is None:
+        text = replace_section(text, "dependencies", 'anyhow = "^1.0"')
+    elif not re.search(r"^anyhow\s*=", deps_body, flags=re.M):
+        text = replace_section(
+            text,
+            "dependencies",
+            _append_line_to_section_body(deps_body, 'anyhow = "^1.0"'),
+        )
+
+    # tapis-core provides the TokenProvider trait used by RefreshMiddleware.
+    tapis_core_dep = 'tapis-core = { version = "0.2.0", path = "../tapis-core" }'
+    deps_body = _section_body(text, "dependencies")
+    if deps_body is None:
+        text = replace_section(text, "dependencies", tapis_core_dep)
+    elif not re.search(r"^tapis-core\s*=", deps_body, flags=re.M):
+        text = replace_section(
+            text,
+            "dependencies",
+            _append_line_to_section_body(deps_body, tapis_core_dep),
         )
 
     dev_body = _section_body(text, "dev-dependencies")
@@ -203,13 +246,35 @@ def _append_line_to_section_body(body: str | None, line: str) -> str:
     return body + "\n" + line
 
 
+def fix_empty_docs(crate_dir: Path, dry_run: bool) -> None:
+    """Remove empty doc-comment lines (``/// ``) from generated model files.
+
+    The OpenAPI generator emits lines like ``/// `` (doc comment with only
+    whitespace) which trigger ``clippy::empty_docs``.  Stripping them is
+    safe because they carry no information.
+    """
+    models_dir = crate_dir / "src" / "models"
+    if not models_dir.exists():
+        return
+    empty_doc_re = re.compile(r"^///[ \t]*$", flags=re.M)
+    for path in models_dir.glob("*.rs"):
+        text = path.read_text()
+        fixed = empty_doc_re.sub("", text)
+        # Collapse runs of blank lines left behind (max 1 consecutive blank).
+        fixed = re.sub(r"\n{3,}", "\n\n", fixed)
+        if fixed != text:
+            print(f"stripped empty doc comments: {path}")
+            if not dry_run:
+                path.write_text(fixed)
+
+
 def fix_empty_enum_defaults(crate_dir: Path, dry_run: bool) -> None:
     models_dir = crate_dir / "src" / "models"
     if not models_dir.exists():
         return
 
     enum_block = re.compile(
-        r"\n///[^\n]*\n#\[derive[^\n]*\]\npub enum (?P<name>[A-Za-z0-9_]+) \{\n\}\n\nimpl Default for (?P=name) \{\n\s*fn default\(\) -> (?P=name) \{\n\s*Self::\n\s*\}\n\}\n",
+        r"(?:\n///[^\n]*)?\n#\[derive[^\n]*\]\npub enum (?P<name>[A-Za-z0-9_]+) \{\n\}\n\nimpl Default for (?P=name) \{\n\s*fn default\(\) -> (?P=name) \{\n\s*Self::\n\s*\}\n\}\n",
         flags=re.M,
     )
 
@@ -306,9 +371,28 @@ def generate_client(
         "use reqwest::{Client, Request, Response};",
         "use reqwest_middleware::{ClientBuilder, Middleware, Next, Result as MiddlewareResult};",
         "use std::sync::Arc;",
+        "use tapis_core::TokenProvider;",
+        "",
+        "tokio::task_local! {",
+        "    /// Extra headers to inject into every request within a [`with_headers`] scope.",
+        "    static EXTRA_HEADERS: HeaderMap;",
+        "}",
+        "",
+        "/// Run an async call with additional HTTP headers injected into every request",
+        "/// made within the future `f`. Headers are scoped to this task only, so",
+        "/// concurrent calls with different headers are safe.",
+        "pub async fn with_headers<F, T>(headers: HeaderMap, f: F) -> T",
+        "where",
+        "    F: std::future::Future<Output = T>,",
+        "{",
+        "    EXTRA_HEADERS.scope(headers, f).await",
+        "}",
         "",
         "#[derive(Debug)]",
         "struct LoggingMiddleware;",
+        "",
+        "#[derive(Debug)]",
+        "struct HeaderInjectionMiddleware;",
         "",
         "#[async_trait::async_trait]",
         "impl Middleware for LoggingMiddleware {",
@@ -320,7 +404,170 @@ def generate_client(
         "    ) -> MiddlewareResult<Response> {",
         "        let method = req.method().clone();",
         "        let url = req.url().clone();",
-        "        println!(\"Tapis SDK request: {} {}\", method, url);",
+        '        println!("Tapis SDK request: {} {}", method, url);',
+        "        next.run(req, extensions).await",
+        "    }",
+        "}",
+        "",
+        "#[async_trait::async_trait]",
+        "impl Middleware for HeaderInjectionMiddleware {",
+        "    async fn handle(",
+        "        &self,",
+        "        mut req: Request,",
+        "        extensions: &mut http::Extensions,",
+        "        next: Next<'_>,",
+        "    ) -> MiddlewareResult<Response> {",
+        "        let _ = EXTRA_HEADERS.try_with(|headers| {",
+        "            for (k, v) in headers {",
+        "                req.headers_mut().insert(k, v.clone());",
+        "            }",
+        "        });",
+        "        next.run(req, extensions).await",
+        "    }",
+        "}",
+        "",
+        "fn validate_tracking_id(tracking_id: &str) -> Result<(), String> {",
+        "    if !tracking_id.is_ascii() {",
+        '        return Err("X-Tapis-Tracking-ID must be an entirely ASCII string.".to_string());',
+        "    }",
+        "    if tracking_id.len() > 126 {",
+        '        return Err("X-Tapis-Tracking-ID must be less than 126 characters.".to_string());',
+        "    }",
+        "    if tracking_id.matches('.').count() != 1 {",
+        "        return Err(\"X-Tapis-Tracking-ID must contain exactly one '.' (format: <namespace>.<unique_identifier>).\".to_string());",
+        "    }",
+        "    if tracking_id.starts_with('.') || tracking_id.ends_with('.') {",
+        "        return Err(\"X-Tapis-Tracking-ID cannot start or end with '.'.\".to_string());",
+        "    }",
+        "    let (namespace, unique_id) = tracking_id.split_once('.').unwrap();",
+        "    if !namespace.chars().all(|c| c.is_alphanumeric() || c == '_') {",
+        '        return Err("X-Tapis-Tracking-ID namespace must contain only alphanumeric characters and underscores.".to_string());',
+        "    }",
+        "    if !unique_id.chars().all(|c| c.is_alphanumeric() || c == '-') {",
+        '        return Err("X-Tapis-Tracking-ID unique identifier must contain only alphanumeric characters and hyphens.".to_string());',
+        "    }",
+        "    Ok(())",
+        "}",
+        "",
+        "#[derive(Debug)]",
+        "struct TrackingIdMiddleware;",
+        "",
+        "#[async_trait::async_trait]",
+        "impl Middleware for TrackingIdMiddleware {",
+        "    async fn handle(",
+        "        &self,",
+        "        mut req: Request,",
+        "        extensions: &mut http::Extensions,",
+        "        next: Next<'_>,",
+        "    ) -> MiddlewareResult<Response> {",
+        "        let tracking_key = req",
+        "            .headers()",
+        "            .keys()",
+        "            .find(|k| {",
+        "                let s = k.as_str();",
+        '                s.eq_ignore_ascii_case("x-tapis-tracking-id")',
+        '                    || s.eq_ignore_ascii_case("x_tapis_tracking_id")',
+        "            })",
+        "            .cloned();",
+        "        if let Some(key) = tracking_key {",
+        "            let tracking_id = req",
+        "                .headers()",
+        "                .get(&key)",
+        "                .and_then(|v| v.to_str().ok())",
+        "                .map(|s| s.to_owned());",
+        "            if let Some(id) = tracking_id {",
+        "                req.headers_mut().remove(&key);",
+        "                validate_tracking_id(&id)",
+        "                    .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;",
+        '                let name = reqwest::header::HeaderName::from_static("x-tapis-tracking-id");',
+        "                let value = reqwest::header::HeaderValue::from_str(&id)",
+        "                    .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;",
+        "                req.headers_mut().insert(name, value);",
+        "            }",
+        "        }",
+        "        next.run(req, extensions).await",
+        "    }",
+        "}",
+        "",
+        "/// Decode a base64url-encoded segment (no padding required) into raw bytes.",
+        "fn decode_base64url(s: &str) -> Option<Vec<u8>> {",
+        "    fn val(c: u8) -> Option<u8> {",
+        "        match c {",
+        "            b'A'..=b'Z' => Some(c - b'A'),",
+        "            b'a'..=b'z' => Some(c - b'a' + 26),",
+        "            b'0'..=b'9' => Some(c - b'0' + 52),",
+        "            b'-' | b'+' => Some(62),",
+        "            b'_' | b'/' => Some(63),",
+        "            _ => None,",
+        "        }",
+        "    }",
+        "    let chars: Vec<u8> = s.bytes().filter(|&b| b != b'=').collect();",
+        "    let mut out = Vec::with_capacity(chars.len() * 3 / 4 + 1);",
+        "    let mut i = 0;",
+        "    while i < chars.len() {",
+        "        let a = val(chars[i])?;",
+        "        let b = val(*chars.get(i + 1)?)?;",
+        "        out.push((a << 2) | (b >> 4));",
+        "        if let Some(&c3) = chars.get(i + 2) {",
+        "            let c = val(c3)?;",
+        "            out.push(((b & 0x0f) << 4) | (c >> 2));",
+        "            if let Some(&c4) = chars.get(i + 3) {",
+        "                let d = val(c4)?;",
+        "                out.push(((c & 0x03) << 6) | d);",
+        "            }",
+        "        }",
+        "        i += 4;",
+        "    }",
+        "    Some(out)",
+        "}",
+        "",
+        "/// Extract the `exp` (expiration) claim from a JWT without verifying the signature.",
+        "fn extract_jwt_exp(token: &str) -> Option<i64> {",
+        "    let payload_b64 = token.split('.').nth(1)?;",
+        "    let bytes = decode_base64url(payload_b64)?;",
+        "    let claims: serde_json::Value = serde_json::from_slice(&bytes).ok()?;",
+        '    claims.get("exp")?.as_i64()',
+        "}",
+        "",
+        "struct RefreshMiddleware {",
+        "    token_provider: Arc<dyn TokenProvider>,",
+        "}",
+        "",
+        "#[async_trait::async_trait]",
+        "impl Middleware for RefreshMiddleware {",
+        "    async fn handle(",
+        "        &self,",
+        "        mut req: Request,",
+        "        extensions: &mut http::Extensions,",
+        "        next: Next<'_>,",
+        "    ) -> MiddlewareResult<Response> {",
+        "        let is_token_endpoint = {",
+        "            let url = req.url().as_str();",
+        '            url.contains("/oauth2/tokens") || url.contains("/v3/tokens")',
+        "        };",
+        "        if !is_token_endpoint {",
+        "            let needs_refresh = req",
+        "                .headers()",
+        '                .get("x-tapis-token")',
+        "                .and_then(|v| v.to_str().ok())",
+        "                .and_then(extract_jwt_exp)",
+        "                .map(|exp| {",
+        "                    let now = std::time::SystemTime::now()",
+        "                        .duration_since(std::time::UNIX_EPOCH)",
+        "                        .map(|d| d.as_secs() as i64)",
+        "                        .unwrap_or(0);",
+        "                    exp - now < 5",
+        "                })",
+        "                .unwrap_or(false);",
+        "            if needs_refresh {",
+        "                if let Some(new_token) = self.token_provider.get_token().await {",
+        "                    let value = HeaderValue::from_str(&new_token).map_err(|e| {",
+        "                        reqwest_middleware::Error::Middleware(anyhow::anyhow!(e))",
+        "                    })?;",
+        '                    req.headers_mut().insert("x-tapis-token", value);',
+        "                }",
+        "            }",
+        "        }",
         "        next.run(req, extensions).await",
         "    }",
         "}",
@@ -337,6 +584,17 @@ def generate_client(
 
     out.extend([
         "    pub fn new(base_url: &str, jwt_token: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {",
+        "        Self::build(base_url, jwt_token, None)",
+        "    }",
+        "",
+        "    /// Create a client with a [`TokenProvider`] for automatic token refresh.",
+        "    /// `RefreshMiddleware` is added to the middleware chain and will call",
+        "    /// `provider.get_token()` transparently whenever the JWT is about to expire.",
+        "    pub fn with_token_provider(base_url: &str, jwt_token: Option<&str>, provider: Arc<dyn TokenProvider>) -> Result<Self, Box<dyn std::error::Error>> {",
+        "        Self::build(base_url, jwt_token, Some(provider))",
+        "    }",
+        "",
+        "    fn build(base_url: &str, jwt_token: Option<&str>, token_provider: Option<Arc<dyn TokenProvider>>) -> Result<Self, Box<dyn std::error::Error>> {",
         "        let mut headers = HeaderMap::new();",
         "        if let Some(token) = jwt_token {",
         '            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);',
@@ -349,15 +607,22 @@ def generate_client(
         "            .default_headers(headers)",
         "            .build()?;",
         "",
-        "        let client = ClientBuilder::new(reqwest_client)",
+        "        let mut builder = ClientBuilder::new(reqwest_client)",
         "            .with(LoggingMiddleware)",
-        "            .build();",
+        "            .with(HeaderInjectionMiddleware)",
+        "            .with(TrackingIdMiddleware);",
         "",
-        "        let mut config = configuration::Configuration::default();",
-        "        config.base_path = base_url.to_string();",
-        "        config.client = client;",
+        "        if let Some(provider) = token_provider {",
+        "            builder = builder.with(RefreshMiddleware { token_provider: provider });",
+        "        }",
         "",
-        "        let config = Arc::new(config);",
+        "        let client = builder.build();",
+        "",
+        "        let config = Arc::new(configuration::Configuration {",
+        "            base_path: base_url.to_string(),",
+        "            client,",
+        "            ..Default::default()",
+        "        });",
         "",
         "        Ok(Self {",
         "            config: config.clone(),",
@@ -445,6 +710,7 @@ def update_service_lib(crate_dir: Path, wrapper_name: str, dry_run: bool) -> Non
     ]
     lines.append("pub mod client;")
     lines.append(f"pub use client::{wrapper_name};")
+    lines.append("pub use client::with_headers;")
 
     updated = "\n".join(lines) + "\n"
     if updated != lib_path.read_text():
@@ -494,7 +760,7 @@ def check_wrapper_coverage(crate_dir: Path) -> tuple[int, int]:
     wrapper_total = sum(
         1
         for line in client_file.read_text().splitlines()
-        if line.lstrip().startswith("pub async fn ")
+        if line.startswith("    pub async fn ")  # indented = inside an impl block
     )
 
     return api_total, wrapper_total
@@ -504,7 +770,10 @@ def update_parent_cargo(repo_root: Path, services: List[str], dry_run: bool) -> 
     root_manifest = repo_root / "Cargo.toml"
     text = root_manifest.read_text()
 
-    dep_lines = []
+    core_version = parse_package_version(repo_root / "tapis-core" / "Cargo.toml")
+    dep_lines = [
+        f'tapis-core = {{ version = "{core_version}", path = "./tapis-core" }}'
+    ]
     for svc in services:
         svc_dir = repo_root / f"tapis-{svc}"
         package_name = parse_package_name(svc_dir / "Cargo.toml")
@@ -519,7 +788,8 @@ def update_parent_cargo(repo_root: Path, services: List[str], dry_run: bool) -> 
                 f'{dep_key} = {{ package = "{package_name}", version = "{version}", path = "./tapis-{svc}" }}'
             )
 
-    ws_members = [f'    "tapis-{svc}",' for svc in services]
+    ws_members = ['    "tapis-core",']
+    ws_members += [f'    "tapis-{svc}",' for svc in services]
 
     text = replace_section(text, "dependencies", "\n".join(dep_lines))
     text = replace_section(
@@ -534,6 +804,14 @@ def update_parent_cargo(repo_root: Path, services: List[str], dry_run: bool) -> 
 def update_parent_lib(repo_root: Path, services: List[str], dry_run: bool) -> None:
     path = repo_root / "src" / "lib.rs"
     lines = ["//! Tapis SDK - Unified client library for Tapis services", ""]
+
+    lines.extend([
+        "/// Shared traits for the Tapis SDK (e.g. [`TokenProvider`](core::TokenProvider)).",
+        "pub mod core {",
+        "    pub use tapis_core::*;",
+        "}",
+        "",
+    ])
 
     for svc in services:
         module = svc.replace("-", "_")
@@ -775,6 +1053,7 @@ def main() -> int:
 
         update_service_manifest(manifest, args.dry_run)
         fix_empty_enum_defaults(crate_dir, args.dry_run)
+        fix_empty_docs(crate_dir, args.dry_run)
         fix_invalid_serde_json_paths(crate_dir, args.dry_run)
         ensure_header_byte_range_display(crate_dir, args.dry_run)
         generate_client(crate_dir, svc, wrapper, args.dry_run)

@@ -30,7 +30,7 @@ impl ReqShareJob {
         }
     }
 }
-///
+
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]
@@ -46,7 +46,6 @@ pub enum JobResource {
     JobInput,
 }
 
-///
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]

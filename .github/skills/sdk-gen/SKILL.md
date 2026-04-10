@@ -11,11 +11,13 @@ license: Apache-2.0
 Use this skill to regenerate low-level Rust API/model code in `tapis-<service>/` crates.
 
 This skill does:
+
 - Run the repo's generation script against the OpenAPI registry
 - Regenerate `src/apis`, `src/models`, docs, and crate manifest
 - Capture known generator-specific issues to fix immediately after generation
 
 This skill does not:
+
 - Maintain wrapper ergonomics (`src/client.rs`) -> use `sdk-wrapper`
 - Maintain parent crate re-exports/dependency wiring -> use `sdk-parent`
 - Diagnose arbitrary compiler failures -> use `sdk-debug`
@@ -23,6 +25,7 @@ This skill does not:
 ## Prerequisites
 
 Required tools:
+
 - `openapi-generator` (tested with 7.x)
 - `jq`
 - `curl`
@@ -57,6 +60,7 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod
 ```
 
 Arguments:
+
 - `<env>`: `prod`, `staging`, or `dev`
 - `<service>`: service key in `.github/skills/sdk-gen/references/OpenAPI_specs.json`
 
@@ -65,6 +69,12 @@ Examples:
 ```bash
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod pods
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod authenticator
+```
+
+For local testing of a complete full SDK regeneration across all services without bumping up the version, run:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump 2>&1
 ```
 
 Automation examples:
@@ -90,6 +100,7 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-c
 ```
 
 Automation notes:
+
 - `--services` limits generation/fixes/wrappers/examples to those services only.
 - `regenerate_all_sdks.py` uses `--no-branch-switch` for generation by default, which avoids git checkout failures in restricted environments and on feature branches.
 - `regenerate_all_sdks.py` performs a DNS precheck for spec hosts and fails fast when host resolution is unavailable.
@@ -107,6 +118,7 @@ Automation notes:
 4. Downloads spec and runs `openapi-generator` into `tapis-<service>/` with `packageVersion` set to the parent SDK version from root `Cargo.toml`.
 
 Operational notes:
+
 - The script requires a clean git working tree when branch switching is needed.
 - Running in `prod` while already on `main` avoids branch switching.
 - Optional version override:
@@ -115,12 +127,14 @@ Operational notes:
 ## Post-Generation Rules
 
 Treat these as generated and avoid manual edits unless a documented generator bug requires it:
+
 - `src/apis/*.rs`
 - `src/models/*.rs`
 - `src/apis/mod.rs`
 - `src/models/mod.rs`
 
 Safe files for manual integration:
+
 - `src/client.rs`
 - `src/lib.rs`
 - crate `Cargo.toml`
@@ -131,18 +145,22 @@ Safe files for manual integration:
 ### 1) Empty enum in `delete_client_200_response.rs`
 
 Symptom:
+
 - `expected identifier, found '}'` in `tapis-authenticator/src/models/delete_client_200_response.rs`
 
 Fix:
+
 - Replace `result: Option<Option<Result>>` with `result: Option<Option<serde_json::Value>>`
 - Remove the empty `Result` enum and its `Default` impl
 
 ### 2) Multipart upload `Form::file` missing
 
 Symptom:
+
 - `no method named file found for struct Form`
 
 Fix:
+
 - Ensure Pods crate enables reqwest `stream` feature:
 
 ```toml
@@ -152,9 +170,11 @@ reqwest = { version = "^0.12", default-features = false, features = ["json", "mu
 ### 3) Wrapper exports dropped from generated `src/lib.rs`
 
 Symptom:
+
 - Wrapper compiles but is not exported
 
 Fix:
+
 - Re-add in service crate:
 
 ```rust
@@ -165,39 +185,48 @@ pub use client::Tapis<ServiceName>;
 ### 4) Invalid `models::serde_json::Value` emitted in some generated APIs
 
 Symptom:
+
 - `could not find serde_json in models`
 
 Observed services:
+
 - `tapis-meta`
 - `tapis-streams`
 
 Fix:
+
 - Replace `models::serde_json::Value` with `serde_json::Value` in affected generated API files.
 - If wrapper method signatures copied the bad type, patch wrappers too.
 
 ### 5) Files `HeaderByteRange` missing `Display`
 
 Symptom:
+
 - `HeaderByteRange doesn't implement std::fmt::Display`
 
 Fix:
+
 - Add `impl std::fmt::Display for HeaderByteRange` in `tapis-files/src/models/header_byte_range.rs`.
 
 ### 6) Service versions reset by generator
 
 Symptom:
+
 - Regenerated crates revert to `1.0.0`.
 
 Fix:
+
 - After all generation/wrapper/debug tasks are complete, run:
   `bash .github/skills/sdk-parent/scripts/bump_minor_version.sh`
 
 ### 7) Branch checkout can fail in restricted environments
 
 Symptom:
+
 - Generation fails while trying to `git checkout` environment branch.
 
 Fix:
+
 - Run generation with `--no-branch-switch`.
 - `regenerate_all_sdks.py` already does this by default; use `--allow-branch-switch` only when branch switching is explicitly desired.
 
@@ -224,6 +253,7 @@ rg -n 'models::serde_json::Value' tapis-*/src/apis tapis-*/src/client.rs
 ```
 
 Expected:
+
 - Build succeeds
 - Method counts match for each wrapped service
 
@@ -242,6 +272,7 @@ Expected:
 ## Handoff
 
 After this skill:
+
 1. Use `sdk-wrapper` to restore/update wrappers.
 2. Use `sdk-parent` to verify parent dependency wiring and re-exports.
 3. Use `sdk-debug` if build failures remain.

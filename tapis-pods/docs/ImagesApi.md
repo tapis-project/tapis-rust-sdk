@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**delete_image**](ImagesApi.md#delete_image) | **DELETE** /pods/images/{image_id} | delete_image
 [**get_image**](ImagesApi.md#get_image) | **GET** /pods/images/{image_id} | get_image
 [**get_images**](ImagesApi.md#get_images) | **GET** /pods/images | get_images
+[**update_image**](ImagesApi.md#update_image) | **PUT** /pods/images/{image_id} | update_image
 
 
 
@@ -155,6 +156,37 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## update_image
+
+> models::ImageResponse update_image(image_id, update_image)
+update_image
+
+Update an image's metadata (tenants, description).  Requires admin mode (X-Pods-Admin: true header).  Returns updated image object.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**image_id** | **String** |  | [required] |
+**update_image** | [**UpdateImage**](UpdateImage.md) |  | [required] |
+
+### Return type
+
+[**models::ImageResponse**](ImageResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

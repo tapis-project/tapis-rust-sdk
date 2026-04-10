@@ -110,7 +110,7 @@ No authorization required
 
 ## delete_template_tag
 
-> models::TemplateTagResponse delete_template_tag(template_id, tag_id, force)
+> models::TemplateTagDeleteResponse delete_template_tag(template_id, tag_id, force)
 delete_template_tag
 
 Delete a specific template tag. (Admin only)  If the tag has dependent pods or other template tags that inherit from it, deletion will fail unless the `force=true` query parameter is provided.  Returns the deleted tag information.
@@ -126,7 +126,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::TemplateTagResponse**](TemplateTagResponse.md)
+[**models::TemplateTagDeleteResponse**](TemplateTagDeleteResponse.md)
 
 ### Authorization
 
@@ -142,7 +142,7 @@ No authorization required
 
 ## get_template
 
-> models::TemplateResponse get_template(template_id, include_dependencies)
+> models::ResponseGetTemplate get_template(template_id, include_dependencies)
 get_template
 
 Get a template.  Returns retrieved templates object.
@@ -157,7 +157,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::TemplateResponse**](TemplateResponse.md)
+[**models::ResponseGetTemplate**](Response_Get_Template.md)
 
 ### Authorization
 
@@ -173,7 +173,7 @@ No authorization required
 
 ## get_template_tag
 
-> models::TemplateTagsResponse get_template_tag(template_id, tag_id, include_configs, include_dependencies)
+> models::ResponseGetTemplateTag get_template_tag(template_id, tag_id, include_configs, include_dependencies)
 get_template_tag
 
 Get a specific tag entry the template has  Returns the tag entry
@@ -190,7 +190,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::TemplateTagsResponse**](TemplateTagsResponse.md)
+[**models::ResponseGetTemplateTag**](Response_Get_Template_Tag.md)
 
 ### Authorization
 
@@ -206,7 +206,7 @@ No authorization required
 
 ## list_template_tags
 
-> models::TemplateTagsResponse list_template_tags(template_id, full, include_configs, include_dependencies)
+> models::ResponseListTemplateTags list_template_tags(template_id, full, include_configs, include_dependencies)
 list_template_tags
 
 List tag entries the template has  Returns the ledger of template tags
@@ -223,7 +223,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::TemplateTagsResponse**](TemplateTagsResponse.md)
+[**models::ResponseListTemplateTags**](Response_List_Template_Tags.md)
 
 ### Authorization
 
@@ -239,7 +239,7 @@ No authorization required
 
 ## list_templates
 
-> models::TemplatesResponse list_templates(include_dependencies)
+> models::ResponseListTemplates list_templates(include_dependencies)
 list_templates
 
 Get all templates allowed globally + in respective tenant + for specific user. Returns a list of templates.
@@ -253,7 +253,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::TemplatesResponse**](TemplatesResponse.md)
+[**models::ResponseListTemplates**](Response_List_Templates.md)
 
 ### Authorization
 

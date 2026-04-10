@@ -1,5 +1,10 @@
 //! Tapis SDK - Unified client library for Tapis services
 
+/// Shared traits for the Tapis SDK (e.g. [`TokenProvider`](core::TokenProvider)).
+pub mod core {
+    pub use tapis_core::*;
+}
+
 /// Tapis Actors service client
 pub mod actors {
     pub use tapis_actors::*;
