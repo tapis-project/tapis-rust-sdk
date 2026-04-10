@@ -26,6 +26,7 @@ The repository is a Cargo workspace:
 | `actors` | `tapis-actors` | Actor-based functions and executions | [docs.rs/tapis-actors](https://docs.rs/tapis-actors) |
 | `apps` | `tapis-apps` | Application definitions and sharing | [docs.rs/tapis-apps](https://docs.rs/tapis-apps) |
 | `authenticator` | `tapis-authenticator` | AuthN/AuthZ, clients, and token APIs | [docs.rs/tapis-authenticator](https://docs.rs/tapis-authenticator) |
+| `core` | `tapis-core` | Shared traits (`TokenProvider`) for the SDK | [docs.rs/tapis-core](https://docs.rs/tapis-core) |
 | `files` | `tapis-files` | File operations, permissions, transfers | [docs.rs/tapis-files](https://docs.rs/tapis-files) |
 | `globus_proxy` | `tapis-globus-proxy` | Globus proxy and transfer operations | [docs.rs/tapis-globus-proxy](https://docs.rs/tapis-globus-proxy) |
 | `jobs` | `tapis-jobs` | Job submission and lifecycle management | [docs.rs/tapis-jobs](https://docs.rs/tapis-jobs) |
