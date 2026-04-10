@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 **volume_mounts** | Option<[**std::collections::HashMap<String, models::VolumeMountsValue>**](Volume_Mounts_value.md)> | Volume mounts keyed by mount_path. For templates, tapisvolume/tapissnapshot MUST use placeholder source_id (e.g., \"${:?Description}\"). Ex: {\"/data\": {\"type\": \"tapisvolume\", \"source_id\": \"${:?User data volume}\"}, \"/etc/config.ini\": {\"type\": \"ephemeral\", \"config_content\": \"key=value\"}} | [optional][default to {}]
 **time_to_stop_default** | Option<**i32**> |  | [optional]
 **time_to_stop_instance** | Option<**i32**> |  | [optional]
-**networking** | Option<[**std::collections::HashMap<String, models::ModelsTemplatesTagsNetworking>**](models_templates_tags__Networking.md)> | Networking information. `{\"url_suffix\": {\"protocol\": \"http\"  \"tcp\", \"port\": int}}` | [optional][default to {}]
+**networking** | Option<[**std::collections::HashMap<String, models::Networking>**](Networking.md)> | Networking information. `{\"url_suffix\": {\"protocol\": \"http\"  \"tcp\", \"port\": int}}` | [optional][default to {}]
 **resources** | Option<[**models::ModelsTemplatesTagsResources**](models_templates_tags__Resources.md)> | Pod resource management `{\"cpu_limit\": 3000, \"mem_limit\": 3000, \"cpu_request\": 500, \"mem_limit\": 500, \"gpus\": 0}` | [optional][default to {}]
 **compute_queue** | Option<**String**> | Queue to run pod in. `default` is the default queue. | [optional][default to default]
 

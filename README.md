@@ -90,6 +90,122 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+## Injecting Additional Headers
+
+Every service crate exposes a `with_headers` function that scopes extra HTTP headers to a single call (or any block of calls). The `X-Tapis-Token` set at client construction is still sent automatically — `with_headers` only adds (or overrides) the headers you supply.
+
+```rust
+use http::header::{HeaderMap, HeaderValue};
+use tapis_sdk::jobs::{models, with_headers, TapisJobs};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let base_url = std::env::var("TAPIS_BASE_URL")
+        .unwrap_or_else(|_| "https://dev.develop.tapis.io/v3".to_string());
+    let token = std::env::var("TAPIS_TOKEN")?;
+
+    let jobs = TapisJobs::new(&base_url, Some(token.as_str()))?;
+
+    // Build the extra headers for this call only.
+    let mut hdrs = HeaderMap::new();
+    hdrs.insert("X-Tapis-Tenant", HeaderValue::from_static("tacc"));
+    hdrs.insert("X-Request-Id",   HeaderValue::from_static("trace-abc-123"));
+
+    // Wrap any call (or async block) in with_headers.
+    // The JWT is still sent automatically; extra headers are layered on top.
+    let job = with_headers(
+        hdrs,
+        jobs.jobs.get_job("your-job-uuid"),
+    ).await?;
+
+    println!("Job: {:?}", job);
+
+    // Calls without with_headers are unaffected — no extra headers sent.
+    let status = jobs.jobs.get_job_status("your-job-uuid").await?;
+    println!("Status: {:?}", status);
+
+    Ok(())
+}
+```
+
+> **Precedence:** if you supply `X-Tapis-Token` inside `with_headers`, it overrides the token set on the client for that call. This enables per-call auth (e.g. impersonation or multi-tenant proxying) without rebuilding the client.
+
+## Automatic Token Refresh
+
+Every service client supports an optional `TokenProvider` for transparent token refresh. When a request is about to be sent and the current JWT has fewer than 5 seconds until expiry, the `RefreshMiddleware` calls `provider.get_token()` and substitutes the fresh token — no manual intervention required.
+
+### 1) Implement `TokenProvider`
+
+`TokenProvider` lives in the `tapis-core` crate (re-exported as `tapis_sdk::core::TokenProvider`). Implement it on any struct that knows how to obtain a fresh token:
+
+```rust
+use std::sync::Arc;
+use async_trait::async_trait;
+use tapis_sdk::core::TokenProvider;
+
+/// Refreshes tokens via the Tapis password grant.
+struct PasswordTokenProvider {
+    base_url: String,
+    username: String,
+    password: String,
+}
+
+#[async_trait]
+impl TokenProvider for PasswordTokenProvider {
+    async fn get_token(&self) -> Option<String> {
+        use tapis_sdk::authenticator::{models, TapisAuthenticator};
+
+        let auth = TapisAuthenticator::new(&self.base_url, None).ok()?;
+        let mut req = models::NewToken::new();
+        req.username   = Some(self.username.clone());
+        req.password   = Some(self.password.clone());
+        req.grant_type = Some("password".to_string());
+
+        let resp = auth.tokens.create_token(req).await.ok()?;
+        resp.result?.access_token?.access_token
+    }
+}
+```
+
+> **Infinite-loop protection:** `RefreshMiddleware` does **not** recurse — if `get_token()` itself issues HTTP requests through the same client instance, those inner calls bypass the middleware and use whatever token was set directly on that inner client.
+
+### 2) Wire the Provider into a Client
+
+Call `.with_token_provider(provider)` after `.new(...)`. The initial `jwt_token` is still used for requests while it is valid; the provider is only invoked when a near-expiry condition is detected.
+
+```rust
+use std::sync::Arc;
+use tapis_sdk::jobs::TapisJobs;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let base_url = std::env::var("TAPIS_BASE_URL")
+        .unwrap_or_else(|_| "https://dev.develop.tapis.io/v3".to_string());
+    let token    = std::env::var("TAPIS_TOKEN")?;
+
+    let provider = Arc::new(PasswordTokenProvider {
+        base_url: base_url.clone(),
+        username: std::env::var("TAPIS_USERNAME")?,
+        password: std::env::var("TAPIS_PASSWORD")?,
+    });
+
+    // Build the client with an initial token and the provider in one call.
+    // Token refresh happens transparently on every request when needed.
+    let jobs = TapisJobs::with_token_provider(&base_url, Some(token.as_str()), provider)?;
+
+    // Long-running workload — the token is refreshed automatically if it expires.
+    let resp = jobs
+        .jobs
+        .get_jobs(None, None, None, None, None, None, None, None, None)
+        .await?;
+    println!("Found {} jobs", resp.result.map(|r| r.len()).unwrap_or(0));
+
+    Ok(())
+}
+```
+
+> **Note:** `with_token_provider` is available on every generated service client (`TapisJobs`, `TapisSystems`, `TapisApps`, etc.). The provider only needs to be implemented once and can be shared across multiple clients via `Arc::clone`.
+
 ## Systems, Apps, and Jobs Workflow
 
 The snippets below demonstrate a common flow:

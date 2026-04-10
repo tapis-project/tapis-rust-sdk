@@ -27,7 +27,7 @@ impl DeliveryTarget {
         }
     }
 }
-///
+
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]

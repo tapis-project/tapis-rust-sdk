@@ -1,6 +1,6 @@
 [package]
 name = "tapis-pgrest"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis PgREST API provides a RESTful interface to a managed SQL-db-as-a-service."
 license = "BSD-3-Clause"
@@ -15,6 +15,9 @@ reqwest = { version = "^0.12", default-features = false, features = ["json", "mu
 reqwest-middleware = { version = "^0.4", features = ["json", "multipart"] }
 http = "^1.0"
 async-trait = "^0.1"
+tokio = { version = "^1.0", features = ["rt"] }
+anyhow = "^1.0"
+tapis-core = { version = "0.3.0", path = "../tapis-core" }
 [features]
 default = ["native-tls"]
 native-tls = ["reqwest/native-tls"]

@@ -12,4 +12,5 @@ extern crate url;
 pub mod apis;
 pub mod client;
 pub mod models;
+pub use client::with_headers;
 pub use client::TapisFiles;

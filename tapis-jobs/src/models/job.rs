@@ -279,7 +279,7 @@ impl Job {
         }
     }
 }
-///
+
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]
@@ -313,7 +313,6 @@ pub enum Status {
     Failed,
 }
 
-///
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]
@@ -373,7 +372,6 @@ pub enum Condition {
     SchedulerTerminated,
 }
 
-///
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]
@@ -387,7 +385,6 @@ pub enum RemoteOutcome {
     FailedSkipArchive,
 }
 
-///
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]
@@ -399,7 +396,6 @@ pub enum JobType {
     Batch,
 }
 
-///
 #[derive(
     Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
 )]
