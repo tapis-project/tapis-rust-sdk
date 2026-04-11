@@ -130,6 +130,9 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
         r'^license\s*=\s*".*"\s*$', 'license = "BSD-3-Clause"', text, flags=re.M
     )
 
+    # Always use the latest Rust edition.
+    text = re.sub(r'^edition\s*=\s*"[^"]*"\s*$', 'edition = "2024"', text, flags=re.M)
+
     def with_stream(match: re.Match[str]) -> str:
         block = match.group(0)
         if '"stream"' in block:

@@ -1,8 +1,8 @@
 use crate::apis::{
-    archives_api, channels_api, configuration, healthcheck_api, hello_api, instruments_api,
+    Error, archives_api, channels_api, configuration, healthcheck_api, hello_api, instruments_api,
     measured_properties_api, measurements_api, ontologies_api, projects_api, ready_api,
     revoke_roles_api, roles_api, search_across_all_streams_end_points_api, sites_api,
-    templates_api, transfer_instrument_data_api, units_api, variables_api, Error,
+    templates_api, transfer_instrument_data_api, units_api, variables_api,
 };
 use crate::models;
 use http::header::{HeaderMap, HeaderValue};
@@ -197,12 +197,10 @@ impl Middleware for RefreshMiddleware {
                     exp - now < 5
                 })
                 .unwrap_or(false);
-            if needs_refresh {
-                if let Some(new_token) = self.token_provider.get_token().await {
-                    let value = HeaderValue::from_str(&new_token)
-                        .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
-                    req.headers_mut().insert("x-tapis-token", value);
-                }
+            if needs_refresh && let Some(new_token) = self.token_provider.get_token().await {
+                let value = HeaderValue::from_str(&new_token)
+                    .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
+                req.headers_mut().insert("x-tapis-token", value);
             }
         }
         next.run(req, extensions).await

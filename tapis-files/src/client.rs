@@ -1,6 +1,6 @@
 use crate::apis::{
-    configuration, content_api, file_operations_api, general_api, permissions_api, post_its_api,
-    sharing_api, transfers_api, Error,
+    Error, configuration, content_api, file_operations_api, general_api, permissions_api,
+    post_its_api, sharing_api, transfers_api,
 };
 use crate::models;
 use http::header::{HeaderMap, HeaderValue};
@@ -195,12 +195,10 @@ impl Middleware for RefreshMiddleware {
                     exp - now < 5
                 })
                 .unwrap_or(false);
-            if needs_refresh {
-                if let Some(new_token) = self.token_provider.get_token().await {
-                    let value = HeaderValue::from_str(&new_token)
-                        .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
-                    req.headers_mut().insert("x-tapis-token", value);
-                }
+            if needs_refresh && let Some(new_token) = self.token_provider.get_token().await {
+                let value = HeaderValue::from_str(&new_token)
+                    .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
+                req.headers_mut().insert("x-tapis-token", value);
             }
         }
         next.run(req, extensions).await
