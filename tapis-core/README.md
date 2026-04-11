@@ -40,7 +40,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-tapis-core = "0.3.0"
+tapis-core = "0.3.1"
 async-trait = "0.1"
 ```
 

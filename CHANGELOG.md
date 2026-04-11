@@ -6,6 +6,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
 
 ---
 
+## [0.3.1] — 2026-04-10
+
+### Changed
+
+- Rust edition bumped from `2021` to `2024` across all crates.
+
+---
+
 ## [0.3.0] — 2026-04-10
 
 ### Added
@@ -46,7 +54,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
 
 - `TapisClient::new(base_url, jwt_token)` — unchanged, no migration needed.
 - To opt in to token refresh: replace `::new(...)` with `::with_token_provider(base_url, jwt_token, Arc::new(MyProvider))`.
-- Add `tapis-core = "0.3.0"` to your `Cargo.toml` only if you implement `TokenProvider` directly; otherwise it is pulled in transitively through any service crate.
+- Add `tapis-core = "0.3.1"` to your `Cargo.toml` only if you implement `TokenProvider` directly; otherwise it is pulled in transitively through any service crate.
 
 ---
 

@@ -1,31 +1,31 @@
 [package]
 name = "tapis-sdk"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Comprehensive Rust SDK for Tapis services"
 license = "BSD-3-Clause"
-edition = "2021"
+edition = "2024"
 repository = "https://github.com/tapis-project/tapis-rust-sdk"
 homepage = "https://tapis-project.org"
 
 [dependencies]
-tapis-core = { version = "0.3.0", path = "./tapis-core" }
-tapis-actors = { version = "0.3.0", path = "./tapis-actors" }
-tapis-apps = { version = "0.3.0", path = "./tapis-apps" }
-tapis-authenticator = { version = "0.3.0", path = "./tapis-authenticator" }
-tapis-files = { version = "0.3.0", path = "./tapis-files" }
-tapis-globus-proxy = { version = "0.3.0", path = "./tapis-globus-proxy" }
-tapis-jobs = { version = "0.3.0", path = "./tapis-jobs" }
-tapis-meta = { version = "0.3.0", path = "./tapis-meta" }
-tapis-notifications = { version = "0.3.0", path = "./tapis-notifications" }
-tapis-pgrest = { version = "0.3.0", path = "./tapis-pgrest" }
-tapis-pods = { version = "0.3.0", path = "./tapis-pods" }
-tapis-sk = { version = "0.3.0", path = "./tapis-sk" }
-tapis-streams = { version = "0.3.0", path = "./tapis-streams" }
-tapis-systems = { version = "0.3.0", path = "./tapis-systems" }
-tapis-tenants = { version = "0.3.0", path = "./tapis-tenants" }
-tapis-tokens = { version = "0.3.0", path = "./tapis-tokens" }
-tapis-workflows = { version = "0.3.0", path = "./tapis-workflows" }
+tapis-core = { version = "0.3.1", path = "./tapis-core" }
+tapis-actors = { version = "0.3.1", path = "./tapis-actors" }
+tapis-apps = { version = "0.3.1", path = "./tapis-apps" }
+tapis-authenticator = { version = "0.3.1", path = "./tapis-authenticator" }
+tapis-files = { version = "0.3.1", path = "./tapis-files" }
+tapis-globus-proxy = { version = "0.3.1", path = "./tapis-globus-proxy" }
+tapis-jobs = { version = "0.3.1", path = "./tapis-jobs" }
+tapis-meta = { version = "0.3.1", path = "./tapis-meta" }
+tapis-notifications = { version = "0.3.1", path = "./tapis-notifications" }
+tapis-pgrest = { version = "0.3.1", path = "./tapis-pgrest" }
+tapis-pods = { version = "0.3.1", path = "./tapis-pods" }
+tapis-sk = { version = "0.3.1", path = "./tapis-sk" }
+tapis-streams = { version = "0.3.1", path = "./tapis-streams" }
+tapis-systems = { version = "0.3.1", path = "./tapis-systems" }
+tapis-tenants = { version = "0.3.1", path = "./tapis-tenants" }
+tapis-tokens = { version = "0.3.1", path = "./tapis-tokens" }
+tapis-workflows = { version = "0.3.1", path = "./tapis-workflows" }
 [dev-dependencies]
 
 
