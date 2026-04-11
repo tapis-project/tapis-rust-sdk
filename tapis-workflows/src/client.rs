@@ -1,7 +1,7 @@
 use crate::apis::{
-    archives_api, cicd_api, configuration, etl_api, general_api, group_secrets_api, groups_api,
-    identities_api, pipeline_archives_api, pipeline_locks_api, pipeline_runs_api, pipelines_api,
-    secrets_api, task_executions_api, tasks_api, users_api, Error,
+    Error, archives_api, cicd_api, configuration, etl_api, general_api, group_secrets_api,
+    groups_api, identities_api, pipeline_archives_api, pipeline_locks_api, pipeline_runs_api,
+    pipelines_api, secrets_api, task_executions_api, tasks_api, users_api,
 };
 use crate::models;
 use http::header::{HeaderMap, HeaderValue};
@@ -196,12 +196,10 @@ impl Middleware for RefreshMiddleware {
                     exp - now < 5
                 })
                 .unwrap_or(false);
-            if needs_refresh {
-                if let Some(new_token) = self.token_provider.get_token().await {
-                    let value = HeaderValue::from_str(&new_token)
-                        .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
-                    req.headers_mut().insert("x-tapis-token", value);
-                }
+            if needs_refresh && let Some(new_token) = self.token_provider.get_token().await {
+                let value = HeaderValue::from_str(&new_token)
+                    .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
+                req.headers_mut().insert("x-tapis-token", value);
             }
         }
         next.run(req, extensions).await

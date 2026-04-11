@@ -47,31 +47,5 @@ jobs:
           cargo clippy --workspace --all-targets
           cargo build --workspace --all-targets
 
-      - name: Publish sub-crates to crates.io
-        run: |
-          set -euo pipefail
-          for crate_dir in \
-            tapis-actors \
-            tapis-apps \
-            tapis-authenticator \
-            tapis-core \
-            tapis-files \
-            tapis-globus-proxy \
-            tapis-jobs \
-            tapis-meta \
-            tapis-notifications \
-            tapis-pgrest \
-            tapis-pods \
-            tapis-sk \
-            tapis-streams \
-            tapis-systems \
-            tapis-tenants \
-            tapis-tokens \
-            tapis-workflows
-          do
-            echo "Publishing ${crate_dir}..."
-            (cd "${crate_dir}" && cargo publish --locked)
-          done
-
-      - name: Publish parent crate to crates.io
-        run: cargo publish --locked
+      - name: Publish all crates to crates.io
+        run: bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh

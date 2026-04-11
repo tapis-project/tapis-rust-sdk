@@ -130,6 +130,9 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
         r'^license\s*=\s*".*"\s*$', 'license = "BSD-3-Clause"', text, flags=re.M
     )
 
+    # Always use the latest Rust edition.
+    text = re.sub(r'^edition\s*=\s*"[^"]*"\s*$', 'edition = "2024"', text, flags=re.M)
+
     def with_stream(match: re.Match[str]) -> str:
         block = match.group(0)
         if '"stream"' in block:
@@ -192,7 +195,16 @@ def update_service_manifest(manifest: Path, dry_run: bool) -> None:
         )
 
     # tapis-core provides the TokenProvider trait used by RefreshMiddleware.
-    tapis_core_dep = 'tapis-core = { version = "0.2.0", path = "../tapis-core" }'
+    # Read the version dynamically from tapis-core/Cargo.toml so this stays in sync.
+    tapis_core_manifest = manifest.parent.parent / "tapis-core" / "Cargo.toml"
+    tapis_core_version = (
+        parse_package_version(tapis_core_manifest)
+        if tapis_core_manifest.exists()
+        else "0.3.1"
+    )
+    tapis_core_dep = (
+        f'tapis-core = {{ version = "{tapis_core_version}", path = "../tapis-core" }}'
+    )
     deps_body = _section_body(text, "dependencies")
     if deps_body is None:
         text = replace_section(text, "dependencies", tapis_core_dep)
