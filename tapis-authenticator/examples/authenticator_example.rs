@@ -50,6 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     // Try to get username/password from environment
+    let mut fetched_token: Option<String> = None;
     if let (Ok(username), Ok(password)) = (
         std::env::var("TAPIS_USERNAME"),
         std::env::var("TAPIS_PASSWORD"),
@@ -70,8 +71,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if let Some(result) = response.result {
                     if let Some(access_token_str) = result.access_token.access_token {
                         println!("  Access Token: {}", access_token_str);
-                        // set TAPIS_TOKEN environment variable for subsequent examples
-                        std::env::set_var("TAPIS_TOKEN", access_token_str);
+                        fetched_token = Some(access_token_str);
                     }
                     if let Some(expires_in) = result.access_token.expires_in {
                         println!("  Expires In: {} seconds", expires_in);
@@ -86,16 +86,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     println!();
 
-    // Get JWT token from environment for authenticated examples
-    let jwt_token = match std::env::var("TAPIS_TOKEN") {
-        Ok(token) => token,
-        Err(_) => {
+    // Get JWT token: prefer the one just fetched, fall back to environment variable
+    let jwt_token = fetched_token
+        .or_else(|| std::env::var("TAPIS_TOKEN").ok())
+        .unwrap_or_else(|| {
             println!("ℹ️  TAPIS_TOKEN not set. Skipping authenticated examples.");
             println!("   Set it with: export TAPIS_TOKEN='your_token'");
             println!("\n✅ Example completed (partial - no auth token)");
-            return Ok(());
-        }
-    };
+            std::process::exit(0);
+        });
 
     println!("🔧 Creating authenticated TapisAuthenticator client...");
 
