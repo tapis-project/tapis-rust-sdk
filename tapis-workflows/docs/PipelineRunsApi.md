@@ -154,7 +154,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **x_workflow_executor_token** | **String** | an authorization header that contains the token that authroizes the workflow executor to update the pipeline run status  | [required] |
 **pipeline_run_uuid** | **uuid::Uuid** |  | [required] |
-**status** | [**EnumRunStatus**](.md) |  | [required] |
+**status** | [**EnumRunStatus**](EnumRunStatus.md) |  | [required] |
 **req_patch_pipeline_run** | Option<[**ReqPatchPipelineRun**](ReqPatchPipelineRun.md)> | Empty JSON object. |  |
 
 ### Return type

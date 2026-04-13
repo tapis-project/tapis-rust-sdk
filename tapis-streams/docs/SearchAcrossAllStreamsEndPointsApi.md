@@ -21,7 +21,7 @@ Search endpoint for streams resources
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **resource_type** | **String** |  | [required] |
-**list_type** | Option<[**ListTypeEnum**](.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only see items owned by requester. |  |
+**list_type** | Option<[**ListTypeEnum**](ListTypeEnum.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only see items owned by requester. |  |
 **skip** | Option<**i32**> |  |  |
 **compute_total** | Option<**bool**> | Compute total number of results that would have been returned if unlimited. Default is false. |  |[default to false]
 

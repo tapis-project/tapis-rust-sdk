@@ -860,7 +860,7 @@ pub async fn get_apps(
         req_builder = req_builder.query(&[("search", &param_value.to_string())]);
     }
     if let Some(ref param_value) = p_query_list_type {
-        req_builder = req_builder.query(&[("listType", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("listType", &param_value.to_string())]);
     }
     if let Some(ref param_value) = p_query_limit {
         req_builder = req_builder.query(&[("limit", &param_value.to_string())]);
@@ -1291,7 +1291,7 @@ pub async fn search_apps_query_parameters(
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
     if let Some(ref param_value) = p_query_list_type {
-        req_builder = req_builder.query(&[("listType", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("listType", &param_value.to_string())]);
     }
     if let Some(ref param_value) = p_query_limit {
         req_builder = req_builder.query(&[("limit", &param_value.to_string())]);
@@ -1386,7 +1386,7 @@ pub async fn search_apps_request_body(
         .request(reqwest::Method::POST, &uri_str);
 
     if let Some(ref param_value) = p_query_list_type {
-        req_builder = req_builder.query(&[("listType", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("listType", &param_value.to_string())]);
     }
     if let Some(ref param_value) = p_query_limit {
         req_builder = req_builder.query(&[("limit", &param_value.to_string())]);

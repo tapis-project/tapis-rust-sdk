@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **columns** | [**models::TableColumns**](TableColumns.md) |  | 
 **comments** | Option<**String**> | Text area to describe table. Returned when calling manage endpoints. | [optional]
 **constraints** | Option<[**models::TableConstraints**](TableConstraints.md)> |  | [optional]
-**enums** | Option<[**serde_json::Value**](.md)> | Definition for enum to create. {enum_name\":\" [enum_val_1, ...]} | [optional]
+**enums** | Option<**serde_json::Value**> | Definition for enum to create. {enum_name\":\" [enum_val_1, ...]} | [optional]
 **create** | Option<**bool**> | Whether the \"created\" endpoint (HTTP verb \"POST\") for creating new rows is available. | [optional][default to true]
 **delete** | Option<**bool**> | Whether the \"delete\" endpoint (HTTP verb \"delete\") for deleting a specific row is available. | [optional][default to true]
 **list_all** | Option<**bool**> | Whether the \"list all\" endpoint (HTTP verb \"GET\") for listing all rows in the table is available. | [optional][default to true]
