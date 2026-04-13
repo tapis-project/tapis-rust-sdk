@@ -14,8 +14,8 @@ Name | Type | Description | Notes
 **foreign_key** | Option<**bool**> | Whether this column should reference a foreign key in another table. | [optional]
 **reference_table** | Option<**String**> | Only if foreign_key, sets which table to reference. | [optional]
 **reference_column** | Option<**String**> | Only if foreign_key, sets when table column to reference. | [optional]
-**on_event** | Option<**String**> | Only if foreign_key, sets whether to use ON DELETE or ON UPDATE postgres definition. | [optional]
-**event_action** | Option<**String**> | Only if foreign_key, sets which event action to call when on_event event occurs. | [optional]
+**on_event** | Option<**OnEvent**> | Only if foreign_key, sets whether to use ON DELETE or ON UPDATE postgres definition. (enum: ON DELETE, ON UPDATE) | [optional]
+**event_action** | Option<**EventAction**> | Only if foreign_key, sets which event action to call when on_event event occurs. (enum: CASCADE, SET NULL, SET DEFAULT, RESTRICT, NO ACTION) | [optional]
 **serial_start** | Option<**i32**> | Only if data_type is serial. Delegates what number the data_type will start at. | [optional]
 **serial_increment** | Option<**i32**> | Only if data_type is serial. Delegates what the serial increment between rows will be. | [optional]
 

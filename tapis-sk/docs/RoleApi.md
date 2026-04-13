@@ -129,7 +129,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **role_name** | **String** |  | [required] |
 **tenant** | Option<**String**> |  |  |
-**role_type** | Option<[**RoleTypeEnum**](.md)> |  |  |
+**role_type** | Option<[**RoleTypeEnum**](RoleTypeEnum.md)> |  |  |
 
 ### Return type
 
@@ -191,7 +191,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **role_name** | **String** |  | [required] |
 **tenant** | Option<**String**> |  |  |
-**role_type** | Option<[**RoleTypeEnum**](.md)> |  |  |
+**role_type** | Option<[**RoleTypeEnum**](RoleTypeEnum.md)> |  |  |
 
 ### Return type
 
@@ -222,7 +222,7 @@ Get the names of all roles in the tenant in alphabetic order. Future enhancement
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **tenant** | Option<**String**> |  |  |
-**role_type** | Option<[**RoleTypeEnum**](.md)> |  |  |
+**role_type** | Option<[**RoleTypeEnum**](RoleTypeEnum.md)> |  |  |
 
 ### Return type
 

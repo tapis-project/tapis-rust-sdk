@@ -9,16 +9,16 @@ Name | Type | Description | Notes
 **description** | Option<**String**> |  | [optional]
 **command** | Option<**Vec<String>**> |  | [optional]
 **arguments** | Option<**Vec<String>**> |  | [optional]
-**environment_variables** | Option<[**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md)> |  | [optional]
+**environment_variables** | Option<**std::collections::HashMap<String, serde_json::Value>**> |  | [optional]
 **secret_map** | Option<**std::collections::HashMap<String, String>**> |  | [optional]
 **status_requested** | Option<**String**> |  | [optional]
-**volume_mounts** | Option<[**std::collections::HashMap<String, models::VolumeMountsValue>**](Volume_Mounts_value.md)> |  | [optional]
+**volume_mounts** | Option<[**std::collections::HashMap<String, models::VolumeMountsValue>**](VolumeMountsValue.md)> |  | [optional]
 **time_to_stop_default** | Option<**i32**> |  | [optional]
 **time_to_stop_instance** | Option<**i32**> |  | [optional]
 **networking** | Option<[**std::collections::HashMap<String, models::Networking>**](Networking.md)> |  | [optional]
-**resources** | Option<[**models::ModelsPodsResources**](models_pods__Resources.md)> |  | [optional]
+**resources** | Option<[**models::ModelsPodsResources**](ModelsPodsResources.md)> |  | [optional]
 **compute_queue** | Option<**String**> | Queue to run pod in. `default` is the default queue. | [optional][default to default]
-**template_overrides** | Option<[**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md)> |  | [optional]
+**template_overrides** | Option<**std::collections::HashMap<String, serde_json::Value>**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

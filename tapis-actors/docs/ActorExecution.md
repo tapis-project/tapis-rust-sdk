@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **cpu** | Option<**i32**> |  | [optional]
 **id** | Option<**String**> | the id of the executions | [optional]
 **start_time** | Option<**String**> | the time the execution started. | [optional]
-**status** | Option<**String**> | the status of the execution. | [optional]
+**status** | Option<**Status**> | the status of the execution. (enum: SUBMITTED, RUNNING, COMPLETE) | [optional]
 **message_received_time** | Option<**String**> | the time the message was originally received by Abaco. | [optional]
 **io** | Option<**i32**> |  | [optional]
 **runtime** | Option<**i32**> |  | [optional]

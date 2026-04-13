@@ -99,7 +99,7 @@ Name | Type | Description  | Required | Notes
 **skip** | Option<**i32**> | index (skip) to start list. |  |
 **start_date** | Option<**String**> | start date of measurements |  |
 **end_date** | Option<**String**> | end date of measurements |  |
-**geojson** | Option<[**serde_json::Value**](.md)> | geojson polygon to spatial search |  |
+**geojson** | Option<[**serde_json::Value**](SerdeJson__Value.md)> | geojson polygon to spatial search |  |
 **format** | Option<**String**> | json or csv download format |  |
 **with_metadata** | Option<**bool**> | if to include metadata with json format- defaults to false |  |
 

@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **message** | **String** |  | [default to success]
 **result** | [**models::PipelineLock**](PipelineLock.md) |  | 
 **version** | **String** |  | 
-**metadata** | [**serde_json::Value**](.md) |  | [default to {}]
+**metadata** | **serde_json::Value** |  | [default to {}]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
