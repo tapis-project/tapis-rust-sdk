@@ -21,7 +21,7 @@ CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 Run a full regeneration from live OpenAPI specs, apply all code fixes, and validate with Clippy — **without bumping versions**. Use this to verify the workspace is clean before committing.
 
 ```bash
-python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump --run-clippy
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy
 ```
 
 This will:
@@ -41,10 +41,10 @@ If this completes with `Automation workflow completed.` and no warnings or error
 Run the full regeneration pipeline **with** version bumping:
 
 ```bash
-python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy --bump-version patch
 ```
 
-This performs the same steps as Step 0 and additionally increments the patch version in every crate's `Cargo.toml`.
+This performs the same steps as Step 0 and additionally increments the patch version in every crate's `Cargo.toml` and syncs README version snippets before publish. Use `--bump-version minor` when you want a repo-wide minor bump instead.
 
 ---
 
@@ -70,7 +70,7 @@ git commit -m "chore: regenerate and bump SDK to vX.Y.Z"
 git push origin main
 ```
 
-> The CI regeneration workflow (if configured) runs with `--skip-bump` and does **not** publish. The publish step must be triggered manually.
+> The CI regeneration workflow (if configured) omits `--bump-version` and does **not** publish. The publish step must be triggered manually.
 
 ---
 
@@ -87,11 +87,45 @@ The workflow will:
 
 ---
 
+## Recovery — Yank a Published Version
+
+If a version has already been published and needs to be withdrawn from new resolution, use the yank helper under `sdk-gen`.
+
+Preview the targeted crates first:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0 --list
+```
+
+Dry-run the yank commands:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0 --dry-run
+```
+
+Yank the published version across the full TAPIS SDK set:
+
+```bash
+export CARGO_REGISTRY_TOKEN=<your_crates_io_token>
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0
+```
+
+Undo a previous yank if needed:
+
+```bash
+export CARGO_REGISTRY_TOKEN=<your_crates_io_token>
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0 --undo
+```
+
+---
+
 ## Quick Reference
 
 | Command | Purpose |
 |---|---|
-| `--skip-bump --run-clippy` | Compile test, no version change |
-| `--run-clippy` | Full regenerate + bump + clippy |
-| `--skip-generate --skip-bump` | Re-apply code fixes only (no OpenAPI fetch, no bump) |
-| `--skip-bump` | Full regenerate, no bump (CI default) |
+| `--run-clippy` | Full regenerate, no version change |
+| `--run-clippy --bump-version patch` | Full regenerate + patch bump + README sync + clippy |
+| `--run-clippy --bump-version minor` | Full regenerate + minor bump + README sync + clippy |
+| `--skip-generate` | Re-apply code fixes only (no OpenAPI fetch, no version bump) |
+| `yank_published_sdks.py <version>` | Yank one published version across all TAPIS SDK crates |
+| `yank_published_sdks.py <version> --undo` | Undo a previous yank across all TAPIS SDK crates |

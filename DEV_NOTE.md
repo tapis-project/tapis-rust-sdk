@@ -136,7 +136,7 @@ Workflow file:
 Behavior:
 - Runs weekly via cron (`0 6 * * 1`) and supports manual trigger (`workflow_dispatch`).
 - Executes:
-  `python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump --run-clippy`
+    `python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy`
 - Opens/updates an automated PR with regeneration changes.
 
 If you want a different schedule, edit the `cron` expression in the workflow file.

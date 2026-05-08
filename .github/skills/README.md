@@ -38,7 +38,9 @@ Use this when:
 2. `sdk-wrapper` - Restore/update wrappers and `lib.rs` exports.
 3. `sdk-parent` - Ensure parent dependency mappings and re-exports are correct.
 4. `sdk-debug` - Build all targets and clear errors/warnings.
-5. `sdk-parent` - As the final step, bump repo-wide minor version for root + all sub-crates:
+5. `sdk-parent` - As the final step, bump repo-wide patch or minor version for root + all sub-crates, which also syncs README version snippets:
+   `bash .github/skills/sdk-parent/scripts/bump_patch_version.sh`
+   or
    `bash .github/skills/sdk-parent/scripts/bump_minor_version.sh`
 
 ## Verification Baseline

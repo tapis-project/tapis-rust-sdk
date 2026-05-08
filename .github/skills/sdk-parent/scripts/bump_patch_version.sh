@@ -186,4 +186,4 @@ done
 
 python3 "${readme_update_script}" --version "${new_version}"
 
-echo "Version bump complete: ${current_version} -> ${new_version}"
+echo "Version bump complete: ${current_version} -> ${new_version}"echo "Version bump complete: ${current_version} -> ${new_version}"
