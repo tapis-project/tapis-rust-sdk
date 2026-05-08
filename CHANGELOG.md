@@ -27,8 +27,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
   - New constructor available on all 16 service clients: `TapisClient::with_token_provider(base_url, jwt_token, Arc<dyn TokenProvider>)`.
 
 - **`HeaderInjectionMiddleware`** — per-call header injection via `with_headers(headers, future)`.
-  - Scopes additional HTTP headers to a single call or async block without rebuilding the client.
-  - Supports per-call auth patterns (e.g., impersonation, multi-tenant proxying).
+  - Scopes allowlisted request-context headers to a single call or async block without rebuilding the client.
+  - Rejects auth and transport headers, including per-call `X-Tapis-Token` overrides.
   - The `X-Tapis-Token` set at client construction is still sent automatically.
 
 - **`TrackingIdMiddleware`** — automatic forwarding and validation of `X-Tapis-Tracking-Id` headers.
