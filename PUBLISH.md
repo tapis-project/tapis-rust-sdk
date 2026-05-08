@@ -87,6 +87,38 @@ The workflow will:
 
 ---
 
+## Recovery — Yank a Published Version
+
+If a version has already been published and needs to be withdrawn from new resolution, use the yank helper under `sdk-gen`.
+
+Preview the targeted crates first:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0 --list
+```
+
+Dry-run the yank commands:
+
+```bash
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0 --dry-run
+```
+
+Yank the published version across the full TAPIS SDK set:
+
+```bash
+export CARGO_REGISTRY_TOKEN=<your_crates_io_token>
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0
+```
+
+Undo a previous yank if needed:
+
+```bash
+export CARGO_REGISTRY_TOKEN=<your_crates_io_token>
+python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0 --undo
+```
+
+---
+
 ## Quick Reference
 
 | Command | Purpose |
@@ -95,3 +127,5 @@ The workflow will:
 | `--run-clippy` | Full regenerate + bump + clippy |
 | `--skip-generate --skip-bump` | Re-apply code fixes only (no OpenAPI fetch, no bump) |
 | `--skip-bump` | Full regenerate, no bump (CI default) |
+| `yank_published_sdks.py <version>` | Yank one published version across all TAPIS SDK crates |
+| `yank_published_sdks.py <version> --undo` | Undo a previous yank across all TAPIS SDK crates |
