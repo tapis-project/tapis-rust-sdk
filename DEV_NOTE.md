@@ -214,16 +214,17 @@ where
 ```
 
 `HeaderInjectionMiddleware::handle` reads the slot (if populated) and inserts
-every header into the outgoing request via `req.headers_mut().insert(k, v)`.
-Because it uses `insert`, the injected headers **override** same-named
-client-level defaults — this allows per-call token impersonation or tenant
-switching.
+only an allowlisted set of observability headers into the outgoing request
+via `req.headers_mut().insert(k, v)`. The current allowlist is limited to
+`X-Tapis-Tracking-ID`, the `x_tapis_tracking_id` alias, and `X-Request-Id`.
+Other headers are rejected. 
 
 **Usage pattern:**
 
 ```rust
 let mut hdrs = HeaderMap::new();
-hdrs.insert("X-Tapis-Impersonation-User", "alice".parse()?);
+hdrs.insert("X-Tapis-Tracking-ID", "jobs.abc-123".parse()?);
+hdrs.insert("X-Request-Id", "trace-abc-123".parse()?);
 
 let resp = tapis_jobs::with_headers(hdrs, async {
     client.jobs.get_job("abc-123").await

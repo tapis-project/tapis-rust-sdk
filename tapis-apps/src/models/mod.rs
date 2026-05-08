@@ -84,5 +84,7 @@ pub mod runtime_option_enum;
 pub use self::runtime_option_enum::RuntimeOptionEnum;
 pub mod share_info;
 pub use self::share_info::ShareInfo;
+pub mod sk_share_record;
+pub use self::sk_share_record::SkShareRecord;
 pub mod tapis_app;
 pub use self::tapis_app::TapisApp;

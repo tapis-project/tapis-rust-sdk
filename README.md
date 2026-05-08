@@ -93,7 +93,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Injecting Additional Headers
 
-Every service crate exposes a `with_headers` function that scopes extra HTTP headers to a single call (or any block of calls). The `X-Tapis-Token` set at client construction is still sent automatically — `with_headers` only adds (or overrides) the headers you supply.
+Every service crate exposes a `with_headers` function that scopes allowlisted request-context headers to a single call (or any block of calls). The `X-Tapis-Token` set at client construction is still sent automatically, and `with_headers` intentionally rejects auth and transport headers.
 
 ```rust
 use http::header::{HeaderMap, HeaderValue};
@@ -107,13 +107,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let jobs = TapisJobs::new(&base_url, Some(token.as_str()))?;
 
-    // Build the extra headers for this call only.
+    // Build the allowlisted request-context headers for this call only.
     let mut hdrs = HeaderMap::new();
-    hdrs.insert("X-Tapis-Tenant", HeaderValue::from_static("tacc"));
-    hdrs.insert("X-Request-Id",   HeaderValue::from_static("trace-abc-123"));
+    hdrs.insert("X-Tapis-Tracking-ID", HeaderValue::from_static("jobs.trace-abc-123"));
+    hdrs.insert("X-Request-Id",        HeaderValue::from_static("trace-abc-123"));
 
     // Wrap any call (or async block) in with_headers.
-    // The JWT is still sent automatically; extra headers are layered on top.
+    // The JWT is still sent automatically; the scoped headers are layered on top.
     let job = with_headers(
         hdrs,
         jobs.jobs.get_job("your-job-uuid"),
@@ -129,7 +129,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-> **Precedence:** if you supply `X-Tapis-Token` inside `with_headers`, it overrides the token set on the client for that call. This enables per-call auth (e.g. impersonation or multi-tenant proxying) without rebuilding the client.
+Allowed header names are currently: `X-Tapis-Tracking-ID` and `X-Request-Id`. The `x_tapis_tracking_id` alias is also accepted. Requests fail fast if `with_headers` includes anything outside that set.
 
 ## Automatic Token Refresh
 

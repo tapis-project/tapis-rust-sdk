@@ -10,18 +10,25 @@ use std::sync::Arc;
 use tapis_core::TokenProvider;
 
 tokio::task_local! {
-    /// Extra headers to inject into every request within a [`with_headers`] scope.
+    /// Allowlisted per-call headers to inject within a [`with_headers`] scope.
     static EXTRA_HEADERS: HeaderMap;
 }
 
-/// Run an async call with additional HTTP headers injected into every request
-/// made within the future `f`. Headers are scoped to this task only, so
-/// concurrent calls with different headers are safe.
+/// Run an async call with allowlisted request-context headers injected into
+/// every request made within the future `f`. Headers are scoped to this
+/// task only, so concurrent calls with different headers are safe.
 pub async fn with_headers<F, T>(headers: HeaderMap, f: F) -> T
 where
     F: std::future::Future<Output = T>,
 {
     EXTRA_HEADERS.scope(headers, f).await
+}
+
+fn is_allowed_extra_header(name: &reqwest::header::HeaderName) -> bool {
+    let name = name.as_str();
+    name.eq_ignore_ascii_case("x-tapis-tracking-id")
+        || name.eq_ignore_ascii_case("x_tapis_tracking_id")
+        || name.eq_ignore_ascii_case("x-request-id")
 }
 
 #[derive(Debug)]
@@ -53,11 +60,23 @@ impl Middleware for HeaderInjectionMiddleware {
         extensions: &mut http::Extensions,
         next: Next<'_>,
     ) -> MiddlewareResult<Response> {
-        let _ = EXTRA_HEADERS.try_with(|headers| {
+        let validation = EXTRA_HEADERS.try_with(|headers| {
+            for key in headers.keys() {
+                if !is_allowed_extra_header(key) {
+                    return Err(reqwest_middleware::Error::Middleware(anyhow::anyhow!(
+                        "with_headers only allows request-scoped context headers; disallowed header: {}",
+                        key.as_str()
+                    )));
+                }
+            }
             for (k, v) in headers {
                 req.headers_mut().insert(k, v.clone());
             }
+            Ok::<(), reqwest_middleware::Error>(())
         });
+        if let Ok(result) = validation {
+            result?;
+        }
         next.run(req, extensions).await
     }
 }

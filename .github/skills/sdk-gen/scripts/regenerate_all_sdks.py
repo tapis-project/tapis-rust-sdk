@@ -386,18 +386,25 @@ def generate_client(
         "use tapis_core::TokenProvider;",
         "",
         "tokio::task_local! {",
-        "    /// Extra headers to inject into every request within a [`with_headers`] scope.",
+        "    /// Allowlisted per-call headers to inject within a [`with_headers`] scope.",
         "    static EXTRA_HEADERS: HeaderMap;",
         "}",
         "",
-        "/// Run an async call with additional HTTP headers injected into every request",
-        "/// made within the future `f`. Headers are scoped to this task only, so",
-        "/// concurrent calls with different headers are safe.",
+        "/// Run an async call with allowlisted request-context headers injected into",
+        "/// every request made within the future `f`. Headers are scoped to this",
+        "/// task only, so concurrent calls with different headers are safe.",
         "pub async fn with_headers<F, T>(headers: HeaderMap, f: F) -> T",
         "where",
         "    F: std::future::Future<Output = T>,",
         "{",
         "    EXTRA_HEADERS.scope(headers, f).await",
+        "}",
+        "",
+        "fn is_allowed_extra_header(name: &reqwest::header::HeaderName) -> bool {",
+        "    let name = name.as_str();",
+        '    name.eq_ignore_ascii_case("x-tapis-tracking-id")',
+        '        || name.eq_ignore_ascii_case("x_tapis_tracking_id")',
+        '        || name.eq_ignore_ascii_case("x-request-id")',
         "}",
         "",
         "#[derive(Debug)]",
@@ -429,11 +436,23 @@ def generate_client(
         "        extensions: &mut http::Extensions,",
         "        next: Next<'_>,",
         "    ) -> MiddlewareResult<Response> {",
-        "        let _ = EXTRA_HEADERS.try_with(|headers| {",
+        "        let validation = EXTRA_HEADERS.try_with(|headers| {",
+        "            for key in headers.keys() {",
+        "                if !is_allowed_extra_header(key) {",
+        "                    return Err(reqwest_middleware::Error::Middleware(anyhow::anyhow!(",
+        '                        "with_headers only allows request-scoped context headers; disallowed header: {}",',
+        "                        key.as_str()",
+        "                    )));",
+        "                }",
+        "            }",
         "            for (k, v) in headers {",
         "                req.headers_mut().insert(k, v.clone());",
         "            }",
+        "            Ok::<(), reqwest_middleware::Error>(())",
         "        });",
+        "        if let Ok(result) = validation {",
+        "            result?;",
+        "        }",
         "        next.run(req, extensions).await",
         "    }",
         "}",
@@ -594,66 +613,72 @@ def generate_client(
 
     out.extend(["}", "", f"impl {wrapper_name} {{"])
 
-    out.extend([
-        "    pub fn new(base_url: &str, jwt_token: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {",
-        "        Self::build(base_url, jwt_token, None)",
-        "    }",
-        "",
-        "    /// Create a client with a [`TokenProvider`] for automatic token refresh.",
-        "    /// `RefreshMiddleware` is added to the middleware chain and will call",
-        "    /// `provider.get_token()` transparently whenever the JWT is about to expire.",
-        "    pub fn with_token_provider(base_url: &str, jwt_token: Option<&str>, provider: Arc<dyn TokenProvider>) -> Result<Self, Box<dyn std::error::Error>> {",
-        "        Self::build(base_url, jwt_token, Some(provider))",
-        "    }",
-        "",
-        "    fn build(base_url: &str, jwt_token: Option<&str>, token_provider: Option<Arc<dyn TokenProvider>>) -> Result<Self, Box<dyn std::error::Error>> {",
-        "        let mut headers = HeaderMap::new();",
-        "        if let Some(token) = jwt_token {",
-        '            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);',
-        "        }",
-    ])
+    out.extend(
+        [
+            "    pub fn new(base_url: &str, jwt_token: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {",
+            "        Self::build(base_url, jwt_token, None)",
+            "    }",
+            "",
+            "    /// Create a client with a [`TokenProvider`] for automatic token refresh.",
+            "    /// `RefreshMiddleware` is added to the middleware chain and will call",
+            "    /// `provider.get_token()` transparently whenever the JWT is about to expire.",
+            "    pub fn with_token_provider(base_url: &str, jwt_token: Option<&str>, provider: Arc<dyn TokenProvider>) -> Result<Self, Box<dyn std::error::Error>> {",
+            "        Self::build(base_url, jwt_token, Some(provider))",
+            "    }",
+            "",
+            "    fn build(base_url: &str, jwt_token: Option<&str>, token_provider: Option<Arc<dyn TokenProvider>>) -> Result<Self, Box<dyn std::error::Error>> {",
+            "        let mut headers = HeaderMap::new();",
+            "        if let Some(token) = jwt_token {",
+            '            headers.insert("X-Tapis-Token", HeaderValue::from_str(token)?);',
+            "        }",
+        ]
+    )
 
-    out.extend([
-        "",
-        "        let reqwest_client = Client::builder()",
-        "            .default_headers(headers)",
-        "            .build()?;",
-        "",
-        "        let mut builder = ClientBuilder::new(reqwest_client)",
-        "            .with(LoggingMiddleware)",
-        "            .with(HeaderInjectionMiddleware)",
-        "            .with(TrackingIdMiddleware);",
-        "",
-        "        if let Some(provider) = token_provider {",
-        "            builder = builder.with(RefreshMiddleware { token_provider: provider });",
-        "        }",
-        "",
-        "        let client = builder.build();",
-        "",
-        "        let config = Arc::new(configuration::Configuration {",
-        "            base_path: base_url.to_string(),",
-        "            client,",
-        "            ..Default::default()",
-        "        });",
-        "",
-        "        Ok(Self {",
-        "            config: config.clone(),",
-    ])
+    out.extend(
+        [
+            "",
+            "        let reqwest_client = Client::builder()",
+            "            .default_headers(headers)",
+            "            .build()?;",
+            "",
+            "        let mut builder = ClientBuilder::new(reqwest_client)",
+            "            .with(LoggingMiddleware)",
+            "            .with(HeaderInjectionMiddleware)",
+            "            .with(TrackingIdMiddleware);",
+            "",
+            "        if let Some(provider) = token_provider {",
+            "            builder = builder.with(RefreshMiddleware { token_provider: provider });",
+            "        }",
+            "",
+            "        let client = builder.build();",
+            "",
+            "        let config = Arc::new(configuration::Configuration {",
+            "            base_path: base_url.to_string(),",
+            "            client,",
+            "            ..Default::default()",
+            "        });",
+            "",
+            "        Ok(Self {",
+            "            config: config.clone(),",
+        ]
+    )
 
     for module in modules:
         cname = pascal_from_snake(module) + "Client"
         out.append(f"            {module}: {cname} {{ config: config.clone() }},")
 
-    out.extend([
-        "        })",
-        "    }",
-        "",
-        "    pub fn config(&self) -> &configuration::Configuration {",
-        "        &self.config",
-        "    }",
-        "}",
-        "",
-    ])
+    out.extend(
+        [
+            "        })",
+            "    }",
+            "",
+            "    pub fn config(&self) -> &configuration::Configuration {",
+            "        &self.config",
+            "    }",
+            "}",
+            "",
+        ]
+    )
 
     sig_re = re.compile(
         r"pub async fn\s+([A-Za-z0-9_]+)\s*\((.*?)\)\s*->\s*(.*?)\s*\{",
@@ -662,14 +687,16 @@ def generate_client(
 
     for module in modules:
         cname = pascal_from_snake(module) + "Client"
-        out.extend([
-            "#[derive(Clone)]",
-            f"pub struct {cname} {{",
-            "    config: Arc<configuration::Configuration>,",
-            "}",
-            "",
-            f"impl {cname} {{",
-        ])
+        out.extend(
+            [
+                "#[derive(Clone)]",
+                f"pub struct {cname} {{",
+                "    config: Arc<configuration::Configuration>,",
+                "}",
+                "",
+                f"impl {cname} {{",
+            ]
+        )
 
         api_text = (api_dir / f"{module}_api.rs").read_text()
         for m in sig_re.finditer(api_text):
@@ -817,25 +844,29 @@ def update_parent_lib(repo_root: Path, services: List[str], dry_run: bool) -> No
     path = repo_root / "src" / "lib.rs"
     lines = ["//! Tapis SDK - Unified client library for Tapis services", ""]
 
-    lines.extend([
-        "/// Shared traits for the Tapis SDK (e.g. [`TokenProvider`](core::TokenProvider)).",
-        "pub mod core {",
-        "    pub use tapis_core::*;",
-        "}",
-        "",
-    ])
+    lines.extend(
+        [
+            "/// Shared traits for the Tapis SDK (e.g. [`TokenProvider`](core::TokenProvider)).",
+            "pub mod core {",
+            "    pub use tapis_core::*;",
+            "}",
+            "",
+        ]
+    )
 
     for svc in services:
         module = svc.replace("-", "_")
         pkg = f"tapis_{svc.replace('-', '_')}"
         display = " ".join(part.capitalize() for part in svc.split("-"))
-        lines.extend([
-            f"/// Tapis {display} service client",
-            f"pub mod {module} {{",
-            f"    pub use {pkg}::*;",
-            "}",
-            "",
-        ])
+        lines.extend(
+            [
+                f"/// Tapis {display} service client",
+                f"pub mod {module} {{",
+                f"    pub use {pkg}::*;",
+                "}",
+                "",
+            ]
+        )
 
     text = "\n".join(lines).rstrip() + "\n"
     print(f"updated parent lib: {path}")
