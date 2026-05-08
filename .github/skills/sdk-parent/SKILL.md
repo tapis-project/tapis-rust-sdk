@@ -69,22 +69,33 @@ After the full SDK workflow succeeds (generation + wrapper + parent wiring + deb
 bash .github/skills/sdk-parent/scripts/bump_minor_version.sh
 ```
 
+For a patch release:
+
+```bash
+bash .github/skills/sdk-parent/scripts/bump_patch_version.sh
+```
+
 What it does:
+
 - Reads root `Cargo.toml` package version.
-- Bumps to next minor (`MAJOR.(MINOR+1).0`).
+- Bumps to the requested next version (`MAJOR.(MINOR+1).0` for minor, `MAJOR.MINOR.(PATCH+1)` for patch).
 - Applies the same version to root and all workspace member crate package versions.
 - Updates inline path dependency `version = "..."` fields in workspace manifests.
+- Syncs README version snippets after the manifests are updated.
 
 Note:
+
 - OpenAPI regeneration typically resets service crate versions to `1.0.0`; this script is the required final normalization step.
 
 Dry run:
 
 ```bash
 bash .github/skills/sdk-parent/scripts/bump_minor_version.sh --dry-run
+bash .github/skills/sdk-parent/scripts/bump_patch_version.sh --dry-run
 ```
 
 If adding a new service crate:
+
 1. Add workspace member.
 2. Add mapped dependency in root `Cargo.toml`.
 3. Add namespaced re-export module in root `src/lib.rs`.
@@ -100,6 +111,7 @@ bash .github/skills/sdk-parent/scripts/publish_all_sdks.sh
 ```
 
 Notes:
+
 - Requires `CARGO_REGISTRY_TOKEN` unless `--dry-run` is used.
 - Uses workspace member order from root `Cargo.toml`.
 - Retries are configurable via:

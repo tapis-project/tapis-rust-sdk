@@ -96,7 +96,7 @@ Symptom:
 Fix:
 - Always run version sync as final step:
 ```bash
-bash .github/skills/sdk-parent/scripts/bump_minor_version.sh
+bash .github/skills/sdk-parent/scripts/bump_patch_version.sh
 ```
 
 ## 10) Generation fails on branch checkout

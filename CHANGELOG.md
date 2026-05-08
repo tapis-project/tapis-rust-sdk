@@ -34,7 +34,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
 - **`TrackingIdMiddleware`** — automatic forwarding and validation of `X-Tapis-Tracking-Id` headers.
   - Enforces Tapis tracking ID format (ASCII, ≤126 chars, exactly one `.`, valid charset).
 
-- **`PUBLISH.md`** — step-by-step publish workflow document, including a compilation-testing step (`--skip-bump --run-clippy`) before version bumping.
+- **`PUBLISH.md`** — step-by-step publish workflow document, including a compilation-testing step (`--run-clippy`) before optional patch or minor version bumping.
 
 ### Changed
 

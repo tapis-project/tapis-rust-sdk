@@ -9,7 +9,7 @@ Workflow:
 5) Optionally apply clippy auto-fixes
 6) Format Rust workspace with rustfmt
 7) Build workspace and verify wrapper coverage
-8) Optionally run version bump script as final step
+8) Optionally bump versions and sync README snippets before publish
 """
 
 from __future__ import annotations
@@ -953,7 +953,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Run cargo clippy --fix --workspace --all-targets before formatting/build",
     )
-    p.add_argument("--skip-bump", action="store_true", help="Skip final version bump")
+    p.add_argument(
+        "--bump-version",
+        choices=["minor", "patch"],
+        help="Bump crate versions after validation and sync README version snippets before publish",
+    )
+    p.add_argument("--skip-bump", action="store_true", help=argparse.SUPPRESS)
     p.add_argument(
         "--publish",
         action="store_true",
@@ -1048,14 +1053,21 @@ def main() -> int:
         / "scripts"
         / "generate_rust_sdk.sh"
     )
-    bump_script = (
-        repo_root
+    bump_scripts = {
+        "minor": repo_root
         / ".github"
         / "skills"
         / "sdk-parent"
         / "scripts"
-        / "bump_minor_version.sh"
-    )
+        / "bump_minor_version.sh",
+        "patch": repo_root
+        / ".github"
+        / "skills"
+        / "sdk-parent"
+        / "scripts"
+        / "bump_patch_version.sh",
+    }
+    selected_bump = None if args.skip_bump else args.bump_version
 
     all_env_services = load_services(specs_json, args.env, "all")
     services = load_services(specs_json, args.env, args.services)
@@ -1083,7 +1095,7 @@ def main() -> int:
     processed_services = [s for s in services if s not in failed_generation]
     if failed_generation and not processed_services and not args.skip_generate:
         raise RuntimeError(
-            "All generation steps failed. Aborting before build/version bump."
+            "All generation steps failed. Aborting before build/version sync."
         )
 
     for svc in processed_services:
@@ -1146,15 +1158,19 @@ def main() -> int:
             dry_run=args.dry_run,
         )
 
-    if not args.skip_bump and not (failed_generation and not args.skip_generate):
-        run(["bash", str(bump_script)], cwd=repo_root, dry_run=args.dry_run)
+    if selected_bump and not (failed_generation and not args.skip_generate):
+        run(
+            ["bash", str(bump_scripts[selected_bump])],
+            cwd=repo_root,
+            dry_run=args.dry_run,
+        )
         if not args.skip_build:
             run(
                 ["cargo", "build", "--workspace", "--all-targets"],
                 cwd=repo_root,
                 dry_run=args.dry_run,
             )
-    elif failed_generation and not args.skip_generate:
+    elif failed_generation and not args.skip_generate and selected_bump:
         print("Skipping version bump due generation failures.", file=sys.stderr)
 
     if args.publish:

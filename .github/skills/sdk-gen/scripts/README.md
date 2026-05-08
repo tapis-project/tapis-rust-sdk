@@ -80,8 +80,11 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --dry-r
 # Regenerate specific services only
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --services pods,authenticator
 
-# Skip final bump (if you want manual control)
-python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump
+# Bump patch version and sync README snippets before publish
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --bump-version patch
+
+# Bump minor version and sync README snippets before publish
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --bump-version minor
 
 # Let the generation script perform branch checkout (default is disabled)
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --allow-branch-switch
@@ -106,7 +109,7 @@ Notes:
 - `regenerate_all_sdks.py` runs `cargo fmt --all` by default to enforce consistent Rust formatting.
 - `--services` scopes generation/fix/wrapper/example work, but parent workspace/dependency wiring remains complete for all known service crates.
 - Version bump is skipped automatically if generation fails for every requested service.
-- Final version bump runs last unless `--skip-bump` is set.
+- Final version bump and README sync run only when `--bump-version {patch,minor}` is provided.
 - Publishing requires `CARGO_REGISTRY_TOKEN` to be set:
   `export CARGO_REGISTRY_TOKEN=<your_crates_io_token>`
 - Optional version override for generation:

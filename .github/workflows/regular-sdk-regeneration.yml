@@ -51,7 +51,6 @@ jobs:
         run: |
           python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py \
             --env prod \
-            --skip-bump \
             --run-clippy
 
       - name: Create pull request for regeneration updates
@@ -63,7 +62,7 @@ jobs:
             Automated weekly TAPIS Rust SDK regeneration run.
 
             Generated with:
-            `python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump --run-clippy`
+            `python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy`
           branch: "automation/weekly-sdk-regeneration"
           delete-branch: true
           labels: |

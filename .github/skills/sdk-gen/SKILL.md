@@ -71,10 +71,10 @@ bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod pods
 bash .github/skills/sdk-gen/scripts/generate_rust_sdk.sh prod authenticator
 ```
 
-For local testing of a complete full SDK regeneration across all services without bumping up the version, run:
+For local testing of a complete full SDK regeneration across all services without bumping the version, run:
 
 ```bash
-python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --skip-bump 2>&1
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod 2>&1
 ```
 
 Automation examples:
@@ -97,6 +97,12 @@ python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --publi
 
 # Run clippy auto-fix before formatting/build
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy
+
+# Bump the patch version and sync README snippets before publish
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy --bump-version patch
+
+# Bump the minor version and sync README snippets before publish
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --run-clippy --bump-version minor
 
 # Preview which crates would be yanked for a published version
 python3 .github/skills/sdk-gen/scripts/yank_published_sdks.py 0.4.0 --list
@@ -226,7 +232,9 @@ Symptom:
 
 Fix:
 
-- After all generation/wrapper/debug tasks are complete, run:
+- After all generation/wrapper/debug tasks are complete, run either:
+  `bash .github/skills/sdk-parent/scripts/bump_patch_version.sh`
+  or
   `bash .github/skills/sdk-parent/scripts/bump_minor_version.sh`
 
 ### 7) Branch checkout can fail in restricted environments
@@ -286,5 +294,6 @@ After this skill:
 1. Use `sdk-wrapper` to restore/update wrappers.
 2. Use `sdk-parent` to verify parent dependency wiring and re-exports.
 3. Use `sdk-debug` if build failures remain.
-4. As the final step after workflow completion, run:
+4. As the final step after workflow completion, run one of:
+   `bash .github/skills/sdk-parent/scripts/bump_patch_version.sh`
    `bash .github/skills/sdk-parent/scripts/bump_minor_version.sh`
