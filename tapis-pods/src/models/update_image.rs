@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateImage {
+    /// Tenants that can use this image.
     #[serde(
         rename = "tenants",
         default,
@@ -20,6 +21,7 @@ pub struct UpdateImage {
         skip_serializing_if = "Option::is_none"
     )]
     pub tenants: Option<Option<Vec<String>>>,
+    /// Description of image.
     #[serde(
         rename = "description",
         default,

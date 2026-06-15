@@ -26,7 +26,7 @@ pub struct JobShareListDto {
     #[serde(rename = "jobPermission", skip_serializing_if = "Option::is_none")]
     pub job_permission: Option<String>,
     #[serde(rename = "created", skip_serializing_if = "Option::is_none")]
-    pub created: Option<String>,
+    pub created: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl JobShareListDto {

@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **unit** | Option<**String**> | The unit to measure property of variable. | [optional]
 **unit_abbrev** | Option<**String**> | The unit abbrevation to measure variable. | [optional]
 **measured_property** | Option<**String**> | The property measured by variable. | [optional]
-**metadata** | Option<[**serde_json::Value**](.md)> | User entered metadata for the variable | [optional]
+**metadata** | Option<**serde_json::Value**> | User entered metadata for the variable | [optional]
 **chords_id** | Option<**i32**> | Variable ID in chords | [optional]
 **created_at** | Option<**String**> | ISO8601 datetime string for object creation date | [optional]
 **last_updated** | Option<**String**> | ISO8601 datetime string for object updated date | [optional]

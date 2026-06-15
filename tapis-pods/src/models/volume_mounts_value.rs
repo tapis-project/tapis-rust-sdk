@@ -16,6 +16,7 @@ pub struct VolumeMountsValue {
     /// Type of mount: 'tapisvolume', 'tapissnapshot', 'ephemeral', or 'pvc'.
     #[serde(rename = "type")]
     pub r#type: Type,
+    /// ID of the volume, snapshot, or PVC to mount. Required for tapisvolume/tapissnapshot/pvc.
     #[serde(
         rename = "source_id",
         default,
@@ -23,6 +24,7 @@ pub struct VolumeMountsValue {
         skip_serializing_if = "Option::is_none"
     )]
     pub source_id: Option<Option<String>>,
+    /// Service-managed: Username who mounted this volume. Set automatically when volume_mounts are created/updated.
     #[serde(
         rename = "mounted_by",
         default,
@@ -33,6 +35,7 @@ pub struct VolumeMountsValue {
     /// Sub-path within the source volume/snapshot to mount. Not used for ephemeral.
     #[serde(rename = "sub_path", skip_serializing_if = "Option::is_none")]
     pub sub_path: Option<String>,
+    /// If true, mount will be read-only. Default: False for volumes/pvc, True for snapshots/ephemeral.
     #[serde(
         rename = "read_only",
         default,
@@ -40,6 +43,7 @@ pub struct VolumeMountsValue {
         skip_serializing_if = "Option::is_none"
     )]
     pub read_only: Option<Option<bool>>,
+    /// Config file content. For ephemeral: mounted as ConfigMap. For tapisvolume: written to NFS. Supports ${pods:secrets:KEY} interpolation. Max 1MB.
     #[serde(
         rename = "config_content",
         default,
@@ -50,6 +54,7 @@ pub struct VolumeMountsValue {
     /// Unix file permissions for config file (e.g., '0644', '0600').
     #[serde(rename = "config_permissions", skip_serializing_if = "Option::is_none")]
     pub config_permissions: Option<String>,
+    /// Filename for config file when using tapisvolume with config_content. Defaults to basename of mount_path.
     #[serde(
         rename = "config_filename",
         default,

@@ -16,7 +16,7 @@ pub struct JobHistoryDisplayDto {
     #[serde(rename = "event", skip_serializing_if = "Option::is_none")]
     pub event: Option<String>,
     #[serde(rename = "created", skip_serializing_if = "Option::is_none")]
-    pub created: Option<String>,
+    pub created: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "eventDetail", skip_serializing_if = "Option::is_none")]
     pub event_detail: Option<String>,
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]

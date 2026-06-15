@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// UpdateSecret : Object with fields that users are allowed to update for the Secret class.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateSecret {
+    /// Description of this secret.
     #[serde(
         rename = "description",
         default,
@@ -21,6 +22,7 @@ pub struct UpdateSecret {
         skip_serializing_if = "Option::is_none"
     )]
     pub description: Option<Option<String>>,
+    /// The new secret value to store.
     #[serde(
         rename = "secret_value",
         default,

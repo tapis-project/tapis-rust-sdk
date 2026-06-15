@@ -25,20 +25,22 @@ pub struct TemplateResponseModel {
     /// If set, metadata message to give users of this template.
     #[serde(rename = "archive_message", skip_serializing_if = "Option::is_none")]
     pub archive_message: Option<String>,
+    /// Time (UTC) that this template was created.
     #[serde(
         rename = "creation_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub creation_ts: Option<Option<String>>,
+    pub creation_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
+    /// Time (UTC) that this template was updated.
     #[serde(
         rename = "update_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub update_ts: Option<Option<String>>,
+    pub update_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
 }
 
 impl TemplateResponseModel {

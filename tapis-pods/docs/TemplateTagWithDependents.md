@@ -12,10 +12,10 @@ Name | Type | Description | Notes
 **archive_message** | Option<**String**> | If set, metadata message to give users of this template tag. | [optional][default to ]
 **tag_timestamp** | Option<**String**> | tag@timestamp for this template tag. | [optional][default to ]
 **added_by** | Option<**String**> | User who added this template tag. | [optional][default to ]
-**creation_ts** | Option<**String**> |  | [optional]
+**creation_ts** | Option<**chrono::DateTime<chrono::FixedOffset>**> | Time (UTC) that this template tag was created. | [optional]
 **tenant_id** | Option<**String**> | Tapis tenant used during creation of this template tag. | [optional][default to ]
 **site_id** | Option<**String**> | Tapis site used during creation of this template tag. | [optional][default to ]
-**dependents** | Option<[**models::TemplateTagDependents**](TemplateTagDependents.md)> |  | [optional]
+**dependents** | Option<[**models::TemplateTagDependents**](TemplateTagDependents.md)> | Dependency information (only present when include_dependencies=true). | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

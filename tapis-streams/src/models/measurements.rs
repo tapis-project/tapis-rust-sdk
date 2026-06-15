@@ -14,9 +14,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Measurements {
     #[serde(rename = "instrument", skip_serializing_if = "Option::is_none")]
-    pub instrument: Option<models::Instrument>,
+    pub instrument: Option<Box<models::Instrument>>,
     #[serde(rename = "site", skip_serializing_if = "Option::is_none")]
-    pub site: Option<models::Site>,
+    pub site: Option<Box<models::Site>>,
     /// The count of measurements records.
     #[serde(
         rename = "measurements_in_file",

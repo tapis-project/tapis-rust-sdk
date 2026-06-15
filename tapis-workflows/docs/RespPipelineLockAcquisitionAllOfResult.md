@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**pipeline_lock_uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**pipeline_lock_uuid** | Option<**uuid::Uuid**> |  | [optional]
 **acquired** | Option<**bool**> |  | [optional]
 **message** | Option<**String**> |  | [optional]
 

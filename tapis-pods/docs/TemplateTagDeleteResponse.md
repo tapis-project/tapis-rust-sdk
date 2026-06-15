@@ -5,8 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **message** | **String** |  | 
-**metadata** | [**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md) |  | 
-**result** | Option<[**std::collections::HashMap<String, serde_json::Value>**](serde_json::Value.md)> |  | [optional]
+**metadata** | **std::collections::HashMap<String, serde_json::Value>** |  | 
+**result** | Option<**std::collections::HashMap<String, serde_json::Value>**> | Environment variables to inject into k8 pod. Use `${pods:secrets:KEY}` to reference secret_map entries. | [optional]
 **status** | **String** |  | 
 **version** | **String** |  | 
 
