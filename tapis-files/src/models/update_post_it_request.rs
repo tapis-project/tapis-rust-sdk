@@ -18,7 +18,7 @@ pub struct UpdatePostItRequest {
     pub allowed_uses: Option<i32>,
     /// Expiration date of the PostIt.
     #[serde(rename = "expiration", skip_serializing_if = "Option::is_none")]
-    pub expiration: Option<String>,
+    pub expiration: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// If set to true, this PostIt will have unlimited uses and not expire.
     #[serde(rename = "unlimited", skip_serializing_if = "Option::is_none")]
     pub unlimited: Option<bool>,

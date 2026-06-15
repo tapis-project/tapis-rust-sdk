@@ -13,11 +13,11 @@ Name | Type | Description | Notes
 **task_id** | Option<**i32**> |  | [optional]
 **children** | Option<[**Vec<models::TransferTaskChild>**](TransferTaskChild.md)> |  | [optional]
 **error_message** | Option<**String**> |  | [optional]
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> | Unique ID of the task. | [optional]
+**uuid** | Option<**uuid::Uuid**> | Unique ID of the task. | [optional]
 **status** | Option<[**models::TransferStatusEnum**](TransferStatusEnum.md)> |  | [optional]
-**created** | Option<**String**> |  | [optional]
-**start_time** | Option<**String**> |  | [optional]
-**end_time** | Option<**String**> |  | [optional]
+**created** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
+**start_time** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
+**end_time** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

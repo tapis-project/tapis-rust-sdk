@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **last_execution_time** | Option<**String**> | The last ime (UTC) the worker started an execution. | [optional]
 **last_health_check_time** | Option<**String**> | The last ime (UTC) the worker responded to a health check. | [optional]
 **location** | Option<**String**> | The location of the docker daemon used by this worker. | [optional]
-**status** | Option<**String**> | Status of the worker. | [optional]
+**status** | Option<**Status**> | Status of the worker. (enum: REQUESTED, SPAWNER SETUP, PULLING IMAGE, CREATING CONTAINER, UPDATING STORE, READY, BUSY, ERROR) | [optional]
 **tenant** | Option<**String**> | tenant assoicated with the worker. | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

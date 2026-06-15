@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TemplateTagPodDefinition {
+    /// Which docker image to use, must be on allowlist, check /pods/images for list.
     #[serde(
         rename = "image",
         default,
@@ -20,6 +21,7 @@ pub struct TemplateTagPodDefinition {
         skip_serializing_if = "Option::is_none"
     )]
     pub image: Option<Option<String>>,
+    /// Name of template to base this template off of.
     #[serde(
         rename = "template",
         default,
@@ -27,6 +29,7 @@ pub struct TemplateTagPodDefinition {
         skip_serializing_if = "Option::is_none"
     )]
     pub template: Option<Option<String>>,
+    /// Description of this pod.
     #[serde(
         rename = "description",
         default,
@@ -34,6 +37,7 @@ pub struct TemplateTagPodDefinition {
         skip_serializing_if = "Option::is_none"
     )]
     pub description: Option<Option<String>>,
+    /// Command to run in pod. ex. `[\"sleep\", \"5000\"]` or `[\"/bin/bash\", \"-c\", \"(exec myscript.sh)\"]`
     #[serde(
         rename = "command",
         default,
@@ -41,6 +45,7 @@ pub struct TemplateTagPodDefinition {
         skip_serializing_if = "Option::is_none"
     )]
     pub command: Option<Option<Vec<String>>>,
+    /// Arguments for the Pod's command.
     #[serde(
         rename = "arguments",
         default,
@@ -60,6 +65,7 @@ pub struct TemplateTagPodDefinition {
     /// Volume mounts keyed by mount_path. For templates, tapisvolume/tapissnapshot MUST use placeholder source_id (e.g., \"${:?Description}\"). Ex: {\"/data\": {\"type\": \"tapisvolume\", \"source_id\": \"${:?User data volume}\"}, \"/etc/config.ini\": {\"type\": \"ephemeral\", \"config_content\": \"key=value\"}}
     #[serde(rename = "volume_mounts", skip_serializing_if = "Option::is_none")]
     pub volume_mounts: Option<std::collections::HashMap<String, models::VolumeMountsValue>>,
+    /// Default time (sec) for pod to run from instance start. -1 for unlimited. 12 hour default.
     #[serde(
         rename = "time_to_stop_default",
         default,
@@ -67,6 +73,7 @@ pub struct TemplateTagPodDefinition {
         skip_serializing_if = "Option::is_none"
     )]
     pub time_to_stop_default: Option<Option<i32>>,
+    /// Time (sec) for pod to run from instance start. Reset each time instance is started. -1 for unlimited. None uses default.
     #[serde(
         rename = "time_to_stop_instance",
         default,

@@ -255,7 +255,7 @@ Retrieve list of systems.  Use *listType*, *search* and *select* query parameter
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **search** | Option<**String**> | Search conditions as a single query parameter. For example search=(id.like.MySys*)~(enabled.eq.true) |  |
-**list_type** | Option<[**ListTypeEnum**](.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only show systems owned by requester. |  |
+**list_type** | Option<[**ListTypeEnum**](ListTypeEnum.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only show systems owned by requester. |  |
 **limit** | Option<**i32**> | Limit number of items returned. For example limit=10. Use -1 for unlimited. Default is 100. |  |[default to 100]
 **order_by** | Option<**String**> | Attribute for sorting. Direction may be included. For example orderBy=id(desc). Default direction is (asc). |  |
 **skip** | Option<**i32**> | Number of items to skip. Use one of skip or startAfter. For example skip=10. Default is 0. |  |
@@ -449,7 +449,7 @@ Retrieve details for systems. Use query parameters to specify search conditions.
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **free_form_parameter_name** | Option<[**std::collections::HashMap<String, String>**](String.md)> | Free form query parameters. |  |
-**list_type** | Option<[**ListTypeEnum**](.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only see items owned by requester. |  |
+**list_type** | Option<[**ListTypeEnum**](ListTypeEnum.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only see items owned by requester. |  |
 **limit** | Option<**i32**> | Limit number of items returned. For example limit=10. Use -1 for unlimited. Default is 100. |  |[default to 100]
 **order_by** | Option<**String**> | Attribute for sorting. Direction may be included. For example orderBy=id(desc). Default direction is (asc). |  |
 **skip** | Option<**i32**> | Number of items to skip. Use one of skip or startAfter. For example skip=10. Default is 0. |  |
@@ -487,7 +487,7 @@ Retrieve details for systems. Use request body to specify SQL-like search condit
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **req_search_systems** | [**ReqSearchSystems**](ReqSearchSystems.md) | A JSON object specifying SQL-like search conditions as an array of strings. Strings are concatenated to form full search query. | [required] |
-**list_type** | Option<[**ListTypeEnum**](.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only see items owned by requester. |  |
+**list_type** | Option<[**ListTypeEnum**](ListTypeEnum.md)> | Determines additional filtering of results based on ownership, permissions and sharing. Default is to only see items owned by requester. |  |
 **limit** | Option<**i32**> | Limit number of items returned. For example limit=10. Use -1 for unlimited. Default is 100. |  |[default to 100]
 **order_by** | Option<**String**> | Attribute for sorting. Direction may be included. For example orderBy=id(desc). Default direction is (asc). |  |
 **skip** | Option<**i32**> | Number of items to skip. Use one of skip or startAfter. For example skip=10. Default is 0. |  |

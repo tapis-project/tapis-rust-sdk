@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **created_at** | Option<**String**> | ISO8601 datetime string for object creation date | [optional]
 **last_updated** | Option<**String**> | ISO8601 datetime string for object updated date | [optional]
 **tags** | Option<**Vec<String>**> | arrays of tags on the instruments | [optional]
-**metadata** | Option<[**serde_json::Value**](.md)> | User entered metadata for the instruments | [optional]
+**metadata** | Option<**serde_json::Value**> | User entered metadata for the instruments | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

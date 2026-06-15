@@ -42,11 +42,11 @@ pub struct TransferTask {
     #[serde(rename = "errorMessage", skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
     #[serde(rename = "created", skip_serializing_if = "Option::is_none")]
-    pub created: Option<String>,
+    pub created: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "startTime", skip_serializing_if = "Option::is_none")]
-    pub start_time: Option<String>,
+    pub start_time: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "endTime", skip_serializing_if = "Option::is_none")]
-    pub end_time: Option<String>,
+    pub end_time: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl TransferTask {

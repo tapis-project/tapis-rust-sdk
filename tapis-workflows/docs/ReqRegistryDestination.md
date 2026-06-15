@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **r#type** | [**models::EnumDestinationType**](EnumDestinationType.md) |  | 
 **credentials** | Option<[**models::ReqDockerhubCred**](ReqDockerhubCred.md)> |  | [optional]
-**identity_uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**identity_uuid** | Option<**uuid::Uuid**> |  | [optional]
 **tag** | Option<**String**> |  | [optional]
 **url** | **String** |  | 
 

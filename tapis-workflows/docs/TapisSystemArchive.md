@@ -6,10 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **String** |  | 
 **r#type** | [**models::EnumArchiveType**](EnumArchiveType.md) |  | 
-**group** | [**uuid::Uuid**](uuid::Uuid.md) |  | 
+**group** | **uuid::Uuid** |  | 
 **tenant_id** | **String** |  | 
 **owner** | **String** |  | 
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**uuid** | Option<**uuid::Uuid**> |  | [optional]
 **archive_dir** | **String** |  | 
 **system_id** | **String** |  | 
 

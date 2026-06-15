@@ -20,6 +20,7 @@ pub struct NewSecret {
     /// Scope of secret: 'user' or 'pod'
     #[serde(rename = "scope", skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
+    /// Pod ID if scope is 'pod'
     #[serde(
         rename = "pod_id",
         default,

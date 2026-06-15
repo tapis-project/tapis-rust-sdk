@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// TemplateTagDependencyInfo : Dependency information for a single template tag.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TemplateTagDependencyInfo {
+    /// Template ID this tag belongs to.
     #[serde(
         rename = "template_id",
         default,

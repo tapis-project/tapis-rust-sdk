@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// UpdateSnapshot : Object with fields that users are allowed to specify when updating the Snapshot class.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateSnapshot {
+    /// Description of this snapshot.
     #[serde(
         rename = "description",
         default,
@@ -21,6 +22,7 @@ pub struct UpdateSnapshot {
         skip_serializing_if = "Option::is_none"
     )]
     pub description: Option<Option<String>>,
+    /// Size in MB to limit snapshot to. We'll start warning if you've gone past the limit.
     #[serde(
         rename = "size_limit",
         default,
@@ -28,6 +30,7 @@ pub struct UpdateSnapshot {
         skip_serializing_if = "Option::is_none"
     )]
     pub size_limit: Option<Option<i32>>,
+    /// cron bits
     #[serde(
         rename = "cron",
         default,
@@ -35,6 +38,7 @@ pub struct UpdateSnapshot {
         skip_serializing_if = "Option::is_none"
     )]
     pub cron: Option<Option<String>>,
+    /// retention_policy bits
     #[serde(
         rename = "retention_policy",
         default,

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**description** | Option<**String**> |  | [optional]
-**size_limit** | Option<**i32**> |  | [optional]
+**description** | Option<**String**> | Description of this volume. | [optional]
+**size_limit** | Option<**i32**> | Size in MB to limit volume to. We'll start warning if you've gone past the limit. | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **group** | Option<**String**> |  | [optional]
 **native_permissions** | Option<**String**> |  | [optional]
 **url** | Option<**String**> |  | [optional]
-**last_modified** | Option<**String**> |  | [optional]
+**last_modified** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **name** | Option<**String**> |  | [optional]
 **path** | Option<**String**> |  | [optional]
 **size** | Option<**i64**> | size in kB | [optional]

@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **project_url** | Option<**String**> | url of the project | [optional]
 **bucket** | Option<**String**> | id of the infludx storage bucket | [optional]
 **active** | Option<**bool**> | Current status of the project | [optional]
-**metadata** | Option<[**serde_json::Value**](.md)> | User defined metadata for the site | [optional]
+**metadata** | Option<**serde_json::Value**> | User defined metadata for the site | [optional]
 **created_at** | Option<**String**> | ISO8601 datetime string for object creation date | [optional]
 **last_updated** | Option<**String**> | ISO8601 datetime string for object updated date | [optional]
 

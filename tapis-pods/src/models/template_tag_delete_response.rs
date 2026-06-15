@@ -18,6 +18,7 @@ pub struct TemplateTagDeleteResponse {
     pub message: String,
     #[serde(rename = "metadata")]
     pub metadata: std::collections::HashMap<String, serde_json::Value>,
+    /// Environment variables to inject into k8 pod. Use `${pods:secrets:KEY}` to reference secret_map entries.
     #[serde(
         rename = "result",
         default,

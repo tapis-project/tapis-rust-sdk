@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**template_id** | Option<**String**> |  | [optional]
+**template_id** | Option<**String**> | Template ID this tag belongs to. | [optional]
 **tag_timestamp** | Option<**String**> | Tag timestamp identifier. | [optional][default to ]
 **full_tag** | Option<**String**> | Full tag reference (template_id:tag@timestamp). | [optional][default to ]
 **dependant_pods** | Option<**Vec<String>**> | List of pod IDs that depend on this template tag. | [optional][default to []]
