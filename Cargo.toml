@@ -1,6 +1,6 @@
 [package]
 name = "tapis-sdk"
-version = "0.4.2"
+version = "0.4.3"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Comprehensive Rust SDK for Tapis services"
 license = "BSD-3-Clause"
@@ -9,7 +9,7 @@ repository = "https://github.com/tapis-project/tapis-rust-sdk"
 homepage = "https://tapis-project.org"
 
 [dependencies]
-tapis-core = { version = "0.4.2", path = "./tapis-core" }
+tapis-core = { version = "0.4.3", path = "./tapis-core" }
 tapis-actors = { version = "0.4.3", path = "./tapis-actors" }
 tapis-apps = { version = "0.4.3", path = "./tapis-apps" }
 tapis-authenticator = { version = "0.4.3", path = "./tapis-authenticator" }
