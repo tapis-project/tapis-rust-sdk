@@ -63,13 +63,16 @@ impl NewLdap {
     }
 }
 /// Whether this LDAP is used for service accounts or user accounts.
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum AccountType {
     #[serde(rename = "service")]
-    #[default]
     Service,
     #[serde(rename = "user")]
     User,
+}
+
+impl Default for AccountType {
+    fn default() -> AccountType {
+        Self::Service
+    }
 }

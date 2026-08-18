@@ -93,13 +93,15 @@ pub async fn add_image(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::ImageResponse`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::ImageResponse`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::ImageResponse`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -151,13 +153,15 @@ pub async fn add_images(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::ImagesResponse`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::ImagesResponse`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::ImagesResponse`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -182,7 +186,7 @@ pub async fn delete_image(
     let uri_str = format!(
         "{}/pods/images/{image_id}",
         configuration.base_path,
-        image_id = p_path_image_id
+        image_id = p_path_image_id.to_string()
     );
     let mut req_builder = configuration
         .client
@@ -207,13 +211,15 @@ pub async fn delete_image(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::ImageDeleteResponse`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::ImageDeleteResponse`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::ImageDeleteResponse`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -238,7 +244,7 @@ pub async fn get_image(
     let uri_str = format!(
         "{}/pods/images/{image_id}",
         configuration.base_path,
-        image_id = p_path_image_id
+        image_id = p_path_image_id.to_string()
     );
     let mut req_builder = configuration.client.request(reqwest::Method::GET, &uri_str);
 
@@ -261,13 +267,15 @@ pub async fn get_image(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::ResponseGetImage`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::ResponseGetImage`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::ResponseGetImage`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -307,13 +315,15 @@ pub async fn get_images(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::ImagesResponse`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::ImagesResponse`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::ImagesResponse`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -340,7 +350,7 @@ pub async fn update_image(
     let uri_str = format!(
         "{}/pods/images/{image_id}",
         configuration.base_path,
-        image_id = p_path_image_id
+        image_id = p_path_image_id.to_string()
     );
     let mut req_builder = configuration.client.request(reqwest::Method::PUT, &uri_str);
 
@@ -364,13 +374,15 @@ pub async fn update_image(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::ImageResponse`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::ImageResponse`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::ImageResponse`"
-                ))))
+                ))));
             }
         }
     } else {

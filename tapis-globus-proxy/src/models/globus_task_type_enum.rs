@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum GlobusTaskTypeEnum {
     #[serde(rename = "TRANSFER")]
-    #[default]
     Transfer,
     #[serde(rename = "DELETE")]
     Delete,
@@ -31,5 +28,11 @@ impl std::fmt::Display for GlobusTaskTypeEnum {
             Self::Delete => write!(f, "DELETE"),
             Self::Unknown => write!(f, "UNKNOWN"),
         }
+    }
+}
+
+impl Default for GlobusTaskTypeEnum {
+    fn default() -> GlobusTaskTypeEnum {
+        Self::Transfer
     }
 }

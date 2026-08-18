@@ -20,6 +20,7 @@ pub struct UpdatePod {
     /// Which pod template to use as base of pod fields. User set attributes will overwrite template fields.
     #[serde(rename = "template", skip_serializing_if = "Option::is_none")]
     pub template: Option<String>,
+    /// Description of this pod.
     #[serde(
         rename = "description",
         default,
@@ -27,6 +28,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub description: Option<Option<String>>,
+    /// Command to run in pod. ex. [\"sleep\", \"5000\"] or [\"/bin/bash\", \"-c\", \"(exec myscript.sh)\"]
     #[serde(
         rename = "command",
         default,
@@ -34,6 +36,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub command: Option<Option<Vec<String>>>,
+    /// Arguments for the Pod's command.
     #[serde(
         rename = "arguments",
         default,
@@ -41,6 +44,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub arguments: Option<Option<Vec<String>>>,
+    /// Environment variables to inject into k8 pod. Use `${pods:secrets:KEY}` to reference secret_map entries.
     #[serde(
         rename = "environment_variables",
         default,
@@ -48,6 +52,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub environment_variables: Option<Option<std::collections::HashMap<String, serde_json::Value>>>,
+    /// Map of keys to secret values. Syntax: ${secret:name} (user secret), ${secret:user:name} (explicit owner). Reference in environment_variables via ${pods:secrets:KEY}. Resolved at pod start.
     #[serde(
         rename = "secret_map",
         default,
@@ -55,6 +60,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub secret_map: Option<Option<std::collections::HashMap<String, String>>>,
+    /// Status requested by user, `ON`, `OFF`, or `RESTART`.
     #[serde(
         rename = "status_requested",
         default,
@@ -62,6 +68,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub status_requested: Option<Option<String>>,
+    /// Volume mounts keyed by mount_path. Values are VolumeMount objects (see schema) or null (to remove inherited mount). Ex: {\"/data\": {\"type\": \"tapisvolume\", \"source_id\": \"myvolume\"}, \"/etc/config.ini\": {\"type\": \"ephemeral\", \"config_content\": \"key=value\"}}
     #[serde(
         rename = "volume_mounts",
         default,
@@ -69,6 +76,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub volume_mounts: Option<Option<std::collections::HashMap<String, models::VolumeMountsValue>>>,
+    /// Default time (sec) for pod to run from instance start. -1 for unlimited. 12 hour default.
     #[serde(
         rename = "time_to_stop_default",
         default,
@@ -76,6 +84,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub time_to_stop_default: Option<Option<i32>>,
+    /// Time (sec) for pod to run from instance start. Reset each time instance is started. -1 for unlimited. None uses default.
     #[serde(
         rename = "time_to_stop_instance",
         default,
@@ -83,6 +92,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub time_to_stop_instance: Option<Option<i32>>,
+    /// Networking information. {\"url_suffix\": {\"protocol\": \"http\"  \"tcp\", \"port\": int}}
     #[serde(
         rename = "networking",
         default,
@@ -90,6 +100,7 @@ pub struct UpdatePod {
         skip_serializing_if = "Option::is_none"
     )]
     pub networking: Option<Option<std::collections::HashMap<String, models::Networking>>>,
+    /// Pod resource management {\"cpu_limit\": 3000, \"mem_limit\": 3000, \"cpu_request\": 500, \"mem_limit\": 500, \"gpu\": 0}
     #[serde(
         rename = "resources",
         default,
@@ -100,6 +111,7 @@ pub struct UpdatePod {
     /// Queue to run pod in. `default` is the default queue.
     #[serde(rename = "compute_queue", skip_serializing_if = "Option::is_none")]
     pub compute_queue: Option<String>,
+    /// Partial overrides for template values. Override volume_mounts or secret_map values without rewriting full template field. Ex: {\"volume_mounts\": {\"/data\": {\"source_id\": \"my-vol\"}}, \"secret_map\": {\"DB_PASS\": \"${secret:mypass}\"}}
     #[serde(
         rename = "template_overrides",
         default,

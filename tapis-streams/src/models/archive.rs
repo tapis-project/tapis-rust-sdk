@@ -41,13 +41,16 @@ impl Archive {
     }
 }
 /// The type of archive object - system or chords
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum ArchiveType {
     #[serde(rename = "system")]
-    #[default]
     System,
     #[serde(rename = "chords")]
     Chords,
+}
+
+impl Default for ArchiveType {
+    fn default() -> ArchiveType {
+        Self::System
+    }
 }

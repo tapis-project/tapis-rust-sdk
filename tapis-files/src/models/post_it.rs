@@ -45,13 +45,13 @@ pub struct PostIt {
     pub redeem_url: Option<String>,
     /// The expiration date/time of the PostIt.
     #[serde(rename = "expiration", skip_serializing_if = "Option::is_none")]
-    pub expiration: Option<String>,
+    pub expiration: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// Creation timestamp in UTC
     #[serde(rename = "created", skip_serializing_if = "Option::is_none")]
-    pub created: Option<String>,
+    pub created: Option<chrono::DateTime<chrono::FixedOffset>>,
     /// Last update timestamp in UTC
     #[serde(rename = "updated", skip_serializing_if = "Option::is_none")]
-    pub updated: Option<String>,
+    pub updated: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl PostIt {

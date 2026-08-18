@@ -22,7 +22,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **system_id** | **String** | System ID | [required] |
 **path** | **String** | Path relative to the system *rootDir* | [required] |
-**range** | Option<[**HeaderByteRange**](.md)> | Optional range of bytes to send. If not specified all content will be sent. |  |
+**range** | Option<[**HeaderByteRange**](HeaderByteRange.md)> | Optional range of bytes to send. If not specified all content will be sent. |  |
 **zip** | Option<**bool**> | Indicates a zip output stream should be provided. |  |
 **more** | Option<**i64**> | Send 1k of UTF-8 encoded string back starting at 'page' 1, e.g. more=1 |  |
 **impersonation_id** | Option<**String**> | Restricted. Only certain services may impersonate a Tapis user. |  |

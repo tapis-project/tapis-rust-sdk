@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumRunStatus {
     #[serde(rename = "staging")]
-    #[default]
     Staging,
     #[serde(rename = "submitted")]
     Submitted,
@@ -58,5 +55,11 @@ impl std::fmt::Display for EnumRunStatus {
             Self::Terminating => write!(f, "terminating"),
             Self::Skipped => write!(f, "skipped"),
         }
+    }
+}
+
+impl Default for EnumRunStatus {
+    fn default() -> EnumRunStatus {
+        Self::Staging
     }
 }

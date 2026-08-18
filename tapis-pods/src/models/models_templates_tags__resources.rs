@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ModelsTemplatesTagsResources {
+    /// CPU allocation pod requests at startup. In millicpus (m). 1000 = 1 cpu.
     #[serde(
         rename = "cpu_request",
         default,
@@ -20,6 +21,7 @@ pub struct ModelsTemplatesTagsResources {
         skip_serializing_if = "Option::is_none"
     )]
     pub cpu_request: Option<Option<i32>>,
+    /// CPU allocation pod is allowed to use. In millicpus (m). 1000 = 1 cpu.
     #[serde(
         rename = "cpu_limit",
         default,
@@ -27,6 +29,7 @@ pub struct ModelsTemplatesTagsResources {
         skip_serializing_if = "Option::is_none"
     )]
     pub cpu_limit: Option<Option<i32>>,
+    /// Memory allocation pod requests at startup. In mebibytes (Mi)
     #[serde(
         rename = "mem_request",
         default,
@@ -34,6 +37,7 @@ pub struct ModelsTemplatesTagsResources {
         skip_serializing_if = "Option::is_none"
     )]
     pub mem_request: Option<Option<i32>>,
+    /// Memory allocation pod is allowed to use. In mebibytes (Mi)
     #[serde(
         rename = "mem_limit",
         default,
@@ -41,6 +45,7 @@ pub struct ModelsTemplatesTagsResources {
         skip_serializing_if = "Option::is_none"
     )]
     pub mem_limit: Option<Option<i32>>,
+    /// Ephemeral storage pod requests at startup. In mebibytes (Mi)
     #[serde(
         rename = "ephemeral_storage_request",
         default,
@@ -48,6 +53,7 @@ pub struct ModelsTemplatesTagsResources {
         skip_serializing_if = "Option::is_none"
     )]
     pub ephemeral_storage_request: Option<Option<i32>>,
+    /// Ephemeral storage pod is allowed to use. In mebibytes (Mi)
     #[serde(
         rename = "ephemeral_storage_limit",
         default,
@@ -55,6 +61,7 @@ pub struct ModelsTemplatesTagsResources {
         skip_serializing_if = "Option::is_none"
     )]
     pub ephemeral_storage_limit: Option<Option<i32>>,
+    /// GPU allocation pod is allowed to use. In integers of GPUs. (we only have 1 currently ;) )
     #[serde(
         rename = "gpus",
         default,

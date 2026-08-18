@@ -15,6 +15,7 @@ use serde::{Deserialize, Serialize};
 pub struct ExecutePodCommands {
     #[serde(rename = "commands")]
     pub commands: Box<models::Commands>,
+    /// Total time (sec) to wait for all commands to finish. Default 300 seconds.
     #[serde(
         rename = "total_timeout",
         default,
@@ -22,6 +23,7 @@ pub struct ExecutePodCommands {
         skip_serializing_if = "Option::is_none"
     )]
     pub total_timeout: Option<Option<i32>>,
+    /// Time (sec) to wait for each command to finish. Default 60 seconds.
     #[serde(
         rename = "command_timeout",
         default,
@@ -29,6 +31,7 @@ pub struct ExecutePodCommands {
         skip_serializing_if = "Option::is_none"
     )]
     pub command_timeout: Option<Option<i32>>,
+    /// If True, will fail if any command does not return 0. Default True.
     #[serde(
         rename = "fail_on_non_success",
         default,

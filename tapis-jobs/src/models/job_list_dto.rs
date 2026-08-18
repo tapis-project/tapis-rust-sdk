@@ -22,15 +22,15 @@ pub struct JobListDto {
     #[serde(rename = "appId", skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
     #[serde(rename = "created", skip_serializing_if = "Option::is_none")]
-    pub created: Option<String>,
+    pub created: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
     #[serde(rename = "condition", skip_serializing_if = "Option::is_none")]
     pub condition: Option<Condition>,
     #[serde(rename = "remoteStarted", skip_serializing_if = "Option::is_none")]
-    pub remote_started: Option<String>,
+    pub remote_started: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "ended", skip_serializing_if = "Option::is_none")]
-    pub ended: Option<String>,
+    pub ended: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "tenant", skip_serializing_if = "Option::is_none")]
     pub tenant: Option<String>,
     #[serde(rename = "execSystemId", skip_serializing_if = "Option::is_none")]
@@ -40,7 +40,7 @@ pub struct JobListDto {
     #[serde(rename = "appVersion", skip_serializing_if = "Option::is_none")]
     pub app_version: Option<String>,
     #[serde(rename = "lastUpdated", skip_serializing_if = "Option::is_none")]
-    pub last_updated: Option<String>,
+    pub last_updated: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl JobListDto {
@@ -64,12 +64,9 @@ impl JobListDto {
     }
 }
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "PENDING")]
-    #[default]
     Pending,
     #[serde(rename = "PROCESSING_INPUTS")]
     ProcessingInputs,
@@ -97,12 +94,15 @@ pub enum Status {
     Failed,
 }
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+impl Default for Status {
+    fn default() -> Status {
+        Self::Pending
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Condition {
     #[serde(rename = "CANCELLED_BY_USER")]
-    #[default]
     CancelledByUser,
     #[serde(rename = "JOB_ARCHIVING_FAILED")]
     JobArchivingFailed,
@@ -154,4 +154,10 @@ pub enum Condition {
     SchedulerTimeout,
     #[serde(rename = "SCHEDULER_TERMINATED")]
     SchedulerTerminated,
+}
+
+impl Default for Condition {
+    fn default() -> Condition {
+        Self::CancelledByUser
+    }
 }

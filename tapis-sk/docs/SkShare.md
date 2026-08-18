@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **resource_id1** | Option<**String**> |  | [optional]
 **resource_id2** | Option<**String**> |  | [optional]
 **privilege** | Option<**String**> |  | [optional]
-**created** | Option<**String**> |  | [optional]
+**created** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **created_by** | Option<**String**> |  | [optional]
 **created_by_tenant** | Option<**String**> |  | [optional]
 

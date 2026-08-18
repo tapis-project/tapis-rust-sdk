@@ -28,13 +28,16 @@ impl NotifDeliveryTarget {
     }
 }
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum DeliveryMethod {
     #[serde(rename = "WEBHOOK")]
-    #[default]
     Webhook,
     #[serde(rename = "EMAIL")]
     Email,
+}
+
+impl Default for DeliveryMethod {
+    fn default() -> DeliveryMethod {
+        Self::Webhook
+    }
 }

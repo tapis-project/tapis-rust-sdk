@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum KeyValueInputModeEnum {
     #[serde(rename = "REQUIRED")]
-    #[default]
     Required,
     #[serde(rename = "FIXED")]
     Fixed,
@@ -34,5 +31,11 @@ impl std::fmt::Display for KeyValueInputModeEnum {
             Self::IncludeOnDemand => write!(f, "INCLUDE_ON_DEMAND"),
             Self::IncludeByDefault => write!(f, "INCLUDE_BY_DEFAULT"),
         }
+    }
+}
+
+impl Default for KeyValueInputModeEnum {
+    fn default() -> KeyValueInputModeEnum {
+        Self::Required
     }
 }

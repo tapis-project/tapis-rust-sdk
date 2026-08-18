@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumMembershipOperator {
     #[serde(rename = "in")]
-    #[default]
     In,
 }
 
@@ -25,5 +22,11 @@ impl std::fmt::Display for EnumMembershipOperator {
         match self {
             Self::In => write!(f, "in"),
         }
+    }
+}
+
+impl Default for EnumMembershipOperator {
+    fn default() -> EnumMembershipOperator {
+        Self::In
     }
 }

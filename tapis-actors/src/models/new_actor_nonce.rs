@@ -30,15 +30,18 @@ impl NewActorNonce {
     }
 }
 /// The permission level associated with the nonce.
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Level {
     #[serde(rename = "READ")]
-    #[default]
     Read,
     #[serde(rename = "WRITE")]
     Write,
     #[serde(rename = "EXECUTE")]
     Execute,
+}
+
+impl Default for Level {
+    fn default() -> Level {
+        Self::Read
+    }
 }

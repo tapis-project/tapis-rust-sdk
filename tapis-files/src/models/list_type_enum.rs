@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum ListTypeEnum {
     #[serde(rename = "OWNED")]
-    #[default]
     Owned,
     #[serde(rename = "ALL")]
     All,
@@ -28,5 +25,11 @@ impl std::fmt::Display for ListTypeEnum {
             Self::Owned => write!(f, "OWNED"),
             Self::All => write!(f, "ALL"),
         }
+    }
+}
+
+impl Default for ListTypeEnum {
+    fn default() -> ListTypeEnum {
+        Self::Owned
     }
 }

@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumTaskFlavor {
     #[serde(rename = "c1tiny")]
-    #[default]
     C1tiny,
     #[serde(rename = "c1sml")]
     C1sml,
@@ -49,5 +46,11 @@ impl std::fmt::Display for EnumTaskFlavor {
             Self::G1nvdmed => write!(f, "g1nvdmed"),
             Self::G1nvdlrg => write!(f, "g1nvdlrg"),
         }
+    }
+}
+
+impl Default for EnumTaskFlavor {
+    fn default() -> EnumTaskFlavor {
+        Self::C1tiny
     }
 }

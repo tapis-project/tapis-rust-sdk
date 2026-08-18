@@ -29,13 +29,16 @@ impl MoveCopyRequest {
     }
 }
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Operation {
     #[serde(rename = "MOVE")]
-    #[default]
     Move,
     #[serde(rename = "COPY")]
     Copy,
+}
+
+impl Default for Operation {
+    fn default() -> Operation {
+        Self::Move
+    }
 }

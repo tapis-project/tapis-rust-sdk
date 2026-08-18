@@ -26,7 +26,7 @@ pub struct GenerateDeviceCode200Response {
     #[serde(rename = "metadata", skip_serializing_if = "Option::is_none")]
     pub metadata: Option<serde_json::Value>,
     #[serde(rename = "result", skip_serializing_if = "Option::is_none")]
-    pub result: Option<Box<models::DeviceCodeResposne>>,
+    pub result: Option<Box<models::DeviceCodeResponse>>,
 }
 
 impl GenerateDeviceCode200Response {
@@ -41,13 +41,16 @@ impl GenerateDeviceCode200Response {
     }
 }
 /// Whether the request was a success or failure.
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "success")]
-    #[default]
     Success,
     #[serde(rename = "failure")]
     Failure,
+}
+
+impl Default for Status {
+    fn default() -> Status {
+        Self::Success
+    }
 }

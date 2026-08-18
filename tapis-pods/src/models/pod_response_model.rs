@@ -26,6 +26,7 @@ pub struct PodResponseModel {
     /// Description of this pod.
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// Command to run in pod. ex. `[\"sleep\", \"5000\"]` or `[\"/bin/bash\", \"-c\", \"(exec myscript.sh)\"]`
     #[serde(
         rename = "command",
         default,
@@ -33,6 +34,7 @@ pub struct PodResponseModel {
         skip_serializing_if = "Option::is_none"
     )]
     pub command: Option<Option<Vec<String>>>,
+    /// Arguments for the Pod's command.
     #[serde(
         rename = "arguments",
         default,
@@ -61,6 +63,7 @@ pub struct PodResponseModel {
         skip_serializing_if = "Option::is_none"
     )]
     pub time_to_stop_default: Option<i32>,
+    /// Time (sec) for pod to run from instance start. Reset each time instance is started. -1 for unlimited. None uses default.
     #[serde(
         rename = "time_to_stop_instance",
         default,
@@ -77,6 +80,7 @@ pub struct PodResponseModel {
     /// Queue to run pod in. `default` is the default queue.
     #[serde(rename = "compute_queue", skip_serializing_if = "Option::is_none")]
     pub compute_queue: Option<String>,
+    /// Partial overrides for template values. Override volume_mounts or secret_map values without rewriting full template field. Ex: {\"volume_mounts\": {\"/data\": {\"source_id\": \"my-vol\"}}, \"secret_map\": {\"DB_PASS\": \"${secret:mypass}\"}}
     #[serde(
         rename = "template_overrides",
         default,
@@ -84,40 +88,44 @@ pub struct PodResponseModel {
         skip_serializing_if = "Option::is_none"
     )]
     pub template_overrides: Option<Option<std::collections::HashMap<String, serde_json::Value>>>,
+    /// Time (UTC) that this pod is scheduled to be stopped. Change with time_to_stop_instance.
     #[serde(
         rename = "time_to_stop_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub time_to_stop_ts: Option<Option<String>>,
+    pub time_to_stop_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
     /// Current status of pod.
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// Status of container if exists. Gives phase.
     #[serde(rename = "status_container", skip_serializing_if = "Option::is_none")]
     pub status_container: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Time (UTC) that this pod was created.
     #[serde(
         rename = "creation_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub creation_ts: Option<Option<String>>,
+    pub creation_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
+    /// Time (UTC) that this pod was updated.
     #[serde(
         rename = "update_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub update_ts: Option<Option<String>>,
+    pub update_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
+    /// Time (UTC) that this pod instance was started.
     #[serde(
         rename = "start_instance_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub start_instance_ts: Option<Option<String>>,
+    pub start_instance_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
 }
 
 impl PodResponseModel {

@@ -27,13 +27,16 @@ impl ManageRole {
     }
 }
 /// Whether to revoke or grant role
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Method {
     #[serde(rename = "grant")]
-    #[default]
     Grant,
     #[serde(rename = "revoke")]
     Revoke,
+}
+
+impl Default for Method {
+    fn default() -> Method {
+        Self::Grant
+    }
 }

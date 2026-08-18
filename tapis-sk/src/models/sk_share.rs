@@ -30,7 +30,7 @@ pub struct SkShare {
     #[serde(rename = "privilege", skip_serializing_if = "Option::is_none")]
     pub privilege: Option<String>,
     #[serde(rename = "created", skip_serializing_if = "Option::is_none")]
-    pub created: Option<String>,
+    pub created: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "createdBy", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
     #[serde(rename = "createdByTenant", skip_serializing_if = "Option::is_none")]

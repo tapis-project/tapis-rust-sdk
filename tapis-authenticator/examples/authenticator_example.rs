@@ -146,7 +146,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Example 4: List OAuth2 Clients
     println!("📋 Example 4: List OAuth2 Clients");
     println!("───────────────────────────────────");
-    match client.clients.list_clients(Some(10), Some(0)).await {
+    match client
+        .clients
+        .list_clients(Some(10), Some(0), Some(false))
+        .await
+    {
         Ok(response) => {
             println!("✓ OAuth2 clients retrieved");
             println!("  Status: {:?}", response.status);

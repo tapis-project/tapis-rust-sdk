@@ -80,24 +80,23 @@ impl TableColumns {
     }
 }
 /// Only if foreign_key, sets whether to use ON DELETE or ON UPDATE postgres definition.
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum OnEvent {
     #[serde(rename = "ON DELETE")]
-    #[default]
     OnDelete,
     #[serde(rename = "ON UPDATE")]
     OnUpdate,
 }
 
+impl Default for OnEvent {
+    fn default() -> OnEvent {
+        Self::OnDelete
+    }
+}
 /// Only if foreign_key, sets which event action to call when on_event event occurs.
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EventAction {
     #[serde(rename = "CASCADE")]
-    #[default]
     Cascade,
     #[serde(rename = "SET NULL")]
     SetNull,
@@ -107,4 +106,10 @@ pub enum EventAction {
     Restrict,
     #[serde(rename = "NO ACTION")]
     NoAction,
+}
+
+impl Default for EventAction {
+    fn default() -> EventAction {
+        Self::Cascade
+    }
 }

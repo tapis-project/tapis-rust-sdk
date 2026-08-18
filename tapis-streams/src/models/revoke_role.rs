@@ -38,12 +38,9 @@ impl RevokeRole {
     }
 }
 /// Resource type should be either project or channel
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum ResourceType {
     #[serde(rename = "project")]
-    #[default]
     Project,
     #[serde(rename = "channel")]
     Channel,
@@ -51,16 +48,24 @@ pub enum ResourceType {
     Template,
 }
 
+impl Default for ResourceType {
+    fn default() -> ResourceType {
+        Self::Project
+    }
+}
 /// role name
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum RoleName {
     #[serde(rename = "admin")]
-    #[default]
     Admin,
     #[serde(rename = "manager")]
     Manager,
     #[serde(rename = "user")]
     User,
+}
+
+impl Default for RoleName {
+    fn default() -> RoleName {
+        Self::Admin
+    }
 }

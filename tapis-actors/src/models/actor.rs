@@ -104,15 +104,18 @@ impl Actor {
     }
 }
 /// Return type (none, bin, json) for this actor. Default is none.
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "none")]
-    #[default]
     None,
     #[serde(rename = "bin")]
     Bin,
     #[serde(rename = "json")]
     Json,
+}
+
+impl Default for Type {
+    fn default() -> Type {
+        Self::None
+    }
 }

@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumBuilder {
     #[serde(rename = "kaniko")]
-    #[default]
     Kaniko,
     #[serde(rename = "singularity")]
     Singularity,
@@ -28,5 +25,11 @@ impl std::fmt::Display for EnumBuilder {
             Self::Kaniko => write!(f, "kaniko"),
             Self::Singularity => write!(f, "singularity"),
         }
+    }
+}
+
+impl Default for EnumBuilder {
+    fn default() -> EnumBuilder {
+        Self::Kaniko
     }
 }

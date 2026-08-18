@@ -45,15 +45,18 @@ impl ExecutionSummary {
     }
 }
 /// the status of the execution.
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "SUBMITTED")]
-    #[default]
     Submitted,
     #[serde(rename = "RUNNING")]
     Running,
     #[serde(rename = "COMPLETE")]
     Complete,
+}
+
+impl Default for Status {
+    fn default() -> Status {
+        Self::Submitted
+    }
 }

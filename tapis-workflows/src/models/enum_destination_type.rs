@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumDestinationType {
     #[serde(rename = "dockerhub")]
-    #[default]
     Dockerhub,
     #[serde(rename = "local")]
     Local,
@@ -28,5 +25,11 @@ impl std::fmt::Display for EnumDestinationType {
             Self::Dockerhub => write!(f, "dockerhub"),
             Self::Local => write!(f, "local"),
         }
+    }
+}
+
+impl Default for EnumDestinationType {
+    fn default() -> EnumDestinationType {
+        Self::Dockerhub
     }
 }

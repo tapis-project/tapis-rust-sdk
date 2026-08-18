@@ -44,13 +44,16 @@ impl NewChannel {
     }
 }
 /// Type of Checks (threshold or deadman)
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "threshold")]
-    #[default]
     Threshold,
     #[serde(rename = "deadman")]
     Deadman,
+}
+
+impl Default for Type {
+    fn default() -> Type {
+        Self::Threshold
+    }
 }

@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **effective_bytes_per_second** | Option<**i32**> |  | [optional]
 **encrypt_data** | Option<**bool**> |  | [optional]
 **fail_on_quota_errors** | Option<**bool**> |  | [optional]
-**fatal_error** | Option<[**models::GlobusTransferTaskFatalError**](GlobusTransferTask_fatal_error.md)> |  | [optional]
+**fatal_error** | Option<[**models::GlobusTransferTaskFatalError**](GlobusTransferTaskFatalError.md)> |  | [optional]
 **faults** | Option<**i32**> |  | [optional]
 **files** | Option<**i32**> |  | [optional]
 **files_skipped** | Option<**i32**> |  | [optional]

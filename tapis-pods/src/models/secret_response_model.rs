@@ -20,6 +20,7 @@ pub struct SecretResponseModel {
     /// Scope of secret: 'user' or 'pod'
     #[serde(rename = "scope", skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
+    /// Pod ID if scope is 'pod'
     #[serde(
         rename = "pod_id",
         default,
@@ -39,13 +40,14 @@ pub struct SecretResponseModel {
     /// Full secret name used in SK (prefixed).
     #[serde(rename = "sk_secret_name", skip_serializing_if = "Option::is_none")]
     pub sk_secret_name: Option<String>,
+    /// Time (UTC) that this secret was created.
     #[serde(
         rename = "creation_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub creation_ts: Option<Option<String>>,
+    pub creation_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
     /// User who added this secret.
     #[serde(rename = "added_by", skip_serializing_if = "Option::is_none")]
     pub added_by: Option<String>,

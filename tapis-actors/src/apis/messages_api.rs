@@ -100,13 +100,15 @@ pub async fn delete_pending_messages(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::DeleteActor200Response`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::DeleteActor200Response`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::DeleteActor200Response`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -170,13 +172,15 @@ pub async fn get_messages(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::GetMessages200Response`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::GetMessages200Response`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::GetMessages200Response`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -212,8 +216,7 @@ pub async fn send_binary_message(
         .request(reqwest::Method::POST, &uri_str);
 
     if let Some(ref param_value) = p_query__abaco_synchronous {
-        req_builder =
-            req_builder.query(&[("_abaco_synchronous", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("_abaco_synchronous", &param_value.to_string())]);
     }
     if let Some(ref apikey) = configuration.api_key {
         let key = apikey.key.clone();
@@ -251,13 +254,15 @@ pub async fn send_binary_message(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::SendMessage200Response`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::SendMessage200Response`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::SendMessage200Response`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -293,8 +298,7 @@ pub async fn send_json_message(
         .request(reqwest::Method::POST, &uri_str);
 
     if let Some(ref param_value) = p_query__abaco_synchronous {
-        req_builder =
-            req_builder.query(&[("_abaco_synchronous", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("_abaco_synchronous", &param_value.to_string())]);
     }
     if let Some(ref apikey) = configuration.api_key {
         let key = apikey.key.clone();
@@ -332,13 +336,15 @@ pub async fn send_json_message(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::SendMessage200Response`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::SendMessage200Response`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::SendMessage200Response`"
-                ))))
+                ))));
             }
         }
     } else {
@@ -374,8 +380,7 @@ pub async fn send_message(
         .request(reqwest::Method::POST, &uri_str);
 
     if let Some(ref param_value) = p_query__abaco_synchronous {
-        req_builder =
-            req_builder.query(&[("_abaco_synchronous", &serde_json::to_string(param_value)?)]);
+        req_builder = req_builder.query(&[("_abaco_synchronous", &param_value.to_string())]);
     }
     if let Some(ref apikey) = configuration.api_key {
         let key = apikey.key.clone();
@@ -413,13 +418,15 @@ pub async fn send_message(
         let content = resp.text().await?;
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
-            ContentType::Text => Err(Error::from(serde_json::Error::custom(
-                "Received `text/plain` content type response that cannot be converted to `models::SendMessage200Response`",
-            ))),
+            ContentType::Text => {
+                return Err(Error::from(serde_json::Error::custom(
+                    "Received `text/plain` content type response that cannot be converted to `models::SendMessage200Response`",
+                )));
+            }
             ContentType::Unsupported(unknown_type) => {
-                Err(Error::from(serde_json::Error::custom(format!(
+                return Err(Error::from(serde_json::Error::custom(format!(
                     "Received `{unknown_type}` content type response that cannot be converted to `models::SendMessage200Response`"
-                ))))
+                ))));
             }
         }
     } else {

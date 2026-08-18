@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum RoleTypeEnum {
     #[serde(rename = "USER")]
-    #[default]
     User,
     #[serde(rename = "USER_DEFAULT")]
     UserDefault,
@@ -37,5 +34,11 @@ impl std::fmt::Display for RoleTypeEnum {
             Self::TenantAdmin => write!(f, "TENANT_ADMIN"),
             Self::SiteAdmin => write!(f, "SITE_ADMIN"),
         }
+    }
+}
+
+impl Default for RoleTypeEnum {
+    fn default() -> RoleTypeEnum {
+        Self::User
     }
 }

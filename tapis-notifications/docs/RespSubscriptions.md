@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **commit** | Option<**String**> |  | [optional]
 **build** | Option<**String**> |  | [optional]
 **result** | Option<[**Vec<models::TapisSubscription>**](TapisSubscription.md)> |  | [optional]
-**metadata** | Option<[**models::RespSubscriptionsMetadata**](RespSubscriptions_metadata.md)> |  | [optional]
+**metadata** | Option<[**models::RespSubscriptionsMetadata**](RespSubscriptionsMetadata.md)> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

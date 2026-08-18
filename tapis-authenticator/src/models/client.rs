@@ -19,6 +19,12 @@ pub struct Client {
     /// A secret key for authenticating the client.
     #[serde(rename = "client_key", skip_serializing_if = "Option::is_none")]
     pub client_key: Option<String>,
+    /// The username of the user who owns this client.
+    #[serde(rename = "owner", skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    /// The tenant this client belongs to.
+    #[serde(rename = "tenant_id", skip_serializing_if = "Option::is_none")]
+    pub tenant_id: Option<String>,
     /// URL for application to receive OAuth callbacks for executing flows such as authorization_code.
     #[serde(rename = "callback_url", skip_serializing_if = "Option::is_none")]
     pub callback_url: Option<String>,
@@ -34,6 +40,9 @@ pub struct Client {
     /// A description of this client.
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// Whether this client is active. Inactive clients cannot be used.
+    #[serde(rename = "active", skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
 }
 
 impl Client {
@@ -41,11 +50,14 @@ impl Client {
         Client {
             client_id: None,
             client_key: None,
+            owner: None,
+            tenant_id: None,
             callback_url: None,
             create_time: None,
             last_update_time: None,
             display_name: None,
             description: None,
+            active: None,
         }
     }
 }

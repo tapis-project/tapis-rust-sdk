@@ -26,7 +26,7 @@ pub struct FileInfo {
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     #[serde(rename = "lastModified", skip_serializing_if = "Option::is_none")]
-    pub last_modified: Option<String>,
+    pub last_modified: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "path", skip_serializing_if = "Option::is_none")]
@@ -52,12 +52,9 @@ impl FileInfo {
     }
 }
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "file")]
-    #[default]
     File,
     #[serde(rename = "dir")]
     Dir,
@@ -67,4 +64,10 @@ pub enum Type {
     Other,
     #[serde(rename = "unknown")]
     Unknown,
+}
+
+impl Default for Type {
+    fn default() -> Type {
+        Self::File
+    }
 }

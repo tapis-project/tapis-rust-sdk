@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**uuid** | Option<**uuid::Uuid**> |  | [optional]
 **pipeline_id** | Option<**String**> |  | [optional]
-**pipeline_run_uuid** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
+**pipeline_run_uuid** | Option<**uuid::Uuid**> |  | [optional]
 **created_at** | Option<**String**> |  | [optional]
 **acquired_at** | Option<**String**> |  | [optional]
 **expires_in** | Option<**i32**> |  | [optional]

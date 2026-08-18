@@ -29,6 +29,8 @@ fn is_allowed_extra_header(name: &reqwest::header::HeaderName) -> bool {
     name.eq_ignore_ascii_case("x-tapis-tracking-id")
         || name.eq_ignore_ascii_case("x_tapis_tracking_id")
         || name.eq_ignore_ascii_case("x-request-id")
+        || name.eq_ignore_ascii_case("x-tapis-user")
+        || name.eq_ignore_ascii_case("x-tapis-tenant")
 }
 
 #[derive(Debug)]
@@ -214,10 +216,12 @@ impl Middleware for RefreshMiddleware {
                     exp - now < 5
                 })
                 .unwrap_or(false);
-            if needs_refresh && let Some(new_token) = self.token_provider.get_token().await {
-                let value = HeaderValue::from_str(&new_token)
-                    .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
-                req.headers_mut().insert("x-tapis-token", value);
+            if needs_refresh {
+                if let Some(new_token) = self.token_provider.get_token().await {
+                    let value = HeaderValue::from_str(&new_token)
+                        .map_err(|e| reqwest_middleware::Error::Middleware(anyhow::anyhow!(e)))?;
+                    req.headers_mut().insert("x-tapis-token", value);
+                }
             }
         }
         next.run(req, extensions).await
@@ -349,7 +353,7 @@ impl ClientsClient {
     pub async fn delete_client(
         &self,
         client_id: &str,
-    ) -> Result<models::DeleteClient200Response, Error<clients_api::DeleteClientError>> {
+    ) -> Result<models::CreateClient201Response, Error<clients_api::DeleteClientError>> {
         clients_api::delete_client(&self.config, client_id).await
     }
 
@@ -364,8 +368,9 @@ impl ClientsClient {
         &self,
         limit: Option<i32>,
         offset: Option<i32>,
+        show_inactive: Option<bool>,
     ) -> Result<models::ListClients200Response, Error<clients_api::ListClientsError>> {
-        clients_api::list_clients(&self.config, limit, offset).await
+        clients_api::list_clients(&self.config, limit, offset, show_inactive).await
     }
 
     pub async fn update_client(

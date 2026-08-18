@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumInstaller {
     #[serde(rename = "pip")]
-    #[default]
     Pip,
 }
 
@@ -25,5 +22,11 @@ impl std::fmt::Display for EnumInstaller {
         match self {
             Self::Pip => write!(f, "pip"),
         }
+    }
+}
+
+impl Default for EnumInstaller {
+    fn default() -> EnumInstaller {
+        Self::Pip
     }
 }

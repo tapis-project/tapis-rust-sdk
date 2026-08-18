@@ -37,13 +37,14 @@ pub struct TemplateTag {
     /// User who added this template tag.
     #[serde(rename = "added_by", skip_serializing_if = "Option::is_none")]
     pub added_by: Option<String>,
+    /// Time (UTC) that this template tag was created.
     #[serde(
         rename = "creation_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub creation_ts: Option<Option<String>>,
+    pub creation_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
     /// Tapis tenant used during creation of this template tag.
     #[serde(rename = "tenant_id", skip_serializing_if = "Option::is_none")]
     pub tenant_id: Option<String>,

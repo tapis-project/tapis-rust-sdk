@@ -40,12 +40,9 @@ impl ReqSubscribe {
     }
 }
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EventCategoryFilter {
     #[serde(rename = "JOB_NEW_STATUS")]
-    #[default]
     JobNewStatus,
     #[serde(rename = "JOB_INPUT_TRANSACTION_ID")]
     JobInputTransactionId,
@@ -61,4 +58,10 @@ pub enum EventCategoryFilter {
     JobUserEvent,
     #[serde(rename = "ALL")]
     All,
+}
+
+impl Default for EventCategoryFilter {
+    fn default() -> EventCategoryFilter {
+        Self::JobNewStatus
+    }
 }

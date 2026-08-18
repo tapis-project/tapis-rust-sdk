@@ -26,6 +26,7 @@ pub struct NewPod {
     /// Description of this pod.
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// Command to run in pod. ex. `[\"sleep\", \"5000\"]` or `[\"/bin/bash\", \"-c\", \"(exec myscript.sh)\"]`
     #[serde(
         rename = "command",
         default,
@@ -33,6 +34,7 @@ pub struct NewPod {
         skip_serializing_if = "Option::is_none"
     )]
     pub command: Option<Option<Vec<String>>>,
+    /// Arguments for the Pod's command.
     #[serde(
         rename = "arguments",
         default,
@@ -61,6 +63,7 @@ pub struct NewPod {
         skip_serializing_if = "Option::is_none"
     )]
     pub time_to_stop_default: Option<i32>,
+    /// Time (sec) for pod to run from instance start. Reset each time instance is started. -1 for unlimited. None uses default.
     #[serde(
         rename = "time_to_stop_instance",
         default,
@@ -77,6 +80,7 @@ pub struct NewPod {
     /// Queue to run pod in. `default` is the default queue.
     #[serde(rename = "compute_queue", skip_serializing_if = "Option::is_none")]
     pub compute_queue: Option<String>,
+    /// Partial overrides for template values. Override volume_mounts or secret_map values without rewriting full template field. Ex: {\"volume_mounts\": {\"/data\": {\"source_id\": \"my-vol\"}}, \"secret_map\": {\"DB_PASS\": \"${secret:mypass}\"}}
     #[serde(
         rename = "template_overrides",
         default,

@@ -23,13 +23,14 @@ pub struct ImageResponseModel {
     /// Description of image.
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// Time (UTC) that this image was created.
     #[serde(
         rename = "creation_ts",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub creation_ts: Option<Option<String>>,
+    pub creation_ts: Option<Option<chrono::DateTime<chrono::FixedOffset>>>,
     /// User who added image to allow list.
     #[serde(rename = "added_by", skip_serializing_if = "Option::is_none")]
     pub added_by: Option<String>,

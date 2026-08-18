@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum DeliveryMethod {
     #[serde(rename = "WEBHOOK")]
-    #[default]
     Webhook,
     #[serde(rename = "EMAIL")]
     Email,
@@ -28,5 +25,11 @@ impl std::fmt::Display for DeliveryMethod {
             Self::Webhook => write!(f, "WEBHOOK"),
             Self::Email => write!(f, "EMAIL"),
         }
+    }
+}
+
+impl Default for DeliveryMethod {
+    fn default() -> DeliveryMethod {
+        Self::Webhook
     }
 }

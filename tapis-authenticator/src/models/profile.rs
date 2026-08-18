@@ -11,27 +11,91 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// Profile : The profile associated with a Tapis identity. NOTE -the fields in the Profile object are populated on a best-effort basis and should not be relied upon. Only the username field is guaranteed to be populated.
+/// Profile : The profile associated with a Tapis identity. NOTE - fields are populated on a best-effort basis from the underlying LDAP directory and should not be relied upon. Only the username field is guaranteed to be populated.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Profile {
-    /// The username associated with the profile.
+    /// The username (uid) associated with the profile.
     #[serde(rename = "username", skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+    /// The LDAP distinguished name for the user entry.
+    #[serde(
+        rename = "dn",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub dn: Option<Option<String>>,
+    /// The user's first/given name.
+    #[serde(
+        rename = "given_name",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub given_name: Option<Option<String>>,
+    /// The user's last/family name.
+    #[serde(
+        rename = "last_name",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub last_name: Option<Option<String>>,
     /// The email address associated with the profile.
-    #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
-    pub email: Option<String>,
-    /// The full name of the user.
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    #[serde(
+        rename = "email",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub email: Option<Option<String>>,
+    /// The telephone number associated with the profile.
+    #[serde(
+        rename = "phone",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub phone: Option<Option<String>>,
+    /// The mobile phone number associated with the profile.
+    #[serde(
+        rename = "mobile_phone",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub mobile_phone: Option<Option<String>>,
+    /// The timestamp when the LDAP entry was created.
+    #[serde(
+        rename = "create_time",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub create_time: Option<Option<String>>,
+    /// The POSIX uid number associated with the user.
+    #[serde(
+        rename = "uid",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub uid: Option<Option<String>>,
 }
 
 impl Profile {
-    /// The profile associated with a Tapis identity. NOTE -the fields in the Profile object are populated on a best-effort basis and should not be relied upon. Only the username field is guaranteed to be populated.
+    /// The profile associated with a Tapis identity. NOTE - fields are populated on a best-effort basis from the underlying LDAP directory and should not be relied upon. Only the username field is guaranteed to be populated.
     pub fn new() -> Profile {
         Profile {
             username: None,
+            dn: None,
+            given_name: None,
+            last_name: None,
             email: None,
-            name: None,
+            phone: None,
+            mobile_phone: None,
+            create_time: None,
+            uid: None,
         }
     }
 }

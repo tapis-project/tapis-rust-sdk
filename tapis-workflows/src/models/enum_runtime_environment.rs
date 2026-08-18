@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum EnumRuntimeEnvironment {
     #[serde(rename = "tapis/workflows-python-singularity:0.1.0")]
-    #[default]
     TapisSlashWorkflowsPythonSingularityColon010,
     #[serde(rename = "python:latest")]
     PythonColonLatest,
@@ -103,5 +100,11 @@ impl std::fmt::Display for EnumRuntimeEnvironment {
                 write!(f, "ghcr.io/tobiashi26/pygeoflood-container:main")
             }
         }
+    }
+}
+
+impl Default for EnumRuntimeEnvironment {
+    fn default() -> EnumRuntimeEnvironment {
+        Self::TapisSlashWorkflowsPythonSingularityColon010
     }
 }

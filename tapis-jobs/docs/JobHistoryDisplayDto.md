@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **event** | Option<**String**> |  | [optional]
-**created** | Option<**String**> |  | [optional]
+**created** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **event_detail** | Option<**String**> |  | [optional]
 **description** | Option<**String**> |  | [optional]
 **transfer_task_uuid** | Option<**String**> |  | [optional]

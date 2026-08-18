@@ -11,12 +11,9 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
-)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum RuntimeOptionEnum {
     #[serde(rename = "NONE")]
-    #[default]
     None,
     #[serde(rename = "SINGULARITY_RUN")]
     SingularityRun,
@@ -28,5 +25,11 @@ impl std::fmt::Display for RuntimeOptionEnum {
             Self::None => write!(f, "NONE"),
             Self::SingularityRun => write!(f, "SINGULARITY_RUN"),
         }
+    }
+}
+
+impl Default for RuntimeOptionEnum {
+    fn default() -> RuntimeOptionEnum {
+        Self::None
     }
 }

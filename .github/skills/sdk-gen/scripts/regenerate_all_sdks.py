@@ -405,6 +405,8 @@ def generate_client(
         '    name.eq_ignore_ascii_case("x-tapis-tracking-id")',
         '        || name.eq_ignore_ascii_case("x_tapis_tracking_id")',
         '        || name.eq_ignore_ascii_case("x-request-id")',
+        '        || name.eq_ignore_ascii_case("x-tapis-user")',
+        '        || name.eq_ignore_ascii_case("x-tapis-tenant")',
         "}",
         "",
         "#[derive(Debug)]",

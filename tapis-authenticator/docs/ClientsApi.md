@@ -42,7 +42,7 @@ Name | Type | Description  | Required | Notes
 
 ## delete_client
 
-> models::DeleteClient200Response delete_client(client_id)
+> models::CreateClient201Response delete_client(client_id)
 Permanently set a client to inactive.
 
 Permanently set a client to inactive. Once set to inactive clients cannot be used.
@@ -56,7 +56,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::DeleteClient200Response**](delete_client_200_response.md)
+[**models::CreateClient201Response**](create_client_201_response.md)
 
 ### Authorization
 
@@ -102,7 +102,7 @@ Name | Type | Description  | Required | Notes
 
 ## list_clients
 
-> models::ListClients200Response list_clients(limit, offset)
+> models::ListClients200Response list_clients(limit, offset, show_inactive)
 
 
 ### Parameters
@@ -112,6 +112,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **limit** | Option<**i32**> | limit the number of clients returned. |  |
 **offset** | Option<**i32**> | index (offset) to start list. |  |
+**show_inactive** | Option<**bool**> | if true, include inactive clients in the results. |  |
 
 ### Return type
 

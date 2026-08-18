@@ -36,7 +36,7 @@ Name | Type | Description | Notes
 **batch_scheduler_profile** | Option<**String**> |  | [optional]
 **job_capabilities** | Option<[**Vec<models::Capability>**](Capability.md)> |  | [optional]
 **tags** | Option<**Vec<String>**> | List of tags as simple strings. | [optional]
-**notes** | Option<[**serde_json::Value**](.md)> | Metadata in the form of a Json object. Not used by Tapis. | [optional]
+**notes** | Option<**serde_json::Value**> | Metadata in the form of a Json object. Not used by Tapis. | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -5,12 +5,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **mime_type** | Option<**String**> |  | [optional]
-**r#type** | Option<**String**> |  | [optional]
+**r#type** | Option<**Type**> |  (enum: file, dir, symbolic_link, other, unknown) | [optional]
 **owner** | Option<**String**> |  | [optional]
 **group** | Option<**String**> |  | [optional]
 **native_permissions** | Option<**String**> |  | [optional]
 **url** | Option<**String**> |  | [optional]
-**last_modified** | Option<**String**> |  | [optional]
+**last_modified** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **name** | Option<**String**> |  | [optional]
 **path** | Option<**String**> |  | [optional]
 **size** | Option<**i64**> |  | [optional]
