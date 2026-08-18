@@ -88,7 +88,7 @@ fi
 major="${BASH_REMATCH[1]}"
 minor="${BASH_REMATCH[2]}"
 patch="${BASH_REMATCH[3]}"
-new_version="${major}.${minor}.$((patch + 1))"
+new_version="${major}.$((minor + 1)).0"
 
 manifests=()
 while IFS= read -r manifest; do

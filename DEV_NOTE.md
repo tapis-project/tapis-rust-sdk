@@ -40,7 +40,7 @@ npm install -g @openapitools/openapi-generator-cli
 
 The generation script also relies on `jq` and `curl`.
 
-## Regenerate All SDKs
+## Testing SDK Regeneration for All SDKs Locally
 
 Run from repo root:
 
@@ -58,6 +58,9 @@ Useful variants:
 ```bash
 # Preview actions only
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --dry-run
+
+# Run build while bumping up the minor version
+python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --bump-version 'patch'
 
 # Regenerate specific services only
 python3 .github/skills/sdk-gen/scripts/regenerate_all_sdks.py --env prod --services pods,files
