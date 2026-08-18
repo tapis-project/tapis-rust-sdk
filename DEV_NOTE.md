@@ -86,9 +86,32 @@ cargo build --workspace --all-targets
 cargo clippy --workspace --all-targets
 ```
 
+
+## Commit and push the generated changes
+```
+git add . && git commit -m "chore: regenerate TAPIS SDKs" && git push origin <branch>
+```
 ## Publish to crates.io
 
+
+### GitHub Action (Manual Publish to crates.io)
+
+Workflow file:
+
+`/Users/wei.zhang/Developer/git/TAPIS/tapis-rust-sdk/.github/workflows/manual-sdk-publish.yml`
+
+Important:
+- This workflow currently contains a **fake** `CARGO_REGISTRY_TOKEN` on purpose.
+- It has a safety gate that fails immediately while the token starts with `FAKE_TOKEN_`.
+- This prevents accidental publishing before the official TACC crates.io account/token is ready.
+
+When ready for real publish:
+1. Update `CARGO_REGISTRY_TOKEN` in the workflow (or move to GitHub Secrets).
+2. Trigger the workflow manually from the Actions tab.
+
 Publishing is integrated into the same automation script.
+
+### Publish crates locally (Alternative)
 
 1. Set a crates.io token first:
 
@@ -144,20 +167,7 @@ Behavior:
 
 If you want a different schedule, edit the `cron` expression in the workflow file.
 
-## GitHub Action (Manual Publish to crates.io)
 
-Workflow file:
-
-`/Users/wei.zhang/Developer/git/TAPIS/tapis-rust-sdk/.github/workflows/manual-sdk-publish.yml`
-
-Important:
-- This workflow currently contains a **fake** `CARGO_REGISTRY_TOKEN` on purpose.
-- It has a safety gate that fails immediately while the token starts with `FAKE_TOKEN_`.
-- This prevents accidental publishing before the official TACC crates.io account/token is ready.
-
-When ready for real publish:
-1. Update `CARGO_REGISTRY_TOKEN` in the workflow (or move to GitHub Secrets).
-2. Trigger the workflow manually from the Actions tab.
 
 ## crates.io Multi-Account Conflicts
 
