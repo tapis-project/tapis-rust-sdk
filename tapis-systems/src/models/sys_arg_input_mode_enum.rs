@@ -11,9 +11,12 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum SysArgInputModeEnum {
     #[serde(rename = "REQUIRED")]
+    #[default]
     Required,
     #[serde(rename = "FIXED")]
     Fixed,
@@ -31,11 +34,5 @@ impl std::fmt::Display for SysArgInputModeEnum {
             Self::IncludeOnDemand => write!(f, "INCLUDE_ON_DEMAND"),
             Self::IncludeByDefault => write!(f, "INCLUDE_BY_DEFAULT"),
         }
-    }
-}
-
-impl Default for SysArgInputModeEnum {
-    fn default() -> SysArgInputModeEnum {
-        Self::Required
     }
 }

@@ -38,16 +38,13 @@ impl ListPermissions200Response {
     }
 }
 /// Whether the request was a success or failure.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum Status {
     #[serde(rename = "success")]
+    #[default]
     Success,
     #[serde(rename = "failure")]
     Failure,
-}
-
-impl Default for Status {
-    fn default() -> Status {
-        Self::Success
-    }
 }

@@ -11,9 +11,12 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum EnumDuplicateSubmissionPolicy {
     #[serde(rename = "allow")]
+    #[default]
     Allow,
     #[serde(rename = "deny")]
     Deny,
@@ -31,11 +34,5 @@ impl std::fmt::Display for EnumDuplicateSubmissionPolicy {
             Self::Terminate => write!(f, "terminate"),
             Self::Defer => write!(f, "defer"),
         }
-    }
-}
-
-impl Default for EnumDuplicateSubmissionPolicy {
-    fn default() -> EnumDuplicateSubmissionPolicy {
-        Self::Allow
     }
 }

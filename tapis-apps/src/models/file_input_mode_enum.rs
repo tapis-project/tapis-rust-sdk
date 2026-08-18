@@ -11,9 +11,12 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum FileInputModeEnum {
     #[serde(rename = "REQUIRED")]
+    #[default]
     Required,
     #[serde(rename = "OPTIONAL")]
     Optional,
@@ -28,11 +31,5 @@ impl std::fmt::Display for FileInputModeEnum {
             Self::Optional => write!(f, "OPTIONAL"),
             Self::Fixed => write!(f, "FIXED"),
         }
-    }
-}
-
-impl Default for FileInputModeEnum {
-    fn default() -> FileInputModeEnum {
-        Self::Required
     }
 }

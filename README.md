@@ -6,7 +6,7 @@
 
 A comprehensive Rust SDK for the [Tapis Framework](https://tapis-project.org), providing type-safe async clients for Tapis v3 services.
 
-Current release line: `0.4.2`
+Current release line: `0.4.4`
 
 ## About Tapis
 
@@ -48,7 +48,7 @@ Use the umbrella crate:
 
 ```toml
 [dependencies]
-tapis-sdk = "0.4.2"
+tapis-sdk = "0.4.4"
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -56,9 +56,9 @@ Or use individual crates:
 
 ```toml
 [dependencies]
-tapis-systems = "0.4.2"
-tapis-apps = "0.4.2"
-tapis-jobs = "0.4.2"
+tapis-systems = "0.4.4"
+tapis-apps = "0.4.4"
+tapis-jobs = "0.4.4"
 tokio = { version = "1", features = ["full"] }
 ```
 

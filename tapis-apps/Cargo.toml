@@ -1,6 +1,6 @@
 [package]
 name = "tapis-apps"
-version = "0.4.3"
+version = "0.4.4"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Applications API provides for management of Tapis applications including permissions."
 license = "BSD-3-Clause"
@@ -17,7 +17,7 @@ http = "^1.0"
 async-trait = "^0.1"
 tokio = { version = "^1.0", features = ["rt"] }
 anyhow = "^1.0"
-tapis-core = { version = "0.4.2", path = "../tapis-core" }
+tapis-core = { version = "0.4.4", path = "../tapis-core" }
 [features]
 default = ["native-tls"]
 native-tls = ["reqwest/native-tls"]

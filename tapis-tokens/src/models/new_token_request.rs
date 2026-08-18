@@ -79,16 +79,13 @@ impl NewTokenRequest {
     }
 }
 /// The type of account (user or service) represented by the token.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum AccountType {
     #[serde(rename = "user")]
+    #[default]
     User,
     #[serde(rename = "service")]
     Service,
-}
-
-impl Default for AccountType {
-    fn default() -> AccountType {
-        Self::User
-    }
 }

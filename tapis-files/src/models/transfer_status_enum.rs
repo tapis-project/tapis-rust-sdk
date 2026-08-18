@@ -13,9 +13,12 @@ use serde::{Deserialize, Serialize};
 
 /// TransferStatusEnum : The status of the task, such as ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED
 /// The status of the task, such as ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum TransferStatusEnum {
     #[serde(rename = "ACCEPTED")]
+    #[default]
     Accepted,
     #[serde(rename = "STAGED")]
     Staged,
@@ -45,11 +48,5 @@ impl std::fmt::Display for TransferStatusEnum {
             Self::FailedOpt => write!(f, "FAILED_OPT"),
             Self::Paused => write!(f, "PAUSED"),
         }
-    }
-}
-
-impl Default for TransferStatusEnum {
-    fn default() -> TransferStatusEnum {
-        Self::Accepted
     }
 }

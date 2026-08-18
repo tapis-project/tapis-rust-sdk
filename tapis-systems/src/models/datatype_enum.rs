@@ -11,9 +11,12 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum DatatypeEnum {
     #[serde(rename = "STRING")]
+    #[default]
     String,
     #[serde(rename = "INTEGER")]
     Integer,
@@ -34,11 +37,5 @@ impl std::fmt::Display for DatatypeEnum {
             Self::Number => write!(f, "NUMBER"),
             Self::Timestamp => write!(f, "TIMESTAMP"),
         }
-    }
-}
-
-impl Default for DatatypeEnum {
-    fn default() -> DatatypeEnum {
-        Self::String
     }
 }

@@ -1,6 +1,6 @@
 [package]
 name = "tapis-core"
-version = "0.4.3"
+version = "0.4.4"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "Shared traits and types for the Tapis Rust SDK."
 license = "BSD-3-Clause"

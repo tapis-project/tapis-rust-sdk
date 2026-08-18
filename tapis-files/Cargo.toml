@@ -1,6 +1,6 @@
 [package]
 name = "tapis-files"
-version = "0.4.3"
+version = "0.4.4"
 authors = ["cicsupport@tacc.utexas.edu"]
 description = "The Tapis Files API provides for management of file resources on Tapis systems"
 license = "BSD-3-Clause"
@@ -19,7 +19,7 @@ reqwest-middleware = { version = "^0.5", features = ["json", "multipart", "query
 http = "^1.0"
 async-trait = "^0.1"
 anyhow = "^1.0"
-tapis-core = { version = "0.4.2", path = "../tapis-core" }
+tapis-core = { version = "0.4.4", path = "../tapis-core" }
 [features]
 default = ["native-tls"]
 native-tls = ["reqwest/native-tls"]

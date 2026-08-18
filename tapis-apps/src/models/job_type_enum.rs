@@ -11,9 +11,12 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum JobTypeEnum {
     #[serde(rename = "BATCH")]
+    #[default]
     Batch,
     #[serde(rename = "FORK")]
     Fork,
@@ -25,11 +28,5 @@ impl std::fmt::Display for JobTypeEnum {
             Self::Batch => write!(f, "BATCH"),
             Self::Fork => write!(f, "FORK"),
         }
-    }
-}
-
-impl Default for JobTypeEnum {
-    fn default() -> JobTypeEnum {
-        Self::Batch
     }
 }
